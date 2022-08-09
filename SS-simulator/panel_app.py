@@ -102,7 +102,7 @@ class Application():
         
         # SPEED B
         def set_speed_plus_B():
-            self.speed_B.set(self.speed_B.get()+1)
+            self.speed_B.set(self.speed_B.get()+0.01)
             # print(self.rutina.get())
 
         def set_speed_minus_B():
