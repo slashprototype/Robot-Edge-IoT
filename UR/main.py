@@ -1,5 +1,6 @@
 from cProfile import run
 import time
+from typing_extensions import runtime
 import utils.text_processor as text_processor
 from datetime import datetime
 import sys
@@ -106,8 +107,11 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                 robot.sync_program(start = 0)
                                 robot.sync_setpoint(targets,target_id)
                                 
+                                robot_data,robot_status = robot.get_data()
+                                runtime_state = robot_data.get('runtime_state') 
+
                                 #ROBOT IS IN "PLAY" MODE
-                                if stm_com != 0:
+                                if stm_com != 0 or runtime_state != 2:
                                     send_robot_action(robot,'start')
                                     robot_data,robot_status = robot.get_data()
                                     runtime_state = robot_data.get('runtime_state') 
