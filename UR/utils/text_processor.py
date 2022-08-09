@@ -100,6 +100,12 @@ def process(file):
                 data = []
                 data.append(2)
                 all_pos.append(data)
+            
+            if re.search(r'(visor_detect\(\))',line):
+                data = []
+                data.append(3)
+                all_pos.append(data)
+            
 
             if re.search(r'(speed_ms\s*=\d*)',line):
                 data = []
@@ -177,6 +183,8 @@ def process(file):
             targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]]) 
         if i[0] == 2:
             targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]]) 
+        if i[0] == 3:
+            targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
         
         # Move L (joint mode)
         if i[0] == 3:
