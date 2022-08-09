@@ -162,9 +162,10 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         robot.get_data()
                         send_robot_action(robot,'auto_init')
                         send_robot_action(robot,'auto_play')
-                        if robot_status == 7:
-                            send_robot_action(robot,'start')
-                            print('Ready to Work!!!')
+                        send_robot_action(robot,'stop')
+                        # if robot_status == 7:
+                        #     send_robot_action(robot,'start')
+                        #     print('Ready to Work!!!')
 
                     except:
                         print('Connection problem...')
