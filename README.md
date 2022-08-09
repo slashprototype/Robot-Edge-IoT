@@ -6,12 +6,12 @@ This project is a development for using RTDE protocol of Universal Robot Company
 
 ### Features:
 
-Include folder with the files needed by UR OS for run the selected program
-Use MQTT topics for receive commands and select the routine based on /routines folder
-Automatically initialize the robot and use watchdog security config
+- Include folder with the files needed by UR OS for run the selected program
+- Use MQTT topics for receive commands and select the routine based on /routines folder
+- Atomatically initialize the robot and use watchdog security config
 
 # Modules Required
 
-`paho-mqtt`
-`rtde` module download at universal robot page
-`jasonpickle`
+- `paho-mqtt`
+- `rtde` module download at universal robot page
+- `jasonpickle`
