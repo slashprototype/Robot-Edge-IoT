@@ -1,25 +1,35 @@
-from classes.robotUR import *
-from main import robot_loop
+import sys
+sys.path.append('classes/mqtt/')
+sys.path.append('classes/robotUR/')
+
+from mqtt import Mqtt
+from robotUR import Robot
+
+
+
+from main import control_loop
 import json
 
 NAME = 'UR3-B'
 ROBOT_IP = '10.40.30.11'
+config_file = 'configuration/configuration.xml'
 
-f = open(NAME + '.json',)
-config = json.load(f)
+topics_file = open('configuration/'+NAME+'.json',)
+topics = json.load(topics_file)
 
 SUBSCRIBE_TOPICS = []
 PUBLISH_TOPICS = []
 
-for i in config['SUBSCRIBE_TOPICS']:
+for i in topics['SUBSCRIBE_TOPICS']:
     SUBSCRIBE_TOPICS.append(i)
 
-for i in config['PUBLISH_TOPICS']:
+for i in topics['PUBLISH_TOPICS']:
     PUBLISH_TOPICS.append(i)
 
 ROUTINES_PATH = 'routines/'+NAME+'_routines/'
 
-robot = Robot(ROBOT_IP, NAME, 30004)
-robot.connect_to_robot()
-robot.start_rtde()
-robot_loop(robot,NAME,SUBSCRIBE_TOPICS,PUBLISH_TOPICS,ROUTINES_PATH)
+robot = Robot(ROBOT_IP, NAME, 30004, config_file)
+
+mqtt = Mqtt('10.40.30.50', 31285, 30,NAME)
+
+control_loop(mqtt,robot,SUBSCRIBE_TOPICS,PUBLISH_TOPICS,ROUTINES_PATH)
