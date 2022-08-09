@@ -140,11 +140,11 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             if stm_com == 2:
                                 robot_status = 7
                                 if status == 3:
-                                    if target_id <= targets_len-1:
+                                    print('file:', ctrl_commad, ' speed:',
+                                            ctrl_speed, ' target_id:', target_id)
+                                    if target_id < targets_len-1:
                                         target_id = target_id + 1
                                         robot.sync_setpoint(targets,target_id)
-                                        print('file:', ctrl_commad, ' speed:',
-                                            ctrl_speed, ' target_id:', target_id)
                                         robot.sync_program(start = 0)
                                         stm_com = 1
                                     else:
