@@ -118,9 +118,9 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                     runtime_state = robot_data.get('runtime_state') 
                                     if runtime_state == 2:
                                         stm_com = 1
-                                    else:
-                                        robot_status = 5
-                                        print('Robot Cannot start working, remote is not active')
+                                    # else:
+                                    #     robot_status = 5
+                                    #     print('Robot Cannot start working, remote is not active')
                                 else:
                                     stm_com = 1
 
