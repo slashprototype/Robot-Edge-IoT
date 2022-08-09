@@ -83,7 +83,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         status = robot_data.get('output_int_register_0') 
                         tool = robot_data.get('output_int_register_1') 
                         runtime_state = robot_data.get('runtime_state') 
-                        print(robot_status)
+                        # print(robot_status)
                     except:
                         print('An error has ocurred while getting data from robot')
                         robot_status = 0
@@ -130,6 +130,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                 # Robot stop
 
                         # ROBOT CONTROL 
+                        
                         try: 
                             if stm_com == 1:
                                 robot_status = 7
