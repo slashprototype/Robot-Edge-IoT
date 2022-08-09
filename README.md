@@ -4,7 +4,10 @@ This project is a development for using RTDE protocol of Universal Robot Company
 
 # Version 1.0
 
-This version is functional
+Features:
+Include folder with the files needed by UR OS for run the selected program
+Use MQTT topics for receive commands and select the routine based on /routines folder
+Automatically initialize the robot and use watchdog security config
 
 # Modules Required
 

@@ -1,0 +1,85 @@
+ Program
+   Init Variables
+   BeforeStart
+     rtde_set_watchdog("input_int_register_0", 2, "PAUSE")
+     Call initialize_variables
+     Set
+     Call sync_registers
+     Wait: 0.5
+   Robot Program
+     sync()
+     status = 1
+     Wait start == 1
+     status = 2
+     Switch move_type
+       Case 1
+         2FG Grip (20)
+         tool = 1
+         write_output_integer_register(1, tool)
+         sync()
+         Wait: 1.0
+       Case 2
+         2FG Release (50)
+         tool = 0
+         write_output_integer_register(1, tool)
+         sync()
+         Wait: 1.0
+       Case 3
+         Popup: Warning!, movel movement with joint data could result in collisions,if isn't a mistake, you can skip this warning
+         If tmpl_joint != [0,0,0,0,0,0]
+           movel(tmpl_joint,accel,speed,0,blend_radius)
+       Case 4
+         If tmpl_cartesian != p[0,0,0,0,0,0]
+           movel(tmpl_cartesian,accel,speed,0,blend_radius)
+       Case 5
+         If tmpj_joint != [0,0,0,0,0,0]
+           movej(tmpj_joint,accel,speed,0,blend_radius)
+       Case 6
+         Popup: Warning!, movej movement with cartesian data could result in collisions,if isn't a mistake, you can skip this warning
+         If tmpj_cartesian != p[0,0,0,0,0,0]
+           movej(tmpj_cartesian,accel,speed,0,blend_radius)
+       'Default Case'
+     status = 3
+     Wait start == 0
+   Thread_1
+     setp≔Tool_const
+     Loop
+       Call sync_registers
+   sync_registers
+     sync()
+     'outputs'
+     write_output_integer_register(0, status)
+     'write_output_integer_register(1, tool)'
+     'inputs'
+     move_type = read_input_integer_register(20)
+     start = read_input_integer_register(1)
+     'set targets'
+     tmp≔[0,0,0,0,0,0]
+     tmp[0] = read_input_float_register(0)
+     tmp[1] = read_input_float_register(1)
+     tmp[2] = read_input_float_register(2)
+     tmp[3] = read_input_float_register(3)
+     tmp[4] = read_input_float_register(4)
+     tmp[5] = read_input_float_register(5)
+     tmpl_cartesian≔p[tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],tmp[5]]
+     tmpl_joint≔[tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],tmp[5]]
+     tmpj_cartesian≔p[tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],tmp[5]]
+     tmpj_joint≔[tmp[0],tmp[1],tmp[2],tmp[3],tmp[4],tmp[5]]
+     'speed and acceleration variables'
+     accel = read_input_float_register(20)
+     speed = read_input_float_register(21)
+     blend_radius = read_input_float_register(22)
+     var_1≔auto_init
+     var_2≔auto_play
+     sync()
+   initialize_variables
+     setp≔Tool_const
+     status≔0
+     start≔0
+     move_type≔0
+     speed≔0.0
+     accel≔0.0
+     blend_radius≔0.0
+     tool≔0
+     var_1≔auto_init
+     var_2≔auto_play
