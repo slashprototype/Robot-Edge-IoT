@@ -1,15 +1,14 @@
 import time
 from threading import Thread
+import sys
 
-
+interrup = False
 
 def loop():
     while True:
-        try:
-            time.sleep(1)
-            print(1)
-        except KeyboardInterrupt:
-            th.join(timeout=1)
+        time.sleep(1)
+        print(1)
+        if interrup == True:
             break
 
 th = Thread(target=loop)
@@ -19,5 +18,7 @@ while True:
     try:
         time.sleep(0.5)
         print('main')
+
     except KeyboardInterrupt:
-        th.join(timeout=1)
+        interrup = True
+        th.join()
