@@ -1,9 +1,6 @@
-from ast import While
 from threading import Thread
 import sys
 import time
-from tracemalloc import stop
-from unittest import runner
 
 class Application ():
     def __init__(self, mqtt,robot,subscribe_topics,publish_topics,routines_path):
