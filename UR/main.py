@@ -7,12 +7,6 @@ from functions import search_script,send_robot_action,get_robot_targets
 
 datetime.now().isoformat()
 
-#-----------------------USEFULL FUNCTIONS ----------------------------------------------------------------------#   
-
-
-
-
-
 #-----------------------ROBOT LOOP ----------------------------------------------------------------------#
 
 # Thread Loop
@@ -52,12 +46,18 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         _current = str(robot_data.get('actual_current')) 
                         _temperature = str(robot_data.get('joint_temperatures'))
                         _tool = str(robot_data.get('output_int_register_1'))
-
-                        
+                        _execute = 0
+                        _resultwork = 0
+                        _status = 0
+                
                         mqtt.publish(publish_topics[4],_position)
                         mqtt.publish(publish_topics[6],_current)
                         mqtt.publish(publish_topics[8],_temperature)
                         mqtt.publish(publish_topics[10],_tool)
+                        # mqtt.publish(publish_topics[12],_execute)
+                        # mqtt.publish(publish_topics[14],_resultwork)
+                        
+
                         # print(robot_status)
                     except:
                         print('An error has ocurred while getting data from robot')
@@ -131,7 +131,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             print('Control Robot Error, stopping robot...')
                             send_robot_action(robot,'stop')
                     else:
-                        print('robot status is incorrect... retrying setup...', robot_status)
+                        print('robot status is incorrect, retrying setup...', robot_status)
                         send_robot_action(robot,'auto_init')
                         send_robot_action(robot,'auto_play')
                         send_robot_action(robot,'stop')
@@ -151,14 +151,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         print('Connection problem...')
 
                 mqtt.publish(publish_topics[2],robot_status)    
-                _execute = 0
-                _resultwork = 0
-                _status = 0
-                
-                
-                # mqtt.publish(publish_topics[12],_execute)
-                # mqtt.publish(publish_topics[14],_resultwork)
-                # mqtt.publish(publish_topics[16],_status)
+
             
             #MQTT NOK
             else:

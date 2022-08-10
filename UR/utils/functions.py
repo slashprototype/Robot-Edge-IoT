@@ -2,6 +2,8 @@ import sys
 import time
 import text_processor
 
+#-----------------------USEFULL FUNCTIONS ----------------------------------------------------------------------#   
+
 def send_robot_action(robot, action):
     running = True
     i = 0
@@ -39,3 +41,6 @@ def get_robot_targets(file):
     targets = text_processor.process(file)
     targets_len = len(targets)
     return (targets,targets_len)
+
+def update_once(mqtt,publish_topic,value):
+    mqtt.publish(publish_topic,value)

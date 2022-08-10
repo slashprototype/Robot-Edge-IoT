@@ -21,4 +21,6 @@ Functionall, still with no sendind the required data to mqtt
 
 ### Version 1.1
 
-Working in add publish topics correctly
+- Working in add publish topics correctly
+- Generic topics for both robots defined and publish, execution logic isn't defined yet
+- main.py was fixed and improved
