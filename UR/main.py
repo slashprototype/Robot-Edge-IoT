@@ -157,7 +157,10 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             print('Control Robot Error, stopping robot...')
                             send_robot_action(robot,'stop')
                     else:
-                        print('robot status is incorrect...', robot_status)
+                        print('robot status is incorrect... retrying setup...', robot_status)
+                        send_robot_action(robot,'auto_init')
+                        send_robot_action(robot,'auto_play')
+                        send_robot_action(robot,'stop')
                 # ROBOT NOK   
                 else:
                     try:
