@@ -205,6 +205,7 @@ class Robot():
 
     def get_data(self):
         robot_status = 0
+        
         try:
             if self.args.buffered:
                 self.state = self.con.receive_buffered(self.args.binary)
@@ -240,7 +241,6 @@ class Robot():
         except:
             self.robot_ok = False
             logging.error('problem getting data...')
-            return (robot_data,robot_status)
         
         
 
