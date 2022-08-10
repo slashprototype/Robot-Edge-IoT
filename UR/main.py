@@ -1,6 +1,6 @@
-from cProfile import run
+from distutils.util import execute
 import time
-from typing_extensions import runtime
+from turtle import position
 import utils.text_processor as text_processor
 from datetime import datetime
 import sys
@@ -27,6 +27,7 @@ def send_robot_action(robot, action):
             else:
                 i = i + 1
     except KeyboardInterrupt:
+        robot.disconnect()
         sys.exit()
 
 def search_script(robot_name,command):
@@ -65,6 +66,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
             time.sleep(0.05)
             
             # INITALIZE BROKER COMMUNICATION AND GET DATA
+            # MQTT OK
             if mqtt.mqtt_ok:
                 received_msg = mqtt.get_data()
                 # GET TOPICS VARIABLE
@@ -74,14 +76,13 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                 ctrl_speed = received_msg['speed']
                 
                 
-
+                # ROBOT OK
                 if robot.robot_ok:
                     # GET ROBOT DATA
                     try:
                         robot_data,robot_status = robot.get_data()
                         robot.sync_config(slider = 1, watchdog = 0)
                         status = robot_data.get('output_int_register_0') 
-                        tool = robot_data.get('output_int_register_1') 
                         runtime_state = robot_data.get('runtime_state') 
                         # print(robot_status)
                     except:
@@ -157,7 +158,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             send_robot_action(robot,'stop')
                     else:
                         print('robot status is incorrect...', robot_status)
-                    
+                # ROBOT NOK   
                 else:
                     try:
                         robot.connect()
@@ -171,9 +172,26 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
 
                     except:
                         print('Connection problem...')
-                
-                mqtt.publish(publish_topics[0],robot_status)    
 
+                robot_data,_ = robot.get_data()
+                _position = robot_data.get('actual_q') 
+                _current = robot_data.get('actual_current') 
+                _temperature = robot_data.get('joint_temperatures') 
+                _tool = robot_data.get('output_int_register_1') 
+                _execute = 0
+                _resultwork = 0
+                _status = 0
+                
+                mqtt.publish(publish_topics[2],robot_status)    
+                mqtt.publish(publish_topics[4],_position)
+                mqtt.publish(publish_topics[6],_current)
+                mqtt.publish(publish_topics[8],_temperature)
+                mqtt.publish(publish_topics[10],_tool)
+                mqtt.publish(publish_topics[12],_execute)
+                mqtt.publish(publish_topics[14],_resultwork)
+                mqtt.publish(publish_topics[16],_status)
+            
+            #MQTT NOK
             else:
                 if robot.robot_ok:    
                     # SEND STOP CONFIGURATION

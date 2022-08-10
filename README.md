@@ -18,3 +18,7 @@ This project is a development for using RTDE protocol of Universal Robot Company
 ### Version 1.0
 
 Functionall, still with no sendind the required data to mqtt
+
+### Version 1.1
+
+Working in add publish topics correctly
