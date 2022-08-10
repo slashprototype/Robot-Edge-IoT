@@ -187,7 +187,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                 mqtt.publish(publish_topics[6],_current)
                 mqtt.publish(publish_topics[8],_temperature)
                 mqtt.publish(publish_topics[10],_tool)
-                mqtt.publish(publish_topics[12],_execute)
+                # mqtt.publish(publish_topics[12],_execute)
                 mqtt.publish(publish_topics[14],_resultwork)
                 mqtt.publish(publish_topics[16],_status)
             
