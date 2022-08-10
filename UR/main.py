@@ -140,7 +140,6 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                     except:
                         print('Connection problem...')
 
-                robot_data,_ = robot.get_data()
                 _position = str(robot_data.get('actual_q'))
                 _current = str(robot_data.get('actual_current')) 
                 _temperature = str(robot_data.get('joint_temperatures'))
