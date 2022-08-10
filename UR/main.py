@@ -174,10 +174,10 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         print('Connection problem...')
 
                 robot_data,_ = robot.get_data()
-                _position = robot_data.get('actual_q') 
-                _current = robot_data.get('actual_current') 
-                _temperature = robot_data.get('joint_temperatures') 
-                _tool = robot_data.get('output_int_register_1') 
+                _position = str(robot_data.get('actual_q'))
+                _current = str(robot_data.get('actual_current')) 
+                _temperature = str(robot_data.get('joint_temperatures'))
+                _tool = str(robot_data.get('output_int_register_1'))
                 _execute = 0
                 _resultwork = 0
                 _status = 0
@@ -188,8 +188,8 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                 mqtt.publish(publish_topics[8],_temperature)
                 mqtt.publish(publish_topics[10],_tool)
                 # mqtt.publish(publish_topics[12],_execute)
-                mqtt.publish(publish_topics[14],_resultwork)
-                mqtt.publish(publish_topics[16],_status)
+                # mqtt.publish(publish_topics[14],_resultwork)
+                # mqtt.publish(publish_topics[16],_status)
             
             #MQTT NOK
             else:
