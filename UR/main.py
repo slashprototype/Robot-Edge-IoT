@@ -1,5 +1,4 @@
 import time
-from turtle import position
 from datetime import datetime
 import sys
 sys.path.append('utils/')

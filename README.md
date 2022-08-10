@@ -24,3 +24,8 @@ Functionall, still with no sendind the required data to mqtt
 - Working in add publish topics correctly
 - Generic topics for both robots defined and publish, execution logic isn't defined yet
 - main.py was fixed and improved
+
+### Version 1.2
+
+- Will change the paradigm for run main logic by using an application in OOP, this changes are neccesary for using two main threads for robot control and mqtt functionality
+- An "Aplication" class was created for replace old main.py

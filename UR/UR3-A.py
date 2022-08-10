@@ -5,8 +5,6 @@ sys.path.append('classes/robotUR/')
 from mqtt import Mqtt
 from robotUR import Robot
 
-
-
 from main import control_loop
 import json
 
