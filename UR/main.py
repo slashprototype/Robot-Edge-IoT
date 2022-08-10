@@ -48,6 +48,16 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         robot.sync_config(slider = 1, watchdog = 0)
                         status = robot_data.get('output_int_register_0') 
                         runtime_state = robot_data.get('runtime_state') 
+                        _position = str(robot_data.get('actual_q'))
+                        _current = str(robot_data.get('actual_current')) 
+                        _temperature = str(robot_data.get('joint_temperatures'))
+                        _tool = str(robot_data.get('output_int_register_1'))
+
+                        
+                        mqtt.publish(publish_topics[4],_position)
+                        mqtt.publish(publish_topics[6],_current)
+                        mqtt.publish(publish_topics[8],_temperature)
+                        mqtt.publish(publish_topics[10],_tool)
                         # print(robot_status)
                     except:
                         print('An error has ocurred while getting data from robot')
@@ -140,19 +150,12 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                     except:
                         print('Connection problem...')
 
-                _position = str(robot_data.get('actual_q'))
-                _current = str(robot_data.get('actual_current')) 
-                _temperature = str(robot_data.get('joint_temperatures'))
-                _tool = str(robot_data.get('output_int_register_1'))
+                mqtt.publish(publish_topics[2],robot_status)    
                 _execute = 0
                 _resultwork = 0
                 _status = 0
                 
-                mqtt.publish(publish_topics[2],robot_status)    
-                mqtt.publish(publish_topics[4],_position)
-                mqtt.publish(publish_topics[6],_current)
-                mqtt.publish(publish_topics[8],_temperature)
-                mqtt.publish(publish_topics[10],_tool)
+                
                 # mqtt.publish(publish_topics[12],_execute)
                 # mqtt.publish(publish_topics[14],_resultwork)
                 # mqtt.publish(publish_topics[16],_status)
