@@ -75,8 +75,10 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             if ctrl_visor_result == 170:
                                 print('result received!!')
                                 stm_com = 1
+                            else:
+                                stm_com = 0
 
-                            stm_com = 0
+                            
                         # ROUTINE SCRIPT SELECTION
                         new = ctrl_commad
                         if (new != old) and (ctrl_commad != 0) and ctrl_execute == 1:
