@@ -36,7 +36,7 @@ class Application():
         subscribe_topics = ["/PCB/CELL-A/UR3-A/MONITORING/STATUS/TYPE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/STATUS/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/JOBNUMBER/VALUE",
-                            "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE"
+                            "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE",
                             "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/POSITION/VALUE",
@@ -134,7 +134,8 @@ class Application():
         
         
         def set_job():
-            mqtt_con.client.publish(publish_topics[4],self.entry_A.get(),1,True)
+            # mqtt_con.client.publish(publish_topics[4],self.entry_A.get(),1,True)
+            mqtt_con.client.publish(publish_topics[1],1 ,1,True)
             
         mqtt_thread = Thread(target=mqtt_loop)
 
@@ -254,7 +255,7 @@ class Application():
         self.entry_B = ttk.Entry(self.marcoLeft_1B)
         
         # MARCO4
-        self.btn_test_job = ttk.Button(self.marcoLeft_2A, text='send job: 1',
+        self.btn_test_job = ttk.Button(self.marcoLeft_2A, text='send execute',
                                       style='My.TButton', width=7, command=set_job)
 
         self.btn_exit = ttk.Button(self.marcoLeft_2A, text='Salir',
