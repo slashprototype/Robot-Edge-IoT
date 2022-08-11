@@ -38,6 +38,9 @@ class Mqtt():
             # SPEED
             if msg.topic == subscribe_topics[6]:
                 self.received_msg['speed'] = float(msg.payload.decode('UTF-8'))
+            #VISOR VALUE
+            if msg.topic == subscribe_topics[8]:
+                self.received_msg['visor_result'] = int(msg.payload.decode('UTF-8'))
             
         self.client.on_connect = on_connect
         self.client.on_message = on_message

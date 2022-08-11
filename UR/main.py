@@ -32,7 +32,8 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                 ctrl_execute = received_msg['execute']
                 ctrl_emergency_stop = received_msg['emergency_stop']
                 ctrl_speed = received_msg['speed']
-                print('command = ',ctrl_commad,'execute = ',ctrl_execute,'speed = ',ctrl_speed)
+                ctrl_visor_result = received_msg['visor_result']
+                
                 
                 
                 # ROBOT OK
@@ -75,6 +76,8 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             print('new command received!')
                             _execute = 0
                             mqtt.publish(publish_topics[12],_execute)
+                            _resultwork = 221
+                            mqtt.publish(publish_topics[14],_resultwork)
 
                             try:
                                 if stm_com != 0:
@@ -129,6 +132,8 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                         stm_com = 1
                                     else:
                                         print('routine complete, select another routine') 
+                                        _resultwork = 170
+                                        mqtt.publish(publish_topics[14],_resultwork)
                                         stm_com = 0
                         except:
                             print('Control Robot Error, stopping robot...')
@@ -138,6 +143,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         send_robot_action(robot,'auto_init')
                         send_robot_action(robot,'auto_play')
                         send_robot_action(robot,'stop')
+                
                 # ROBOT NOK   
                 else:
                     try:
@@ -153,7 +159,8 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                     except:
                         print('Connection problem...')
 
-                mqtt.publish(publish_topics[2],robot_status)    
+                mqtt.publish(publish_topics[2],robot_status) 
+                print('command = ',ctrl_commad,'execute = ',ctrl_execute,'speed = ',ctrl_speed, 'visor_result = ', ctrl_visor_result, 'robot_status', robot_status)   
 
             
             #MQTT NOK
