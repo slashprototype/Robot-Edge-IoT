@@ -30,7 +30,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                 # GET TOPICS VARIABLE
                 ctrl_commad = received_msg['command']
                 ctrl_execute = received_msg['execute']
-                ctrl_emergency_stop = received_msg['emergency_stop']
+                # ctrl_emergency_stop = received_msg['emergency_stop']
                 ctrl_speed = received_msg['speed']
                 ctrl_visor_result = received_msg['visor_result']
                 
