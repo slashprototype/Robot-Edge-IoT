@@ -73,8 +73,9 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             if ctrl_visor_result == 170:
                                 print('result received!!')
                                 mqtt.publish(publish_topics[17],0)
-                                stm_com = 1
-                            else:
+                                if stm_com < 1:
+                                    stm_com = 1
+                            else :
                                 print('sending trigger, waiting for response')
                                 mqtt.publish(publish_topics[17],2)
                                 stm_com = 0
