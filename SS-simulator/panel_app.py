@@ -34,7 +34,7 @@ class Application():
                     ]
 
         subscribe_topics = ["/PCB/CELL-A/UR3-A/MONITORING/STATUS/TYPE",
-                            "/PCB/CELL-A/UR3-A/MONITORING/STATUS/VALUE",
+                            # "/PCB/CELL-A/UR3-A/MONITORING/STATUS/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/JOBNUMBER/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE"
                             "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
