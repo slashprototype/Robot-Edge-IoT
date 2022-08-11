@@ -85,7 +85,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                 print('result received!!')
                                 mqtt.publish(publish_topics[17],0)
                                 stm_com = 1
-                                bit = 0
+                                bit = 3
                             
 
                             
@@ -149,12 +149,15 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                         target_id = target_id + 1
                                         robot.sync_setpoint(targets,target_id)
                                         robot.sync_program(start = 0)
+                                        bit = 0
                                         stm_com = 1
+                                        
                                     else:
                                         print('routine complete, select another routine') 
                                         _resultwork = 170
                                         mqtt.publish(publish_topics[14],_resultwork)
                                         stm_com = 0
+
                         except:
                             print('Control Robot Error, stopping robot...')
                             send_robot_action(robot,'stop')
