@@ -32,6 +32,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                 ctrl_execute = received_msg['execute']
                 ctrl_emergency_stop = received_msg['emergency_stop']
                 ctrl_speed = received_msg['speed']
+                print('command = ',ctrl_commad,'execute = ',ctrl_execute,'speed = ',ctrl_speed)
                 
                 
                 # ROBOT OK
@@ -49,7 +50,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         _execute = 0
                         _resultwork = 0
                         _status = 0
-                
+                        
                         mqtt.publish(publish_topics[4],_position)
                         mqtt.publish(publish_topics[6],_current)
                         mqtt.publish(publish_topics[8],_temperature)
@@ -69,9 +70,11 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
 
                         # ROUTINE SCRIPT SELECTION
                         new = ctrl_commad
-                        if (new != old) and (ctrl_commad != 0):
+                        if (new != old) and (ctrl_commad != 0) or ctrl_execute == 1:
                             old = ctrl_commad
                             print('new command received!')
+                            _execute = 0
+                            mqtt.publish(publish_topics[12],_execute)
 
                             try:
                                 if stm_com != 0:

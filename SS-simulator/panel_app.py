@@ -39,7 +39,7 @@ class Application():
                             "/PCB/CELL-A/UR3-A/MONITORING/CURRENT/VALUE",
                             "/PCB/CELL-A/UR3-A/MONITORING/TEMPERATURE/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/TOOL/VALUE",
-                            # "/PCB/CELL-A/UR3-A/CONTROLLER/EXECUTE/VALUE",
+                            "/PCB/CELL-A/UR3-A/CONTROLLER/EXECUTE/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/RESULTWORK/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/STATUS/VALUE"
                             ]
