@@ -91,7 +91,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             
                         # ROUTINE SCRIPT SELECTION
                         new = ctrl_commad
-                        if  ctrl_execute == 1:
+                        if (new != old) and (ctrl_commad != 0) and ctrl_execute == 1:
                             old = ctrl_commad
                             print('new command received!')
                             _execute = 0
