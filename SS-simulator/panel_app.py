@@ -21,7 +21,7 @@ class Application():
                     "/PCB/CELL-A/UR3-A/CONTROLLER/EXECUTE/VALUE",
                     "/PCB/CELL-A/UR3-A/CONTROLLER/EMERGENCYSTOP/VALUE",
                     "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE",
-                    "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE",
+                    "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
 
                     "/PCB/CELL-B/UR3-B/CONTROLLER/COMMAND/VALUE",
                     "/PCB/CELL-B/UR3-B/CONTROLLER/EXECUTE/VALUE",
@@ -78,7 +78,7 @@ class Application():
                 # mqtt_con.client.publish(publish_topics[1],self.execute_A.get() ,1,True)
                 # mqtt_con.client.publish(publish_topics[2],self.emergency_A.get(),1,True)
                 # mqtt_con.client.publish(publish_topics[3],"{:.2f}".format(self.speed_A.get()) ,1,True)
-                # mqtt_con.client.publish(publish_topics[4],self.visor_trigger.get(),1,True)
+                mqtt_con.client.publish(publish_topics[4],self.visor_trigger.get(),1,True)
                 
                 # mqtt_con.client.publish(publish_topics[5],self.rutina_B.get() ,1,True)
                 # mqtt_con.client.publish(publish_topics[6],self.execute_B.get() ,1,True)
@@ -238,7 +238,7 @@ class Application():
         
         self.check_visor_trigger = ttk.Checkbutton(self.marcoLeft_1A, text='visor trigger',
                                             variable=self.visor_trigger,
-                                            onvalue=1, offvalue=0)                                            
+                                            onvalue=170, offvalue=255)                                            
         self.entry_A = ttk.Entry(self.marcoLeft_1A)
 
         
