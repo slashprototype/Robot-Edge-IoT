@@ -74,10 +74,10 @@ class Application():
             while(running):
                 time.sleep(0.1)
 
-                mqtt_con.client.publish(publish_topics[0],self.rutina_A.get() ,1,True)
-                mqtt_con.client.publish(publish_topics[1],self.execute_A.get() ,1,True)
-                mqtt_con.client.publish(publish_topics[2],self.emergency_A.get(),1,True)
-                mqtt_con.client.publish(publish_topics[3],"{:.2f}".format(self.speed_A.get()) ,1,True)
+                # mqtt_con.client.publish(publish_topics[0],self.rutina_A.get() ,1,True)
+                # mqtt_con.client.publish(publish_topics[1],self.execute_A.get() ,1,True)
+                # mqtt_con.client.publish(publish_topics[2],self.emergency_A.get(),1,True)
+                # mqtt_con.client.publish(publish_topics[3],"{:.2f}".format(self.speed_A.get()) ,1,True)
                 # mqtt_con.client.publish(publish_topics[4],self.visor_trigger.get(),1,True)
                 
                 # mqtt_con.client.publish(publish_topics[5],self.rutina_B.get() ,1,True)
