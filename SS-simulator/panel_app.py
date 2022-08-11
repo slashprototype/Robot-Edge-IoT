@@ -85,8 +85,8 @@ class Application():
                 mqtt_con.client.publish(publish_topics[7],self.emergency_B.get() ,1,True)
                 mqtt_con.client.publish(publish_topics[8],"{:.2f}".format(self.speed_B.get()),1,True)
                 
-                mqtt_con.client.publish(publish_topics[9],0 ,1,True)
-                mqtt_con.client.publish(publish_topics[10],0 ,1,True)
+                # mqtt_con.client.publish(publish_topics[9],0 ,1,True)
+                # mqtt_con.client.publish(publish_topics[10],0 ,1,True)
                 # if len(mqtt_con.received_msg) > 0:
                 #     print(mqtt_con.received_msg)
                 # time.sleep(1)
