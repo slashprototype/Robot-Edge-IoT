@@ -26,9 +26,9 @@ class Application():
                     "/PCB/CELL-B/UR3-B/CONTROLLER/COMMAND/VALUE",
                     "/PCB/CELL-B/UR3-B/CONTROLLER/EXECUTE/VALUE",
                     "/PCB/CELL-B/UR3-B/CONTROLLER/EMERGENCYSTOP/VALUE",
-                    "/PCB/CELL-B/UR3-B/CONTROLLER/SPEED/VALUE"
+                    "/PCB/CELL-B/UR3-B/CONTROLLER/SPEED/VALUE",
 
-                    "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE"
+                    "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE",
                     "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE"
                     
                     ]
