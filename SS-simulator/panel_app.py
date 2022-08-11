@@ -286,7 +286,8 @@ class Application():
         self.remote_speed_A.grid(column=0, row=2)
         self.check_execute_A.grid(column=0, row=3)
         self.check_execute_A.grid(column=0, row=4)
-        self.entry_A.grid(column=0,row=5)
+        self.check_visor_trigger.grid(column=0, row= 5)
+        self.entry_A.grid(column=0,row=6)
 
         self.box_emergency_stop_B.grid(column=0, row=0)
         self.remote_speed_B.grid(column=0, row=2)
