@@ -80,13 +80,13 @@ class Application():
                 mqtt_con.client.publish(publish_topics[3],"{:.2f}".format(self.speed_A.get()) ,1,True)
                 # mqtt_con.client.publish(publish_topics[4],self.visor_trigger.get(),1,True)
                 
-                mqtt_con.client.publish(publish_topics[5],self.rutina_B.get() ,1,True)
-                mqtt_con.client.publish(publish_topics[6],self.execute_B.get() ,1,True)
-                mqtt_con.client.publish(publish_topics[7],self.emergency_B.get() ,1,True)
-                mqtt_con.client.publish(publish_topics[8],"{:.2f}".format(self.speed_B.get()),1,True)
+                # mqtt_con.client.publish(publish_topics[5],self.rutina_B.get() ,1,True)
+                # mqtt_con.client.publish(publish_topics[6],self.execute_B.get() ,1,True)
+                # mqtt_con.client.publish(publish_topics[7],self.emergency_B.get() ,1,True)
+                # mqtt_con.client.publish(publish_topics[8],"{:.2f}".format(self.speed_B.get()),1,True)
                 
-                mqtt_con.client.publish(publish_topics[9],0 ,1,True)
-                mqtt_con.client.publish(publish_topics[10],0 ,1,True)
+                # mqtt_con.client.publish(publish_topics[9],0 ,1,True)
+                # mqtt_con.client.publish(publish_topics[10],0 ,1,True)
                 # if len(mqtt_con.received_msg) > 0:
                 #     print(mqtt_con.received_msg)
                 # time.sleep(1)
@@ -96,6 +96,7 @@ class Application():
         # RUTINA A ENTRY BOX
         def set_command_A():
             self.rutina_A.set(self.entry_A.get())
+            mqtt_con.client.publish(publish_topics[0],self.rutina_A.get() ,1,True)
             # print(self.rutina.get())
         
         # RUTINA B ENTRY BOX
