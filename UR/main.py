@@ -18,7 +18,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
     target_id = 0
     stm_com = 0
     robot_status = 0
-
+    bit = 0
     try:
         while(True):
             time.sleep(0.05)
@@ -68,17 +68,24 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                     if robot_status >= 6:
                         #SYNCRONIZE BROKER CONFIGURATION VARIABLES TO ROBOT 
                         robot.sync_config(slider_fraction = ctrl_speed) 
-
-                        if target_id == 1 and ctrl_commad == 130:
-                            if ctrl_visor_result == 170:
-                                print('result received!!')
-                                mqtt.publish(publish_topics[17],0)
-                                if stm_com < 1:
-                                    stm_com = 1
-                            else :
+                        
+                        
+                        
+                        if target_id == 1 and ctrl_commad == 130 and bit == 0:
+                            bit = 1
+                        
+                        if bit == 1:
                                 print('sending trigger, waiting for response')
                                 mqtt.publish(publish_topics[17],2)
                                 stm_com = 0
+                                bit = 2
+                        if bit == 2:
+                            if ctrl_visor_result == 170:
+                                print('result received!!')
+                                mqtt.publish(publish_topics[17],0)
+                                stm_com = 1
+                                bit = 0
+                            
 
                             
                         # ROUTINE SCRIPT SELECTION
