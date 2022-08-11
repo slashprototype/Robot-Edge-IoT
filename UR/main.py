@@ -70,7 +70,12 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         robot.sync_config(slider_fraction = ctrl_speed) 
 
                         if target_id == 1 and ctrl_commad == 130:
+                            print('sending trigger, waiting for response')
                             mqtt.publish(publish_topics[17],2)
+                            if ctrl_visor_result == 170:
+                                print('result received!!')
+                                stm_com = 1
+
                             stm_com = 0
                         # ROUTINE SCRIPT SELECTION
                         new = ctrl_commad
