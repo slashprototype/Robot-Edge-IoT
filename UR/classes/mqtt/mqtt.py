@@ -26,21 +26,24 @@ class Mqtt():
         
         def on_message(client, userdata, msg):
             
-            # COMMAND
-            if msg.topic == subscribe_topics[1]:    
-                self.received_msg['command'] = int(msg.payload.decode('UTF-8'))
-            # EXECUTE
-            if msg.topic == subscribe_topics[3]:
-                self.received_msg['execute'] = int(msg.payload.decode('UTF-8'))
-            # EMERGENCY STOP
-            # if msg.topic == subscribe_topics[5]:
-                # self.received_msg['emergency_stop'] = int(msg.payload.decode('UTF-8'))
-            # SPEED
-            if msg.topic == subscribe_topics[6]:
-                self.received_msg['speed'] = float(msg.payload.decode('UTF-8'))
-            #VISOR VALUE
-            if msg.topic == subscribe_topics[8]:
-                self.received_msg['visor_result'] = int(msg.payload.decode('UTF-8'))
+            try:
+                # COMMAND
+                if msg.topic == subscribe_topics[1]:    
+                    self.received_msg['command'] = int(msg.payload.decode('UTF-8'))
+                # EXECUTE
+                if msg.topic == subscribe_topics[3]:
+                    self.received_msg['execute'] = int(msg.payload.decode('UTF-8'))
+                # EMERGENCY STOP
+                # if msg.topic == subscribe_topics[5]:
+                    # self.received_msg['emergency_stop'] = int(msg.payload.decode('UTF-8'))
+                # SPEED
+                if msg.topic == subscribe_topics[6]:
+                    self.received_msg['speed'] = float(msg.payload.decode('UTF-8'))
+                #VISOR VALUE
+                if msg.topic == subscribe_topics[8]:
+                    self.received_msg['visor_result'] = int(msg.payload.decode('UTF-8'))
+            except:
+                pass
             
         self.client.on_connect = on_connect
         self.client.on_message = on_message
