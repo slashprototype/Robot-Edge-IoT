@@ -1,6 +1,7 @@
 from threading import Thread
 import sys
 import time
+from multiprocessing import Process
 
 class Application ():
     def __init__(self, mqtt,robot,subscribe_topics,publish_topics,routines_path):
@@ -11,12 +12,13 @@ class Application ():
         self.routines_path = routines_path
         self.running = False
         
-        self.robot_thread = Thread(target=self.robot_loop, args =(lambda : self.running, ),daemon=True)
+        self.robot_process = Process(target=self.robot_loop)
         self.mqtt_thread = Thread(target=self.mqtt_loop)
         self.main_thread = Thread(target=self.main_loop)
         
-        self.start_app()
-        self.main_loop()
+        self.robot_process.start()
+        # self.start_app()
+        # self.main_loop()
 
     def start_app(self):
         self.running = True
@@ -49,11 +51,13 @@ class Application ():
         while (self.running):
             time.sleep(0.1)
             print(self.mqtt)
+            if not self.running:
+                break
     
-    def robot_loop(self, stop):
-        while (self.running):
-            time.sleep(0.1)
-            print(self.robot)
+    def robot_loop(self):
+        time.sleep(1)
+        print('running')
+        
 
 
 if __name__ == '__main__':

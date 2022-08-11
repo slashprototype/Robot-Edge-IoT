@@ -1,24 +1,10 @@
-import time
-from threading import Thread
-import sys
+from multiprocessing import Process
 
-interrup = False
-
-def loop():
+def f(name):
     while True:
-        time.sleep(1)
-        print(1)
-        if interrup == True:
-            break
+        print('hello', name)
 
-th = Thread(target=loop)
-th.start()
-
-while True:
-    try:
-        time.sleep(0.5)
-        print('main')
-
-    except KeyboardInterrupt:
-        interrup = True
-        th.join()
+if __name__ == '__main__':
+    p = Process(target=f, args=('bob',))
+    p.start()
+    p.join()

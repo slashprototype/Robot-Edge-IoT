@@ -53,7 +53,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         mqtt.publish(publish_topics[6],_current)
                         mqtt.publish(publish_topics[8],_temperature)
                         mqtt.publish(publish_topics[10],_tool)
-                        # mqtt.publish(publish_topics[12],_execute)
+                        
                         # mqtt.publish(publish_topics[14],_resultwork)
                         
 
@@ -68,8 +68,9 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
 
                         # ROUTINE SCRIPT SELECTION
                         new = ctrl_commad
-                        if (new != old) and (ctrl_commad != 0):
+                        if (new != old) and (ctrl_commad != 0) or ctrl_execute == 1:
                             old = ctrl_commad
+                            mqtt.publish(publish_topics[12],0)
                             print('new command received!')
 
                             try:
