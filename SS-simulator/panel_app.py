@@ -34,9 +34,9 @@ class Application():
                     ]
 
         subscribe_topics = ["/PCB/CELL-A/UR3-A/MONITORING/STATUS/TYPE",
-                            # "/PCB/CELL-A/UR3-A/MONITORING/STATUS/VALUE",
+                            "/PCB/CELL-A/UR3-A/MONITORING/STATUS/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/JOBNUMBER/VALUE",
-                            # "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE"
+                            "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE"
                             "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/POSITION/VALUE",
@@ -107,11 +107,13 @@ class Application():
         # SPEED A
         def set_speed_plus_A():
             self.speed_A.set(self.speed_A.get()+0.01)
+            mqtt_con.client.publish(publish_topics[3],"{:.2f}".format(self.speed_A.get()) ,1,True)
             # print(self.speed.get())
 
         def set_speed_minus_A():
             if self.speed_A.get() > 0:
                 self.speed_A.set(self.speed_A.get()-0.01)
+                mqtt_con.client.publish(publish_topics[3],"{:.2f}".format(self.speed_A.get()) ,1,True)
                 # print(self.speed.get())
         
         # SPEED B
