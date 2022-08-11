@@ -69,6 +69,9 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         #SYNCRONIZE BROKER CONFIGURATION VARIABLES TO ROBOT 
                         robot.sync_config(slider_fraction = ctrl_speed) 
 
+                        if target_id == 1 and ctrl_commad == 130:
+                            mqtt.publish(publish_topics[17],2)
+                            stm_com = 0
                         # ROUTINE SCRIPT SELECTION
                         new = ctrl_commad
                         if (new != old) and (ctrl_commad != 0) and ctrl_execute == 1:
@@ -126,17 +129,10 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                 robot_status = 7
                                 if status == 3:
                                     if target_id < targets_len-1:
-                                        
-                                        if target_id == 1 and ctrl_commad == 130:
-                                            mqtt.publish(publish_topics[17],2)
-                                            print('sending job')
-
-                                        else:
-                                            target_id = target_id + 1
-                                            robot.sync_setpoint(targets,target_id)
-                                            robot.sync_program(start = 0)
-                                            stm_com = 1
-
+                                        target_id = target_id + 1
+                                        robot.sync_setpoint(targets,target_id)
+                                        robot.sync_program(start = 0)
+                                        stm_com = 1
                                     else:
                                         print('routine complete, select another routine') 
                                         _resultwork = 170
