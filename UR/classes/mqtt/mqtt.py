@@ -42,6 +42,10 @@ class Mqtt():
                 #VISOR VALUE
                 if msg.topic == subscribe_topics[8]:
                     self.received_msg['visor_result'] = int(msg.payload.decode('UTF-8'))
+                    
+                if msg.topic == subscribe_topics[9]:
+                    self.received_msg['qr_result'] = int(msg.payload.decode('UTF-8'))
+
             except:
                 pass
             

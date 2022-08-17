@@ -33,6 +33,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                 # ctrl_emergency_stop = received_msg['emergency_stop']
                 ctrl_speed = received_msg['speed']
                 ctrl_visor_result = received_msg['visor_result']
+                ctrl_qr_result = received_msg['qr_result']
                 
                 
                 
@@ -81,7 +82,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                 stm_com = 0
                                 bit = 2
                         if bit == 2:
-                            if ctrl_visor_result == 170:
+                            if ctrl_visor_result == 170 and ctrl_qr_result == 170:
                                 print('result received!!')
                                 mqtt.publish(publish_topics[17],0)
                                 stm_com = 1
