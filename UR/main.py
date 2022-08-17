@@ -94,10 +94,12 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             
                         # ROUTINE SCRIPT SELECTION
                         new = ctrl_commad
-                        if (new != old) and (ctrl_commad != 0) and ctrl_execute == 1:
+                        # if (new != old) and (ctrl_commad != 0) and ctrl_execute == 1:
+                        if ctrl_execute == 1:
                             old = ctrl_commad
                             print('new command received!')
                             _execute = 0
+                            ctrl_execute = _execute
                             mqtt.publish(publish_topics[12],_execute)
                             _resultwork = 221
                             mqtt.publish(publish_topics[14],_resultwork)
