@@ -101,7 +101,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             mqtt.publish(publish_topics[12],_execute)
                             _resultwork = 221
                             mqtt.publish(publish_topics[14],_resultwork)
-                            bit = 1
+                            bit = 0
                             mqtt.publish(publish_topics[17],0)
 
                             try:
