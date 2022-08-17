@@ -72,7 +72,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         
                         
                         
-                        if target_id == 1 and ctrl_commad == 130 and bit == 0:
+                        if target_id == 1 and ctrl_commad == 220 and bit == 0:
                             print('HEY')
                             bit = 1
                         
