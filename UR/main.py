@@ -77,11 +77,13 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             bit = 1
                         
                         if bit == 1:
-                                print('sending trigger, waiting for response')
-                                mqtt.publish(publish_topics[17],2)
-                                stm_com = 0
-                                bit = 2
+                            print('sending trigger, waiting for response')
+                            mqtt.publish(publish_topics[17],2)
+                            stm_com = 0
+                            bit = 2
+
                         if bit == 2:
+                            print('waiting for',ctrl_visor_result,ctrl_qr_result)
                             if ctrl_visor_result == 170 and ctrl_qr_result == 170:
                                 print('result received!!')
                                 mqtt.publish(publish_topics[17],0)
@@ -99,6 +101,8 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             mqtt.publish(publish_topics[12],_execute)
                             _resultwork = 221
                             mqtt.publish(publish_topics[14],_resultwork)
+                            bit = 1
+                            mqtt.publish(publish_topics[17],0)
 
                             try:
                                 if stm_com != 0:
