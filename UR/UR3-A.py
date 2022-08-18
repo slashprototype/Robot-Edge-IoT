@@ -1,11 +1,7 @@
 import sys
-sys.path.append('classes/mqtt/')
-sys.path.append('classes/robotUR/')
-
-from mqtt import Mqtt
-from robotUR import Robot
-
-from main import control_loop
+from classes.app.app import App
+from classes.mqtt.mqtt import Mqtt
+from classes.robotUR.robotUR import Robot
 import json
 
 NAME = 'UR3-A'
@@ -30,4 +26,4 @@ robot = Robot(ROBOT_IP, NAME, 30004, config_file)
 
 mqtt = Mqtt('10.40.30.50', 31285, 30,NAME)
 
-control_loop(mqtt,robot,SUBSCRIBE_TOPICS,PUBLISH_TOPICS,ROUTINES_PATH)
+app = App(mqtt,robot,SUBSCRIBE_TOPICS,PUBLISH_TOPICS,ROUTINES_PATH)
