@@ -1,6 +1,8 @@
 from threading import Thread
 import sys
 import time
+sys.path.append('utils/')
+from functions import search_script,send_robot_action,get_robot_targets
 
 class App ():
     def __init__(self, mqtt,robot,subscribe_topics,publish_topics,routines_path):
@@ -101,11 +103,19 @@ class App ():
     def robot_monitoring_loop(self):
         while (self.running):
             try:
-                time.sleep(5)
                 if self.fsm_robot_monitoring == 0:
                     print('create a robot instance')
+                    time.sleep(1)
+
                 if self.fsm_robot_monitoring == 10:
-                    print('connect to robot...')
+                    print('connecting to robot...')
+                    try:
+                        self.robot.connect()
+                        self.robot.get_data()
+                    except:
+                        print('Connection problem...')
+                        self.fsm_robot_monitoring = 30
+
                 if self.fsm_robot_monitoring == 20:
                     print('robot ok')
                 
