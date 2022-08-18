@@ -1,7 +1,12 @@
 import sys
-from classes.app.app import App
-from classes.mqtt.mqtt import Mqtt
-from classes.robotUR.robotUR import Robot
+sys.path.append('classes/app/')
+sys.path.append('classes/mqtt/')
+sys.path.append('classes/robotUR/')
+
+from app import App
+from mqtt import Mqtt
+from robotUR import Robot
+
 import json
 
 NAME = 'UR3-A'
