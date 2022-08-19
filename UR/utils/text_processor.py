@@ -103,7 +103,7 @@ def process(file):
             
             if re.search(r'(visor_detect\(\))',line):
                 data = []
-                data.append(3)
+                data.append(7)
                 all_pos.append(data)
             
 
@@ -183,7 +183,7 @@ def process(file):
             targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]]) 
         if i[0] == 2:
             targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]]) 
-        if i[0] == 3:
+        if i[0] == 7:
             targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
         
         # Move L (joint mode)
