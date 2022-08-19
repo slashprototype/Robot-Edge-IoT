@@ -70,9 +70,10 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         #SYNCRONIZE BROKER CONFIGURATION VARIABLES TO ROBOT 
                         robot.sync_config(slider_fraction = ctrl_speed) 
                         
+                        # [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 3]
+                        # [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 3]
                         
-                        
-                        if target_id == 1 and ctrl_commad == 220 and bit == 0:
+                        if targets[target_id][5] == 7 and bit == 0:
                             print('HEY')
                             bit = 1
                         
@@ -115,6 +116,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                 targets, targets_len = get_robot_targets(file)
                                 robot.sync_program(start = 0)
                                 robot.sync_setpoint(targets,target_id)
+                                print(targets[target_id])
                                 
                                 robot_data,robot_status = robot.get_data()
                                 runtime_state = robot_data.get('runtime_state') 
@@ -155,6 +157,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                     if target_id < targets_len-1:
                                         target_id = target_id + 1
                                         robot.sync_setpoint(targets,target_id)
+                                        print(targets)
                                         robot.sync_program(start = 0)
                                         bit = 0
                                         stm_com = 1
@@ -195,7 +198,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                 else:
                     mqtt.publish(publish_topics[16],187) 
 
-                print('command = ',ctrl_commad,'execute = ',ctrl_execute,'speed = ',ctrl_speed, 'visor_result = ', ctrl_visor_result, 'robot_status', robot_status)   
+                # print('command = ',ctrl_commad,'execute = ',ctrl_execute,'speed = ',ctrl_speed, 'visor_result = ', ctrl_visor_result, 'robot_status', robot_status)   
 
             
             #MQTT NOK
