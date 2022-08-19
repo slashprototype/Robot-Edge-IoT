@@ -19,6 +19,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
     stm_com = 0
     robot_status = 0
     bit = 0
+    targets = [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 0]
     try:
         while(True):
             time.sleep(0.05)
