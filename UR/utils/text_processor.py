@@ -1,4 +1,3 @@
-
 import re
 
 def fix_pos(line,id):
@@ -37,55 +36,39 @@ def process(file):
             if re.search(r'(global)\s(speed_ms)\s*=\d*',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(10)
+                data.append(30)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
             if re.search(r'(global)\s(speed_rads)\s*=\d*',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(12)
+                data.append(31)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
             if re.search(r'(global)\s(accel_mss)\s*=\d*',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(11)
+                data.append(32)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
             if re.search(r'(global)\s(accel_radss)\s*=\d*',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(13)
+                data.append(33)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
             if re.search(r'(global)\s(blend_radius_m)\s*=\d*',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(14)
+                data.append(34)
                 data.append(float(speed[0]))
                 all_pos.append(data)
 
         if section == 1:
-
-            if re.search(r'(movel)\(\[',line):
-                posfix = fix_pos(line,3)
-                all_pos.append(posfix)
-            
-            if re.search(r'(movel)\(p\[',line):
-                posfix = fix_pos(line,4)
-                all_pos.append(posfix)
-
-            if re.search(r'(movej)\(\[',line):
-                posfix = fix_pos(line,5)
-                all_pos.append(posfix)
-            
-            if re.search(r'(movej)\(p\[',line):
-                posfix = fix_pos(line,6)
-                all_pos.append(posfix)
 
             # if re.search(r'(movep)\(',line):
             #     posfix = fix_pos(line,6)
@@ -101,60 +84,109 @@ def process(file):
                 data.append(2)
                 all_pos.append(data)
             
+            if re.search(r'(movel)\(\[',line):
+                posfix = fix_pos(line,3)
+                all_pos.append(posfix)
+            
+            if re.search(r'(movel)\(p\[',line):
+                posfix = fix_pos(line,4)
+                all_pos.append(posfix)
+
+            if re.search(r'(movej)\(\[',line):
+                posfix = fix_pos(line,5)
+                all_pos.append(posfix)
+            
+            if re.search(r'(movej)\(p\[',line):
+                posfix = fix_pos(line,6)
+                all_pos.append(posfix)
+            
             if re.search(r'(visor_detect\(\))',line):
                 data = []
-                data.append(3)
+                data.append(10)
                 all_pos.append(data)
             
+            if re.search(r'(visor_code\(\))',line):
+                data = []
+                data.append(11)
+                all_pos.append(data)
+            
+            if re.search(r'(move_axis_0\(\))',line):
+                data = []
+                data.append(20)
+                all_pos.append(data)
+            if re.search(r'(move_axis_1\(\))',line):
+                data = []
+                data.append(21)
+                all_pos.append(data)
+            if re.search(r'(move_axis_2\(\))',line):
+                data = []
+                data.append(22)
+                all_pos.append(data)
+            if re.search(r'(move_axis_3\(\))',line):
+                data = []
+                data.append(23)
+                all_pos.append(data)
+                
 
             if re.search(r'(speed_ms\s*=\d*)',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(10)
+                data.append(30)
                 data.append(float(speed[0]))
                 all_pos.append(data)
 
             if re.search(r'(speed_rads\s*=\d*)',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(12)
+                data.append(31)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
             if re.search(r'(accel_mss\s*=\d*)',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(11)
+                data.append(32)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
             if re.search(r'(accel_radss\s*=\d*)',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(13)
+                data.append(33)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
             if re.search(r'(blend_radius_m\s*=\d*)',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(14)
+                data.append(34)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
 
 
-    # 10 = speed_ms
-    # 11 = accel_mss
-    # 12 = speed_rads
-    # 13 = accel_radss
-    # 14 = blend_radius_m
+    
+    
     # 1 = active tool
     # 2 = deactive tool
     # 3 = move L (joint type)
     # 4 = move L (cartesian type)
     # 5 = move J (joint type)
     # 6 = move J (cartesian type)
+
+    # 10 = visor detect
+    # 11 = visor code
+
+    # 20 = move axis 0
+    # 21 = move axis 1
+    # 22 = move axis 2
+    # 23 = move axis 3
+
+    # 30 = speed_ms
+    # 31 = speed_rads
+    # 32 = accel_mss
+    # 33 = accel_radss
+    # 34 = blend_radius_m
     
     speed_ms = 0  
     speed_rads = 0  
@@ -168,23 +200,25 @@ def process(file):
     for i in all_pos: 
         # print(i)
 
-        if i[0] == 10:
+        if i[0] == 30:
             speed_ms = i[1]
-        if i[0] == 11:
-            accel_mss = i[1]
-        if i[0] == 12:
+        if i[0] == 31:
             speed_rads = i[1]
-        if i[0] == 13:
+
+        if i[0] == 32:
+            accel_mss = i[1]
+        if i[0] == 33:
             accel_radss = i[1]
-        if i[0] == 14:
+
+        if i[0] == 34:
             blend_radius_m = i[1]
         
+        # 1 = active too
         if i[0] == 1:
             targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]]) 
+        # 2 = deactive tool
         if i[0] == 2:
             targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]]) 
-        if i[0] == 3:
-            targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
         
         # Move L (joint mode)
         if i[0] == 3:
@@ -199,6 +233,29 @@ def process(file):
         # Move J (cartesian mode)
         if i[0] == 6:
             targets.append([i[1:],accel_mss,speed_ms,0,blend_radius_m,i[0]])
+        
+        # 10 = visor detect
+        if i[0] == 10:
+            targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
+        # 11 = visor code
+        if i[0] == 11:
+            targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
+
+        # 20 = move axis 0
+        if i[0] == 20:
+            targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
+        # 21 = move axis 1
+        if i[0] == 21:
+            targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
+        # 22 = move axis 2
+        if i[0] == 22:
+            targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
+        # 23 = move axis 3
+        if i[0] == 23:
+            targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
+        # 24 = move axis 4
+        if i[0] == 24:
+            targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
     
     # for i in targets:
     #     print (i)
