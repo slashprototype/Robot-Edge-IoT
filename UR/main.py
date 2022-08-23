@@ -32,7 +32,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                 ctrl_emergency_stop = received_msg['emergency_stop']
                 ctrl_speed = received_msg['speed']
                 
-                
+                hola = 1
                 # ROBOT OK
                 if robot.robot_ok:
                     # GET ROBOT DATA
