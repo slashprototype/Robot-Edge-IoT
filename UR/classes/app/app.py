@@ -48,11 +48,14 @@ class App ():
     def main_loop(self):
         self.start_app()
         while True:
+            
             try:
-                pass
-                # print('fsm_mqtt_sync', self.fsm_mqtt_sync)
-                # print('fsm_robot_sync', self.fsm_robot_sync)
-                # print('fsm_robot_control', self.fsm_robot_control)
+                # pass
+                time.sleep(0.5)
+                print('fsm_mqtt_sync', self.fsm_mqtt_sync,
+                      'fsm_robot_sync', self.fsm_robot_sync,
+                      'fsm_robot_control', self.fsm_robot_control
+                        )
                 
             except KeyboardInterrupt:
                 print('interruptions')            
@@ -63,12 +66,12 @@ class App ():
         while (self.running):
             try:
                 if self.fsm_mqtt_sync == 0:
-                    print('creating mqtt client')
+                    # print('creating mqtt client')
                     time.sleep(5)
                     self.fsm_mqtt_sync = 10
 
                 if self.fsm_mqtt_sync == 10:
-                    print('connect to broker...')
+                    # print('connect to broker...')
                     self.mqtt.connect(self.subscribe_topics)
                     if self.mqtt.mqtt_ok == True:
                         self.fsm_mqtt_sync = 20
@@ -79,13 +82,13 @@ class App ():
                     time.sleep(0.5)
                     try:
                         received_msg = self.mqtt.get_data()
-                        print(received_msg)
+                        # print(received_msg)
                     except:
                         self.fsm_mqtt_sync = 30
 
                 # ALARM
                 if self.fsm_mqtt_sync == 30:
-                    print('mqtt exceptions')
+                    # print('mqtt exceptions')
                     time.sleep(0.5)
                     
                     if self.mqtt.mqtt_ok == False:
@@ -106,19 +109,19 @@ class App ():
         while (self.running):
             try:
                 if self.fsm_robot_sync == 0:
-                    print('create a robot instance')
+                    # print('create a robot instance')
                     time.sleep(1)
                     self.fsm_robot_sync = 10
 
                 if self.fsm_robot_sync == 10:
-                    print('connecting to robot...')
+                    # print('connecting to robot...')
                     try:
                         self.robot.connect()
                         self.robot.get_data()
                         if self.robot.robot_ok == True:
                             self.fsm_robot_sync = 20
                     except:
-                        print('Connection problem...')
+                        # print('Connection problem...')
                         self.fsm_robot_sync = 30
 
                 if self.fsm_robot_sync == 20:
