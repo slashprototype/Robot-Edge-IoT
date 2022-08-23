@@ -122,11 +122,13 @@ class App ():
                         self.fsm_robot_sync = 30
 
                 if self.fsm_robot_sync == 20:
-                    print('robot ok')
+                    # print('robot ok')
+                    pass
                 
                 # ALARM
                 if self.fsm_robot_sync == 30:
-                    print('robot exceptions')
+                    # print('robot exceptions')
+                    pass
             except:
                 # END WHILE LOOP
                 print('ending robot monitoring loop')
