@@ -18,11 +18,11 @@ class App ():
         self.fsm_robot_monitoring = 0
         self.fsm_mqtt = 0
 
-        self.mqtt_thread = Thread(target=self.mqtt_loop)
+        self.mqtt_thread = Thread(target=self.mqtt_sync)
         self.mqtt_thread.setDaemon(True)
-        self.robot_monitoring_thread = Thread(target=self.robot_monitoring_loop)
+        self.robot_monitoring_thread = Thread(target=self.robot_sync)
         self.robot_monitoring_thread.setDaemon(True)
-        self.robot_control_thread = Thread(target=self.robot_control_loop)
+        self.robot_control_thread = Thread(target=self.robot_control)
         self.robot_control_thread.setDaemon(True)
         
 
@@ -57,7 +57,7 @@ class App ():
                 self.close_app() 
                 
 
-    def mqtt_loop(self):
+    def mqtt_sync(self):
         while (self.running):
             try:
                 if self.fsm_mqtt == 0:
@@ -100,7 +100,7 @@ class App ():
         
     
 
-    def robot_monitoring_loop(self):
+    def robot_sync(self):
         while (self.running):
             try:
                 if self.fsm_robot_monitoring == 0:
@@ -131,7 +131,7 @@ class App ():
         
 
 
-    def robot_control_loop(self):
+    def robot_control(self):
         while (self.running):
             try:
                 time.sleep(15)
