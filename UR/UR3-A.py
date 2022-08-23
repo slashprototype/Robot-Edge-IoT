@@ -1,7 +1,9 @@
 import sys
 sys.path.append('classes/app/')
+sys.path.append('classes/app/utils/')
 sys.path.append('classes/mqtt/')
 sys.path.append('classes/robotUR/')
+
 
 from app import App
 from mqtt import Mqtt
