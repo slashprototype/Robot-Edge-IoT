@@ -13,8 +13,8 @@ class App ():
         
 
         self.fsm_robot_control = 0
-        self.fsm_robot_monitoring = 0
-        self.fsm_mqtt = 0
+        self.fsm_robot_sync = 0
+        self.fsm_mqtt_sync = 0
 
         self.mqtt_thread = Thread(target=self.mqtt_sync)
         self.mqtt_thread.setDaemon(True)
@@ -50,6 +50,10 @@ class App ():
         while True:
             try:
                 pass
+                # print('fsm_mqtt_sync', self.fsm_mqtt_sync)
+                # print('fsm_robot_sync', self.fsm_robot_sync)
+                # print('fsm_robot_control', self.fsm_robot_control)
+                
             except KeyboardInterrupt:
                 print('interruptions')            
                 self.close_app() 
@@ -58,41 +62,41 @@ class App ():
     def mqtt_sync(self):
         while (self.running):
             try:
-                if self.fsm_mqtt == 0:
+                if self.fsm_mqtt_sync == 0:
                     print('creating mqtt client')
                     time.sleep(5)
-                    self.fsm_mqtt = 10
+                    self.fsm_mqtt_sync = 10
 
-                if self.fsm_mqtt == 10:
+                if self.fsm_mqtt_sync == 10:
                     print('connect to broker...')
                     self.mqtt.connect(self.subscribe_topics)
                     if self.mqtt.mqtt_ok == True:
-                        self.fsm_mqtt = 20
+                        self.fsm_mqtt_sync = 20
                     else:
-                        self.fsm_mqtt = 30
+                        self.fsm_mqtt_sync = 30
 
-                if self.fsm_mqtt == 20:
+                if self.fsm_mqtt_sync == 20:
                     time.sleep(0.5)
                     try:
                         received_msg = self.mqtt.get_data()
                         print(received_msg)
                     except:
-                        self.fsm_mqtt = 30
+                        self.fsm_mqtt_sync = 30
 
                 # ALARM
-                if self.fsm_mqtt == 30:
+                if self.fsm_mqtt_sync == 30:
                     print('mqtt exceptions')
                     time.sleep(0.5)
                     
                     if self.mqtt.mqtt_ok == False:
-                        self.fsm_mqtt = 10
+                        self.fsm_mqtt_sync = 10
                     else:
                         print('some exceptions in subscribe or publish has ocurred')
 
             except:
                 # END WHILE LOOP    
                 print('ending mqtt')
-                self.mqtt_thread.join() 
+                self.mqtt_sync.join() 
                 break
         
         
@@ -101,29 +105,32 @@ class App ():
     def robot_sync(self):
         while (self.running):
             try:
-                if self.fsm_robot_monitoring == 0:
+                if self.fsm_robot_sync == 0:
                     print('create a robot instance')
                     time.sleep(1)
+                    self.fsm_robot_sync = 10
 
-                if self.fsm_robot_monitoring == 10:
+                if self.fsm_robot_sync == 10:
                     print('connecting to robot...')
                     try:
                         self.robot.connect()
                         self.robot.get_data()
+                        if self.robot.robot_ok == True:
+                            self.fsm_robot_sync = 20
                     except:
                         print('Connection problem...')
-                        self.fsm_robot_monitoring = 30
+                        self.fsm_robot_sync = 30
 
-                if self.fsm_robot_monitoring == 20:
+                if self.fsm_robot_sync == 20:
                     print('robot ok')
                 
                 # ALARM
-                if self.fsm_robot_monitoring == 30:
+                if self.fsm_robot_sync == 30:
                     print('robot exceptions')
             except:
                 # END WHILE LOOP
                 print('ending robot monitoring loop')
-                self.robot_monitoring_thread.join()
+                self.robot_sync.join()
                 break
 
         
@@ -149,7 +156,7 @@ class App ():
             except:
                 # END WHILE LOOP
                 print('ending robot control loop')          
-                self.robot_control_thread.join()
+                self.robot_control.join()
                 break
 
         
