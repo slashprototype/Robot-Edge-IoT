@@ -79,7 +79,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         # [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 3]
                         # [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 3]
                         
-                        if (targets[target_id][5] == 1 and bit_2 == 0) or (targets[target_id][5] == 2 and bit_2 == 0):
+                        if (targets[target_id][5] == 1 or targets[target_id][5] == 2) and bit_2 == 0:
                             print('HEY TOOL ROUTINE')
                             bit_2 = 1
                         
@@ -133,6 +133,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                             _resultwork = 221
                             mqtt.publish(publish_topics[14],_resultwork)
                             bit = 0
+                            bit_2 = 0
                             mqtt.publish(publish_topics[17],0)
 
                             try:
