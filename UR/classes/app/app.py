@@ -1,7 +1,6 @@
 from threading import Thread
 import sys
 import time
-sys.path.append('utils/')
 
 class App ():
     def __init__(self, mqtt,robot,subscribe_topics,publish_topics,routines_path):

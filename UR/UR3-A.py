@@ -8,7 +8,6 @@ sys.path.append('classes/robotUR/')
 from app import App
 from mqtt import Mqtt
 from robotUR import Robot
-from functions import search_script,send_robot_action,get_robot_targets
 
 import json
 
