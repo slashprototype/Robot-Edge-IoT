@@ -45,6 +45,9 @@ class Mqtt():
                     
                 if msg.topic == subscribe_topics[9]:
                     self.received_msg['qr_result'] = int(msg.payload.decode('UTF-8'))
+                
+                if msg.topic == subscribe_topics[7]:
+                    self.received_msg['tool_status'] = int(msg.payload.decode('UTF-8'))
 
             except:
                 pass

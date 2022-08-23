@@ -19,7 +19,10 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
     stm_com = 0
     robot_status = 0
     bit = 0
+    bit_2 = 0
     targets = [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 0]
+    _tool = 0
+
     try:
         while(True):
             time.sleep(0.05)
@@ -35,6 +38,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                 ctrl_speed = received_msg['speed']
                 ctrl_visor_result = received_msg['visor_result']
                 ctrl_qr_result = received_msg['qr_result']
+                ctrl_tool_status = received_msg['tool_status']
                 
                 
                 
@@ -49,7 +53,8 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         _position = str(robot_data.get('actual_q'))
                         _current = str(robot_data.get('actual_current')) 
                         _temperature = str(robot_data.get('joint_temperatures'))
-                        _tool = str(robot_data.get('output_int_register_1'))
+                        # _tool = str(robot_data.get('output_int_register_1'))
+                        
                         _execute = 0
                         _resultwork = 0
                         _status = 0
@@ -74,6 +79,28 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         # [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 3]
                         # [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 3]
                         
+                        if (targets[target_id][5] == 1 and bit_2 == 0) or (targets[target_id][5] == 2 and bit_2 == 0):
+                            print('HEY TOOL ROUTINE')
+                            bit_2 = 1
+                        
+                        if bit_2 == 1:
+                            print('sending trigger, waiting for response')
+                            if targets[target_id][5] == 1:
+                                _tool = 170
+                            if targets[target_id][5] == 2:
+                                _tool = 187
+
+                            stm_com = 0
+                            bit_2 = 2
+
+                        if bit_2 == 2:
+                            print('waiting for',ctrl_tool_status,'==', _tool)
+                            if ctrl_tool_status == _tool:
+                                print('result match')
+                                stm_com = 1
+                                bit_2 = 3
+
+
                         if targets[target_id][5] == 7 and bit == 0:
                             print('HEY')
                             bit = 1
