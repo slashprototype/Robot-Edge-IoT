@@ -52,7 +52,7 @@ class App ():
             try:
                 # pass
                 time.sleep(1)
-                print('mqtt_ok', self.mqtt_ok, 'robot_ok', self.robot_ok)
+                print('mqtt_ok', self.mqtt_ok, 'robot_ok', self.mqtt.connection_status, self.robot_ok)
 
             except KeyboardInterrupt:
                 print('interruptions')            
