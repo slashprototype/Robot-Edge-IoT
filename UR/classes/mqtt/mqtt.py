@@ -31,12 +31,12 @@ class Mqtt():
             # Subscribe to REGOUT
             for i in subscribe_topics:
                 client.subscribe(i)
+
         def on_disconnect(client, userdata, rc):
             self.connection_status = False
             print('CLIENTE DESCONECTADO!!!!')
         
         def on_message(client, userdata, msg):
-            
             # COMMAND
             if msg.topic == subscribe_topics[1]:    
                 self.received_msg['command'] = int(msg.payload.decode('UTF-8'))
@@ -65,7 +65,7 @@ class Mqtt():
             self.client.connect(self.ip,self.port,self.keep_alive)
             print('connected succesfully to broker at', self.ip)
             self.connection_status = True
-            self.client.loop_start()
+            self.client.loop_forever()
         except:
             print('Connection failed!')
             self.connection_status = False
