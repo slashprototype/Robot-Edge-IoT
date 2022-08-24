@@ -145,7 +145,7 @@ class App ():
             try:
                 if self.mqtt_ok and self.robot_ok:
                     
-                    if self.fsm_robot_control == 0:
+                    if self.fsm_robot_control == 1:
                         print('Initial status in robot control')
                         time.sleep(5)
                         self.fsm_robot_control = 10
