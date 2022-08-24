@@ -49,3 +49,13 @@ def main():
 # Driver code
 if __name__ == '__main__':
     main()
+
+
+x = False
+y = False
+z = True
+
+if (x or y or z) != False:
+    print('hay alarma')
+else:
+    print('no hay alarma')

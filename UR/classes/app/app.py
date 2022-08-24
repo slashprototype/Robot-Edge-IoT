@@ -10,7 +10,9 @@ class App ():
         self.publish_topics = publish_topics
         self.routines_path = routines_path
         self.running = False
-        
+
+        self.mqtt_ok = False
+        self.robot_ok = False
 
         self.fsm_robot_control = 0
         self.fsm_robot_sync = 0
@@ -22,8 +24,6 @@ class App ():
         self.robot_monitoring_thread.setDaemon(True)
         self.robot_control_thread = Thread(target=self.robot_control)
         self.robot_control_thread.setDaemon(True)
-        
-
         
         self.main_loop()
 
@@ -47,54 +47,60 @@ class App ():
 
     def main_loop(self):
         self.start_app()
-        while True:
-            
+        while True:  
             try:
                 # pass
                 time.sleep(0.5)
                 print('fsm_mqtt_sync', self.fsm_mqtt_sync,
                       'fsm_robot_sync', self.fsm_robot_sync,
-                      'fsm_robot_control', self.fsm_robot_control
-                        )
-                
+                      'fsm_robot_control', self.fsm_robot_control)  
+
             except KeyboardInterrupt:
                 print('interruptions')            
                 self.close_app() 
                 
 
     def mqtt_sync(self):
+        
         while (self.running):
             try:
-                if self.fsm_mqtt_sync == 0:
-                    # print('creating mqtt client')
-                    time.sleep(5)
-                    self.fsm_mqtt_sync = 10
 
+                # FIRST INIT
+                if self.fsm_mqtt_sync == 0:
+                    self.fsm_mqtt_sync = 10
+                
+                #CONNECTING
                 if self.fsm_mqtt_sync == 10:
-                    # print('connect to broker...')
                     self.mqtt.connect(self.subscribe_topics)
-                    if self.mqtt.mqtt_ok == True:
+                    if self.mqtt.connection_status == True:
                         self.fsm_mqtt_sync = 20
                     else:
-                        self.fsm_mqtt_sync = 30
+                        self.fsm_mqtt_sync = 10
 
+                #RUNNING
                 if self.fsm_mqtt_sync == 20:
-                    time.sleep(0.5)
                     try:
                         received_msg = self.mqtt.get_data()
-                        # print(received_msg)
+                        self.mqtt_ok = True
                     except:
                         self.fsm_mqtt_sync = 30
 
                 # ALARM
-                if self.fsm_mqtt_sync == 30:
-                    # print('mqtt exceptions')
-                    time.sleep(0.5)
+                if self.mqtt.connection_status == False:
+                   self.fsm_mqtt_sync == 30
                     
-                    if self.mqtt.mqtt_ok == False:
+                if self.fsm_mqtt_sync == 30:
+                    self.mqtt_ok = False
+                            
+                    if self.mqtt.connection_status == False:
                         self.fsm_mqtt_sync = 10
+                    
+                    elif self.mqtt.subscribe_status == False:
+                        self.fsm_mqtt_sync = 20
+
                     else:
-                        print('some exceptions in subscribe or publish has ocurred')
+                        print('unknow error raised')
+                        self.fsm_mqtt_sync = 30
 
             except:
                 # END WHILE LOOP    
@@ -109,24 +115,23 @@ class App ():
         while (self.running):
             try:
                 if self.fsm_robot_sync == 0:
-                    # print('create a robot instance')
-                    time.sleep(1)
                     self.fsm_robot_sync = 10
 
                 if self.fsm_robot_sync == 10:
-                    # print('connecting to robot...')
                     try:
                         self.robot.connect()
                         self.robot.get_data()
                         if self.robot.robot_ok == True:
                             self.fsm_robot_sync = 20
                     except:
-                        # print('Connection problem...')
-                        self.fsm_robot_sync = 30
+                        self.fsm_robot_sync = 10
 
                 if self.fsm_robot_sync == 20:
-                    # print('robot ok')
-                    pass
+                    try:
+                        self.robot.get_data()
+                        self.robot_ok = True
+                    except:
+                        self.fsm_robot_sync = 30
                 
                 # ALARM
                 if self.fsm_robot_sync == 30:

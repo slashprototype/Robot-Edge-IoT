@@ -12,9 +12,15 @@ class Mqtt():
         self.client_name = client_name
         self.keyPaths = "classes/mqtt/authFiles/"
         self.received_msg = {}
-        self.mqtt_ok = False
+        self.received_msg_len = 4
+        self.connection_status = False
+        self.subscribe_status = True
+        self.publish_status = True
+
+
         self.client = mqtt.Client(client_id=self.client_name,
                         clean_session=True, userdata=None, protocol=mqtt.MQTTv311, transport="tcp")
+                    
 
     def connect(self,subscribe_topics):
             # Subscribe to MQTT broker topics
@@ -46,37 +52,30 @@ class Mqtt():
                             keyfile=self.keyPaths+"client01.key", cert_reqs=ssl.CERT_NONE,
                             tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
         self.client.tls_insecure_set(True)
-
-        print("Connecting to broker...")
         try:
             self.client.connect(self.ip,self.port,self.keep_alive)
-            print('Connected succesfully to broker')
+            self.connection_status = True
             self.client.loop_start()
-            self.mqtt_ok = True
         except:
-            print('cannot start connection with broker')
-            self.mqtt_ok = False
+            self.connection_status = False
 
     def publish(self,publish_topic,value):
-        
+
         try:      
             self.client.publish(publish_topic,value,1,True)
-            self.mqtt_ok = True
+            self.publish_status = True
         except:
-            print('Error in robot publish')
-            self.mqtt_ok = False
+            self.publish_status = False
 
     def get_data(self):
 
-        if len(self.received_msg) >= 4:
-            # print(received_msg)
-            self.mqtt_ok = True
+        if len(self.received_msg) == self.received_msg_len:
+            self.subscribe_status = True
             return (self.received_msg)
 
         else:
-            print('A topic data is missing, just received: ',len(self.received_msg),' topics info')
-            self.mqtt_ok = False
-            return (self.received_msg)
+            self.subscribe_status = False
+            raise Exception('A topic data is missing, just received: ',len(self.received_msg),' topics info')
             
 
 
