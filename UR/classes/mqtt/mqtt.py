@@ -18,11 +18,8 @@ class Mqtt():
         self.subscribe_status = True
         self.publish_status = True
         self.setup = False
-
-
         self.client = mqtt.Client(client_id=self.client_name,
                         clean_session=True, userdata=None, protocol=mqtt.MQTTv311, transport="tcp")
-                    
 
     def connect(self,subscribe_topics):
             # Subscribe to MQTT broker topics
@@ -65,7 +62,7 @@ class Mqtt():
             self.client.connect(self.ip,self.port,self.keep_alive)
             print('connected succesfully to broker at', self.ip)
             self.connection_status = True
-            self.client.loop_forever()
+            self.client.loop_start()
         except:
             print('Connection failed!')
             self.connection_status = False
