@@ -17,6 +17,7 @@ class Mqtt():
         self.connection_status = False
         self.subscribe_status = True
         self.publish_status = True
+        self.setup = False
 
 
         self.client = mqtt.Client(client_id=self.client_name,
@@ -45,14 +46,16 @@ class Mqtt():
             # SPEED
             if msg.topic == subscribe_topics[6]:
                 self.received_msg['speed'] = float(msg.payload.decode('UTF-8'))
-            
-        self.client.on_connect = on_connect
-        self.client.on_message = on_message
-        self.client.username_pw_set(username="user01", password="user01")
-        self.client.tls_set(ca_certs=self.keyPaths+"ca.crt", certfile=self.keyPaths+"client01.crt",
-                            keyfile=self.keyPaths+"client01.key", cert_reqs=ssl.CERT_NONE,
-                            tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
-        self.client.tls_insecure_set(True)
+        
+        if self.setup == False:
+            self.client.on_connect = on_connect
+            self.client.on_message = on_message
+            self.client.username_pw_set(username="user01", password="user01")
+            self.client.tls_set(ca_certs=self.keyPaths+"ca.crt", certfile=self.keyPaths+"client01.crt",
+                                keyfile=self.keyPaths+"client01.key", cert_reqs=ssl.CERT_NONE,
+                                tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
+            self.client.tls_insecure_set(True)
+            self.setup = True
         print('trying connection to broker...')
         try:
             self.client.connect(self.ip,self.port,self.keep_alive)
