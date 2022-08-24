@@ -15,7 +15,10 @@ class Robot():
         # parameters
         self.name = name
         self.ip = ip
-        self.robot_ok = False
+        self.connection_status = False
+        self.alarm = 'Not connected'
+        self.alarm_id = 0
+
         parser = argparse.ArgumentParser()
         parser.add_argument('--host', default=ip,
                             help='name of host to connect to ip')
@@ -69,23 +72,27 @@ class Robot():
                 self.setpoint_vars = self.con.send_input_setup(self.setpoint_vars_names, self.setpoint_vars_types)   
                 print('succesfully connected to '+self.ip)
             except:
-                self.robot_ok = False
+                self.connection_status = False
+                self.alarm_id = 1
                 raise Exception('error in setup recipes')
 
             self.initial_control_values()
             if not self.con.send_start():
-                self.robot_ok = False
+                self.connection_status = False
+                self.alarm_id = 2
                 raise Exception('Unable to start rtde synchronization')
             else:
-                self.robot_ok = True
+                self.connection_status = True
+                self.alarm_id = 0
                 print('rtde syncronized correctly!')  
 
         except:
             if os.system("ping -c 1 -w2 " + self.ip) == 0:
-                raise Exception('Unable to create a connection, check robot status')
+                self.connection_status = False
+                self.alarm = 'Unable to create a connection, check robot alarm_id: '+ str(self.alarm_id)
             else:
-                self.robot_ok = False
-                raise Exception('Unable to find a robot at '+self.ip)
+                self.connection_status = False
+                self.alarm = 'Unable to find a robot at '+self.ip
 
 
     def initial_control_values(self):
@@ -234,17 +241,18 @@ class Robot():
             elif safety_status == 7:
                 robot_status = 1
 
-            self.robot_ok = True
+            self.connection_status = True
             return (robot_data,robot_status)
 
         # except rtde.RTDEException:
         except:
-            self.robot_ok = False
-            logging.error('problem getting data...')
+            self.connection_status = False
+            print('problem getting data...')
+            raise Exception('problem getting data...')
         
         
 
     def disconnect(self):
-        self.robot_ok = False
+        self.connection_status = False
         self.con.send_pause()
         self.con.disconnect()

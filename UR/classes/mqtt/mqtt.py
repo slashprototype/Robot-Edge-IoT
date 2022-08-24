@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 import ssl
+import time
 
 
 
@@ -52,11 +53,14 @@ class Mqtt():
                             keyfile=self.keyPaths+"client01.key", cert_reqs=ssl.CERT_NONE,
                             tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
         self.client.tls_insecure_set(True)
+        print('trying connection to broker...')
         try:
             self.client.connect(self.ip,self.port,self.keep_alive)
+            print('connected succesfully to broker at', self.ip)
             self.connection_status = True
             self.client.loop_start()
         except:
+            print('Connection failed!')
             self.connection_status = False
 
     def publish(self,publish_topic,value):
@@ -69,13 +73,16 @@ class Mqtt():
 
     def get_data(self):
 
-        if len(self.received_msg) == self.received_msg_len:
+        if len(self.received_msg) == self.received_msg_len and self.connection_status == True:
             self.subscribe_status = True
             return (self.received_msg)
 
-        else:
+        else:            
             self.subscribe_status = False
-            raise Exception('A topic data is missing, just received: ',len(self.received_msg),' topics info')
+            if self.connection_status == False:
+                raise Exception('Connection error ocurred when getting data')
+            else:
+                raise Exception('A topic data is missing, just received: ',len(self.received_msg),' topics info')
             
 
 

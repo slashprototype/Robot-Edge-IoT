@@ -1,6 +1,7 @@
 from threading import Thread
 import sys
 import time
+from classes.app.utils.functions import search_script,send_robot_action,get_robot_targets
 
 class App ():
     def __init__(self, mqtt,robot,subscribe_topics,publish_topics,routines_path):
@@ -50,10 +51,8 @@ class App ():
         while True:  
             try:
                 # pass
-                time.sleep(0.5)
-                print('fsm_mqtt_sync', self.fsm_mqtt_sync,
-                      'fsm_robot_sync', self.fsm_robot_sync,
-                      'fsm_robot_control', self.fsm_robot_control)  
+                time.sleep(1)
+                print('mqtt_ok', self.mqtt_ok, 'robot_ok', self.robot_ok)
 
             except KeyboardInterrupt:
                 print('interruptions')            
@@ -86,12 +85,8 @@ class App ():
                         self.fsm_mqtt_sync = 30
 
                 # ALARM
-                if self.mqtt.connection_status == False:
-                   self.fsm_mqtt_sync == 30
-                    
                 if self.fsm_mqtt_sync == 30:
                     self.mqtt_ok = False
-                            
                     if self.mqtt.connection_status == False:
                         self.fsm_mqtt_sync = 10
                     
@@ -118,12 +113,10 @@ class App ():
                     self.fsm_robot_sync = 10
 
                 if self.fsm_robot_sync == 10:
-                    try:
-                        self.robot.connect()
-                        self.robot.get_data()
-                        if self.robot.robot_ok == True:
-                            self.fsm_robot_sync = 20
-                    except:
+                    self.robot.connect()
+                    if self.robot.connection_status == True:
+                        self.fsm_robot_sync = 20
+                    else:
                         self.fsm_robot_sync = 10
 
                 if self.fsm_robot_sync == 20:
@@ -135,8 +128,9 @@ class App ():
                 
                 # ALARM
                 if self.fsm_robot_sync == 30:
-                    # print('robot exceptions')
-                    pass
+                    self.robot_ok = False
+                    self.fsm_robot_syn = 10
+                    
             except:
                 # END WHILE LOOP
                 print('ending robot monitoring loop')
@@ -149,20 +143,34 @@ class App ():
     def robot_control(self):
         while (self.running):
             try:
-                time.sleep(15)
-        
-                if self.fsm_robot_control == 10:
-                    print('initializing robot...')
+                if self.mqtt_ok and self.robot_ok:
+                    
+                    if self.fsm_robot_control == 0:
+                        print('Initial status in robot control')
+                        time.sleep(5)
+                        self.fsm_robot_control = 10
 
-                if self.fsm_robot_control == 20:
-                    print('waiting for execute')
+                    if self.fsm_robot_control == 10:
+                        print('initializing robot...')
+                        time.sleep(1)
+                        self.fsm_robot_control = 20
 
-                if self.fsm_robot_control == 21:
-                    print('start working')
+                    if self.fsm_robot_control == 20:
+                        print('waiting for execute')
+                        time.sleep(1)
+
+                    if self.fsm_robot_control == 21:
+                        print('start working')
+                        time.sleep(1)
+                    
+                    # ALARM
+                    if self.fsm_robot_control == 30:
+                        time.sleep(1)
+                        print('robot control exceptions')
+                else:
+                    print('Reset machine to 0')
+                    self.fsm_robot_control = 0
                 
-                # ALARM
-                if self.fsm_robot_control == 30:
-                    print('robot control exceptions')
             except:
                 # END WHILE LOOP
                 print('ending robot control loop')          
