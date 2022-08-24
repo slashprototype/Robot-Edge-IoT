@@ -168,7 +168,7 @@ class App ():
                         time.sleep(1)
                         print('robot control exceptions')
                 else:
-                    print('Reset machine to 0')
+                    # print('Reset machine to 0')
                     self.fsm_robot_control = 0
                 
             except:
