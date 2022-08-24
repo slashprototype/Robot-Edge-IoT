@@ -31,6 +31,9 @@ class Mqtt():
             # Subscribe to REGOUT
             for i in subscribe_topics:
                 client.subscribe(i)
+        def on_disconnect(client, userdata, rc):
+            self.connection_status = False
+            print('CLIENTE DESCONECTADO!!!!')
         
         def on_message(client, userdata, msg):
             
@@ -49,6 +52,7 @@ class Mqtt():
         
         if self.setup == False:
             self.client.on_connect = on_connect
+            self.client.on_disconnect = on_disconnect
             self.client.on_message = on_message
             self.client.username_pw_set(username="user01", password="user01")
             self.client.tls_set(ca_certs=self.keyPaths+"ca.crt", certfile=self.keyPaths+"client01.crt",
