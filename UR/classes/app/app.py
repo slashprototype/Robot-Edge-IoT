@@ -182,7 +182,8 @@ class App ():
 
                 if self.fsm_robot_control == 0:
                         print('Initial status in robot control')
-                        self.fsm_robot_control = 30
+                        if self.mqtt_ok and self.robot_ok:
+                            self.fsm_robot_control = 30
 
                 if self.mqtt_ok and self.robot_ok:
 
