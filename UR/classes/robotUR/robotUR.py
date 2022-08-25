@@ -247,6 +247,7 @@ class Robot():
         # except rtde.RTDEException:
         except:
             self.connection_status = False
+            self.alarm = 'Error getting data'
             # print('problem getting data...')
             raise Exception('problem getting data...')
         
