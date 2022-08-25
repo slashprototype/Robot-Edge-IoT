@@ -15,6 +15,7 @@ class App ():
 
         self.mqtt_ok = False
         self.robot_ok = False
+        self.setup_robot = False
 
         self.fsm_robot_control = 0
         self.fsm_robot_sync = 0
@@ -98,7 +99,12 @@ class App ():
                         self.ctrl_visor_result = received_msg['visor_result']
                         self.ctrl_qr_result = received_msg['qr_result']
                         self.ctrl_tool_status = received_msg['tool_status']
-
+                        
+                        if self.setup_robot == True:
+                            self.mqtt.publish(self.publish_topics[4],self.position)
+                            self.mqtt.publish(self.publish_topics[6],self.current)
+                            self.mqtt.publish(self.publish_topics[8],self.temperature)
+                        
                         self.mqtt_ok = True
                     except:
                         self.fsm_mqtt_sync = 30
@@ -141,7 +147,14 @@ class App ():
 
                 if self.fsm_robot_sync == 20:
                     try:
-                        self.robot.get_data()
+                        robot_data,robot_status = self.robot.get_data()
+                        self.robot.sync_config(slider = 1, watchdog = 0)
+                        status = robot_data.get('output_int_register_0') 
+                        runtime_state = robot_data.get('runtime_state') 
+                        self._position = str(robot_data.get('actual_q'))
+                        self._current = str(robot_data.get('actual_current')) 
+                        self._temperature = str(robot_data.get('joint_temperatures'))
+                        self.setup_robot = True
                         self.robot_ok = True
                     except:
                         self.fsm_robot_sync = 30
