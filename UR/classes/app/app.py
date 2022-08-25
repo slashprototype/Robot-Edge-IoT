@@ -125,6 +125,8 @@ class App ():
                         self.robot.get_data()
                         self.robot_ok = True
                     except:
+                        print('changos')
+                        time.sleep(1)
                         self.fsm_robot_sync = 30
                 
                 # ALARM
