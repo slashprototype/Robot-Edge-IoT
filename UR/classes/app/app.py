@@ -57,7 +57,8 @@ class App ():
                 # print('mqtt_ok', self.mqtt_ok, self.mqtt.subscribe_status,self.mqtt.connection_status
                 # , 'robot_ok', self.robot_ok)
                 if self.mqtt_ok and self.robot_ok:
-                    print('Communications are ok')
+                    # print('Communications are ok')
+                    pass
                 else:
                     print('ROBOT alarms: ',self.robot.alarm, self.robot.alarm_id)
                     if self.mqtt.connection_status == False:
@@ -186,7 +187,7 @@ class App ():
                 if self.mqtt_ok and self.robot_ok:
 
                     if self.fsm_robot_control == 10:
-                        print('initializing robot...')
+                        print('initializing/reset robot...')
                         time.sleep(5)
                         self.fsm_robot_control = 20
 
@@ -220,10 +221,9 @@ class App ():
 
                 # ALARM
                 if self.fsm_robot_control == 30:
-                    if self.bit_reset == False:
+                    if self.ctrl_commad == 10 and self.ctrl_execute == 1:
                         time.sleep(1)
-                        print('Waiting for reset bit')
-                    elif self.bit_reset == True:
+                        print('sending reset to robot...')
                         self.fsm_robot_control = 10                
             except:
                 # END WHILE LOOP
