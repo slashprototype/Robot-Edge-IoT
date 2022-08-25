@@ -18,6 +18,7 @@ class Mqtt():
         self.subscribe_status = True
         self.publish_status = True
         self.setup = False
+        self.alarm = 'Not connected'
         self.client = mqtt.Client(client_id=self.client_name,
                         clean_session=True, userdata=None, protocol=mqtt.MQTTv311, transport="tcp")
 
@@ -102,8 +103,10 @@ class Mqtt():
         else:            
             self.subscribe_status = False
             if self.connection_status == False:
+                self.alarm = 'Connection error ocurred when getting data'
                 raise Exception('Connection error ocurred when getting data')
             else:
+                self.alarm = 'A topic data is missing, just received: ',len(self.received_msg),' topics info'
                 raise Exception('A topic data is missing, just received: ',len(self.received_msg),' topics info')
             
 

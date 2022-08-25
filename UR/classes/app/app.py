@@ -100,10 +100,10 @@ class App ():
                         self.ctrl_qr_result = received_msg['qr_result']
                         # self.ctrl_tool_status = received_msg['tool_status']
                         
-                        if self.setup_robot == True:
-                            self.mqtt.publish(self.publish_topics[4],self.position)
-                            self.mqtt.publish(self.publish_topics[6],self.current)
-                            self.mqtt.publish(self.publish_topics[8],self.temperature)
+                        # if self.setup_robot == True:
+                        #     self.mqtt.publish(self.publish_topics[4],self.position)
+                        #     self.mqtt.publish(self.publish_topics[6],self.current)
+                        #     self.mqtt.publish(self.publish_topics[8],self.temperature)
                         
                         self.mqtt_ok = True
                     except:
