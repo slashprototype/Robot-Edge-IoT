@@ -83,6 +83,7 @@ class Robot():
                 raise Exception('Unable to start rtde synchronization')
             else:
                 self.connection_status = True
+                self.alarm = 'Connected'
                 self.alarm_id = 0
                 # print('rtde syncronized correctly!')  
 
