@@ -98,12 +98,12 @@ class App ():
                         self.ctrl_speed = received_msg['speed']
                         self.ctrl_visor_result = received_msg['visor_result']
                         self.ctrl_qr_result = received_msg['qr_result']
-                        # self.ctrl_tool_status = received_msg['tool_status']
+                        self.ctrl_tool_status = received_msg['tool_status']
                         
-                        # if self.setup_robot == True:
-                        #     self.mqtt.publish(self.publish_topics[4],self.position)
-                        #     self.mqtt.publish(self.publish_topics[6],self.current)
-                        #     self.mqtt.publish(self.publish_topics[8],self.temperature)
+                        if self.setup_robot == True:
+                            self.mqtt.publish(self.publish_topics[4],self.robot_position)
+                            self.mqtt.publish(self.publish_topics[6],self.robot_current)
+                            self.mqtt.publish(self.publish_topics[8],self.robot_temperature)
                         
                         self.mqtt_ok = True
                     except:
@@ -151,9 +151,9 @@ class App ():
                         self.robot.sync_config(slider = 1, watchdog = 0)
                         status = robot_data.get('output_int_register_0') 
                         runtime_state = robot_data.get('runtime_state') 
-                        self._position = str(robot_data.get('actual_q'))
-                        self._current = str(robot_data.get('actual_current')) 
-                        self._temperature = str(robot_data.get('joint_temperatures'))
+                        self.robot_position = str(robot_data.get('actual_q'))
+                        self.robot_current = str(robot_data.get('actual_current')) 
+                        self.robot_temperature = str(robot_data.get('joint_temperatures'))
                         self.setup_robot = True
                         self.robot_ok = True
                     except:
