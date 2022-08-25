@@ -118,7 +118,6 @@ class App ():
                     if self.robot.connection_status == True:
                         self.fsm_robot_sync = 20
                     else:
-                        print('changos')
                         self.fsm_robot_sync = 10
 
                 if self.fsm_robot_sync == 20:
@@ -126,13 +125,12 @@ class App ():
                         self.robot.get_data()
                         self.robot_ok = True
                     except:
-                        
                         self.fsm_robot_sync = 30
                 
                 # ALARM
                 if self.fsm_robot_sync == 30:
                     self.robot_ok = False
-                    self.fsm_robot_syn = 10
+                    self.fsm_robot_sync = 10
                     
             except:
                 # END WHILE LOOP
