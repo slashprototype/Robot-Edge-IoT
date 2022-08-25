@@ -72,6 +72,7 @@ class App ():
                 
 
     def mqtt_sync(self):
+        counter_1 = 0
         while (self.running):
             time.sleep(0.01)
             try:
@@ -100,10 +101,11 @@ class App ():
                         self.ctrl_qr_result = received_msg['qr_result']
                         self.ctrl_tool_status = received_msg['tool_status']
                         
-                        if self.setup_robot == True:
+                        if self.setup_robot == True and counter_1 >= 100:
                             self.mqtt.publish(self.publish_topics[4],self.robot_position)
                             self.mqtt.publish(self.publish_topics[6],self.robot_current)
                             self.mqtt.publish(self.publish_topics[8],self.robot_temperature)
+                            counter_1 = 0
                         
                         self.mqtt_ok = True
                     except:
@@ -121,7 +123,7 @@ class App ():
                     else:
                         print('unknow error raised')
                         self.fsm_mqtt_sync = 30
-
+                counter_1 = counter_1 + 1
             except:
                 # END WHILE LOOP    
                 print('ending mqtt')
