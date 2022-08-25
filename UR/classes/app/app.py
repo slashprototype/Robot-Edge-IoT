@@ -107,6 +107,7 @@ class App ():
                         
                         self.mqtt_ok = True
                     except:
+                        print(received_msg)
                         self.fsm_mqtt_sync = 30
 
                 # ALARM
