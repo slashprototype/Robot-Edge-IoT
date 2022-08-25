@@ -24,7 +24,13 @@ class Mqtt():
     def connect(self,subscribe_topics):
             # Subscribe to MQTT broker topics
         def on_connect(client, userdata, flags, rc):
+            
             print("Connected with result code", rc)
+            if rc == 0:
+                self.connection_status = True
+            else: 
+                self.connection_status = False
+                
             # Subscribe to REGOUT
             for i in subscribe_topics:
                 client.subscribe(i)
