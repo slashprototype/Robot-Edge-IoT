@@ -22,6 +22,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
     bit_2 = 0
     targets = [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 0]
     _tool = 0
+    counter = 0
 
     try:
         while(True):
@@ -227,10 +228,14 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         print('Connection problem...')
 
                 mqtt.publish(publish_topics[2],robot_status) 
-                if robot_status>=6:
-                    mqtt.publish(publish_topics[16],170) 
-                else:
-                    mqtt.publish(publish_topics[16],187) 
+
+                counter = counter + 1
+                if counter == 30:
+                    counter = 0
+                    if robot_status>=6:
+                        mqtt.publish(publish_topics[16],170) 
+                    else:
+                        mqtt.publish(publish_topics[16],187) 
 
                 # print('command = ',ctrl_commad,'execute = ',ctrl_execute,'speed = ',ctrl_speed, 'visor_result = ', ctrl_visor_result, 'robot_status', robot_status)   
 
