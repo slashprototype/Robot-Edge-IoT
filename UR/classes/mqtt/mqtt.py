@@ -13,7 +13,7 @@ class Mqtt():
         self.client_name = client_name
         self.keyPaths = "classes/mqtt/authFiles/"
         self.received_msg = {}
-        self.received_msg_len = 4
+        self.received_msg_len = 7
         self.connection_status = False
         self.subscribe_status = True
         self.publish_status = True
@@ -61,7 +61,8 @@ class Mqtt():
                 self.received_msg['qr_result'] = int(msg.payload.decode('UTF-8'))
             
             if msg.topic == subscribe_topics[7]:
-                self.received_msg['tool_status'] = int(msg.payload.decode('UTF-8'))            
+                self.received_msg['tool_status'] = int(msg.payload.decode('UTF-8'))     
+            print(self.received_msg)       
         
         if self.setup == False:
             self.client.on_connect = on_connect
