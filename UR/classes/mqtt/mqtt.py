@@ -13,7 +13,7 @@ class Mqtt():
         self.client_name = client_name
         self.keyPaths = "classes/mqtt/authFiles/"
         self.received_msg = {}
-        self.received_msg_len = 6
+        self.received_msg_len = 7
         self.connection_status = False
         self.subscribe_status = True
         self.publish_status = True
@@ -92,6 +92,7 @@ class Mqtt():
             self.client.publish(publish_topic,value,1,True)
             self.publish_status = True
         except:
+            print('publish problem')
             self.publish_status = False
 
     def get_data(self):
