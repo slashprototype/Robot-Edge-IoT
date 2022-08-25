@@ -113,7 +113,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
 
                         if bit == 2:
                             print('waiting for',ctrl_visor_result,ctrl_qr_result)
-                            if ctrl_visor_result == 170 and ctrl_qr_result == 170:
+                            if ctrl_visor_result == 170:
                                 print('result received!!')
                                 mqtt.publish(publish_topics[17],0)
                                 stm_com = 1
