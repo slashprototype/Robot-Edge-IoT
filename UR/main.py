@@ -1,4 +1,5 @@
 import time
+from turtle import position
 from datetime import datetime
 import sys
 sys.path.append('utils/')
@@ -17,6 +18,11 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
     target_id = 0
     stm_com = 0
     robot_status = 0
+    bit = 0
+    bit_2 = 0
+    targets = [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 0]
+    _tool = 0
+    counter = 0
 
     try:
         while(True):
@@ -31,8 +37,12 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                 ctrl_execute = received_msg['execute']
                 ctrl_emergency_stop = received_msg['emergency_stop']
                 ctrl_speed = received_msg['speed']
+                ctrl_visor_result = received_msg['visor_result']
+                ctrl_qr_result = received_msg['qr_result']
+                ctrl_tool_status = received_msg['tool_status']
                 
-                hola = 1
+                
+                
                 # ROBOT OK
                 if robot.robot_ok:
                     # GET ROBOT DATA
@@ -44,16 +54,17 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         _position = str(robot_data.get('actual_q'))
                         _current = str(robot_data.get('actual_current')) 
                         _temperature = str(robot_data.get('joint_temperatures'))
-                        _tool = str(robot_data.get('output_int_register_1'))
+                        # _tool = str(robot_data.get('output_int_register_1'))
+                        
                         _execute = 0
                         _resultwork = 0
                         _status = 0
-                
+                        
                         mqtt.publish(publish_topics[4],_position)
                         mqtt.publish(publish_topics[6],_current)
                         mqtt.publish(publish_topics[8],_temperature)
                         mqtt.publish(publish_topics[10],_tool)
-                        
+                        # mqtt.publish(publish_topics[12],_execute)
                         # mqtt.publish(publish_topics[14],_resultwork)
                         
 
@@ -65,13 +76,71 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                     if robot_status >= 6:
                         #SYNCRONIZE BROKER CONFIGURATION VARIABLES TO ROBOT 
                         robot.sync_config(slider_fraction = ctrl_speed) 
+                        
+                        # [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 3]
+                        # [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 3]
+                        
+                        if (targets[target_id][5] == 1 or targets[target_id][5] == 2) and bit_2 == 0:
+                            print('HEY TOOL ROUTINE')
+                            bit_2 = 1
+                        
+                        if bit_2 == 1:
+                            print('sending trigger, waiting for response')
+                            if targets[target_id][5] == 1:
+                                _tool = 170
+                            if targets[target_id][5] == 2:
+                                _tool = 187
 
+                            stm_com = 0
+                            bit_2 = 2
+
+                        if bit_2 == 2:
+                            print('waiting for',ctrl_tool_status,'==', _tool)
+                            if ctrl_tool_status == _tool:
+                                print('result match')
+                                stm_com = 1
+                                bit_2 = 3
+
+
+                        if targets[target_id][5] == 7 and bit == 0:
+                            print('HEY')
+                            bit = 1
+                        
+                        if bit == 1:
+                            print('sending trigger, waiting for response')
+                            mqtt.publish(publish_topics[17],2)
+                            stm_com = 0
+                            bit = 2
+
+                        if bit == 2:
+                            print('waiting for',ctrl_visor_result,ctrl_qr_result)
+                            if ctrl_visor_result == 170:
+                                print('result received!!')
+                                mqtt.publish(publish_topics[17],0)
+                                stm_com = 1
+                                bit = 3
+                            
+
+                            
                         # ROUTINE SCRIPT SELECTION
                         new = ctrl_commad
-                        if (new != old) and (ctrl_commad != 0) or ctrl_execute == 1:
+                        # if (new != old) and (ctrl_commad != 0) and ctrl_execute == 1:
+                        if ctrl_execute == 1:
                             old = ctrl_commad
-                            mqtt.publish(publish_topics[12],0)
                             print('new command received!')
+                            _resultwork = 221
+                            mqtt.publish(publish_topics[14],_resultwork)
+                            
+                            _execute = 0
+                            ctrl_execute = _execute
+                            mqtt.publish(publish_topics[12],_execute)
+
+                            
+                            
+                            
+                            bit = 0
+                            bit_2 = 0
+                            mqtt.publish(publish_topics[17],0)
 
                             try:
                                 if stm_com != 0:
@@ -82,6 +151,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                 targets, targets_len = get_robot_targets(file)
                                 robot.sync_program(start = 0)
                                 robot.sync_setpoint(targets,target_id)
+                                print(targets[target_id])
                                 
                                 robot_data,robot_status = robot.get_data()
                                 runtime_state = robot_data.get('runtime_state') 
@@ -122,11 +192,17 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                                     if target_id < targets_len-1:
                                         target_id = target_id + 1
                                         robot.sync_setpoint(targets,target_id)
+                                        print(targets)
                                         robot.sync_program(start = 0)
+                                        bit = 0
                                         stm_com = 1
+                                        
                                     else:
                                         print('routine complete, select another routine') 
+                                        _resultwork = 170
+                                        mqtt.publish(publish_topics[14],_resultwork)
                                         stm_com = 0
+
                         except:
                             print('Control Robot Error, stopping robot...')
                             send_robot_action(robot,'stop')
@@ -135,6 +211,7 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                         send_robot_action(robot,'auto_init')
                         send_robot_action(robot,'auto_play')
                         send_robot_action(robot,'stop')
+                
                 # ROBOT NOK   
                 else:
                     try:
@@ -150,7 +227,17 @@ def control_loop(mqtt,robot,subscribe_topics,publish_topics,routines_path):
                     except:
                         print('Connection problem...')
 
-                mqtt.publish(publish_topics[2],robot_status)    
+                mqtt.publish(publish_topics[2],robot_status) 
+
+                counter = counter + 1
+                if counter == 30:
+                    counter = 0
+                    if robot_status>=6:
+                        mqtt.publish(publish_topics[16],170) 
+                    else:
+                        mqtt.publish(publish_topics[16],187) 
+
+                # print('command = ',ctrl_commad,'execute = ',ctrl_execute,'speed = ',ctrl_speed, 'visor_result = ', ctrl_visor_result, 'robot_status', robot_status)   
 
             
             #MQTT NOK
