@@ -11,7 +11,7 @@ class App ():
         self.publish_topics = publish_topics
         self.routines_path = routines_path
         self.running = False
-        self.bit_reset = False
+        self.bit_reset = True
 
         self.mqtt_ok = False
         self.robot_ok = False
