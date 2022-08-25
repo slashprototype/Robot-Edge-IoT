@@ -89,9 +89,7 @@ def RA_E4_PICK_420():
   movel(p[-0.201936, -0.113463, 0.251969, -0.711619, -3.059208, 0.001149],accel_mss,speed_ms,0,0.000)
   movel(p[-0.424948, -0.113427, 0.142992, 0.007675, -3.140992, 0.000583],accel_mss,speed_ms,0,0.000)
   movel(p[-0.425062, -0.113499, 0.053089, 0.007674, -3.140696, 0.000875],accel_mss,speed_ms,0,0.000)
-  visor_detect()
   # Attach to ventosa v3
-  tool_on()
   movel(p[-0.424948, -0.113427, 0.142992, 0.007675, -3.140992, 0.000583],accel_mss,speed_ms,0,0.000)
   # End of main program
 end
