@@ -55,7 +55,7 @@ class Robot():
         time.sleep(0.5)
 
     def connect(self):
-        # print('connecting to robot...')
+        print('connecting to robot...')
         time.sleep(0.5)
         try:
             self.con = rtde.RTDE(self.args.host, self.args.port)
