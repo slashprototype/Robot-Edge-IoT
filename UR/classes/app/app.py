@@ -52,8 +52,17 @@ class App ():
             try:
                 # pass
                 time.sleep(1)
-                print('mqtt_ok', self.mqtt_ok, self.mqtt.subscribe_status,self.mqtt.connection_status
-                , 'robot_ok', self.robot_ok)
+                # print('mqtt_ok', self.mqtt_ok, self.mqtt.subscribe_status,self.mqtt.connection_status
+                # , 'robot_ok', self.robot_ok)
+                if self.mqtt_ok and self.robot_ok:
+                    print('Communications are ok')
+                else:
+                    print('ROBOT alarms: ',self.robot.alarm, self.robot.alarm_id)
+                    if self.mqtt.connection_status == False:
+                        print('MQTT connection error')
+                    elif self.mqtt.subscribe_status == False:
+                        print('MQTT subscribe error')
+                    print('\n')
 
             except KeyboardInterrupt:
                 print('interruptions')            

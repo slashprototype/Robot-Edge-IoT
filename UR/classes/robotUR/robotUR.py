@@ -88,7 +88,7 @@ class Robot():
 
         except:
             self.connection_status = False
-            if os.system("ping -c 1 -w2 " + self.ip) == 0:
+            if os.system("ping -c 5 -w2 " + self.ip) == 0:
                 self.disconnect()
                 self.alarm = 'Unable to create a connection, check robot alarm_id: '+ str(self.alarm_id)
             else:
