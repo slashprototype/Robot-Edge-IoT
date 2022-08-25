@@ -94,7 +94,7 @@ class App ():
                 if self.fsm_mqtt_sync == 20:
                     try:
                         received_msg = self.mqtt.get_data()
-                        self.ctrl_commad = received_msg['command']
+                        self.ctrl_command = received_msg['command']
                         self.ctrl_execute = received_msg['execute']
                         self.ctrl_emergency_stop = received_msg['emergency_stop']
                         self.ctrl_speed = received_msg['speed']
