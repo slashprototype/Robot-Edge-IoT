@@ -55,7 +55,7 @@ class Robot():
         time.sleep(0.5)
 
     def connect(self):
-        print('connecting to robot...')
+        # print('connecting to robot...')
         time.sleep(0.5)
         try:
             self.con = rtde.RTDE(self.args.host, self.args.port)
@@ -70,7 +70,7 @@ class Robot():
                 self.program_input = self.con.send_input_setup(self.program_input_names, self.program_input_types)
                 self.setpoint = self.con.send_input_setup(self.setpoint_names, self.setpoint_types)
                 self.setpoint_vars = self.con.send_input_setup(self.setpoint_vars_names, self.setpoint_vars_types)   
-                print('succesfully connected to '+self.ip)
+                # print('succesfully connected to '+self.ip)
             except:
                 self.connection_status = False
                 self.alarm_id = 1
@@ -84,7 +84,7 @@ class Robot():
             else:
                 self.connection_status = True
                 self.alarm_id = 0
-                print('rtde syncronized correctly!')  
+                # print('rtde syncronized correctly!')  
 
         except:
             self.connection_status = False
@@ -247,7 +247,7 @@ class Robot():
         # except rtde.RTDEException:
         except:
             self.connection_status = False
-            print('problem getting data...')
+            # print('problem getting data...')
             raise Exception('problem getting data...')
         
         
