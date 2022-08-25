@@ -11,6 +11,7 @@ class App ():
         self.publish_topics = publish_topics
         self.routines_path = routines_path
         self.running = False
+        self.bit_reset = False
 
         self.mqtt_ok = False
         self.robot_ok = False
@@ -154,12 +155,12 @@ class App ():
     def robot_control(self):
         while (self.running):
             try:
-                if self.mqtt_ok and self.robot_ok:
-                    
-                    if self.fsm_robot_control == 1:
+
+                if self.fsm_robot_control == 0:
                         print('Initial status in robot control')
-                        time.sleep(5)
-                        self.fsm_robot_control = 10
+                        self.fsm_robot_control = 30
+
+                if self.mqtt_ok and self.robot_ok:
 
                     if self.fsm_robot_control == 10:
                         print('initializing robot...')
@@ -172,16 +173,18 @@ class App ():
 
                     if self.fsm_robot_control == 21:
                         print('start working')
-                        time.sleep(1)
+                        time.sleep(1)     
                     
-                    # ALARM
-                    if self.fsm_robot_control == 30:
-                        time.sleep(1)
-                        print('robot control exceptions')
                 else:
-                    # print('Reset machine to 0')
-                    self.fsm_robot_control = 0
-                
+                    self.fsm_robot_control = 30
+
+                # ALARM
+                if self.fsm_robot_control == 30:
+                    if self.bit_reset == False:
+                        time.sleep(1)
+                        print('Waiting for reset bit')
+                    elif self.bit_reset == True:
+                        self.fsm_robot_control = 10                
             except:
                 # END WHILE LOOP
                 print('ending robot control loop')          
