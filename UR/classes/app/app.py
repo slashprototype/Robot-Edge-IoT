@@ -70,8 +70,8 @@ class App ():
                 
 
     def mqtt_sync(self):
-        
         while (self.running):
+            time.sleep(0.01)
             try:
 
                 # FIRST INIT
@@ -118,6 +118,7 @@ class App ():
 
     def robot_sync(self):
         while (self.running):
+            time.sleep(0.01)
             try:
                 if self.fsm_robot_sync == 0:
                     self.fsm_robot_sync = 10
