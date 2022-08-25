@@ -98,7 +98,7 @@ class App ():
                         self.ctrl_speed = received_msg['speed']
                         self.ctrl_visor_result = received_msg['visor_result']
                         self.ctrl_qr_result = received_msg['qr_result']
-                        self.ctrl_tool_status = received_msg['tool_status']
+                        # self.ctrl_tool_status = received_msg['tool_status']
                         
                         if self.setup_robot == True:
                             self.mqtt.publish(self.publish_topics[4],self.position)
