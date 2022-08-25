@@ -222,7 +222,7 @@ class App ():
 
                 # ALARM
                 if self.fsm_robot_control == 30:
-                    if self.ctrl_commad == 10 and self.ctrl_execute == 1:
+                    if self.ctrl_command == 10 and self.ctrl_execute == 1:
                         time.sleep(1)
                         print('sending reset to robot...')
                         self.fsm_robot_control = 10                
