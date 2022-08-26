@@ -245,7 +245,7 @@ class App ():
                     time.sleep(3)
                 
                 if status==1:
-                    if self.mqtt_ok or self.robot_ok != True:
+                    if self.mqtt_ok and self.robot_ok != True:
                         self.fsm_robot_control = 30
                     
                 # ALARM
