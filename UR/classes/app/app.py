@@ -91,8 +91,11 @@ class App ():
                 
     def exceptions_loop(self):
         while (self.running):
-            if self.mqtt_ok and self.robot_ok != True:
-                raise MyException
+            try:
+                if self.mqtt_ok and self.robot_ok != True:
+                    raise MyException
+            except:
+                'EXCEPTION RAISED'
 
 
 
@@ -202,13 +205,18 @@ class App ():
 
     def robot_control(self):
         setup = False
+        s = 0
         while (self.running):
             try:
                 while(True):
                     try:
-                        time.sleep(1)
-                        print('waiting')
+                        if s == 0:
+                            time.sleep(1)
+                            print('waiting')
+                        else:
+                            print('already catched')
                     except MyException:
+                        s = 1
                         print('changos')
 
                 if self.fsm_robot_control == 0:
