@@ -1,7 +1,7 @@
 from threading import Thread
 import sys
 import time
-from UR.classes.app.test import MyException
+from classes.app.test import MyException
 from classes.app.utils.functions import search_script,send_robot_action,get_robot_targets, get_fsm_status_type
 
 class App ():
