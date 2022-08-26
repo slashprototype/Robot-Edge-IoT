@@ -212,22 +212,38 @@ class App ():
                 if self.fsm_robot_control == 21:
                     print('Waiting for execute')
                     if self.ctrl_execute == 1:
+                        self.publish_mqtt(execute = 0)
                         print('command selected is',self.ctrl_command)
                         self.fsm_robot_control = 22
+                        targets_len = 5
+                        actual_target = 0
+                        move_type = 0
                     time.sleep(2)     
+
 
                 if self.fsm_robot_control == 22:
                     print('Checking index and move type')
-                    time.sleep(1)     
-                    self.fsm_robot_control = 23
+                    time.sleep(1)
+
+                    if actual_target < targets_len:
+                        if move_type == 0:
+                            self.fsm_robot_control = 23
+                        if move_type == 1:
+                            self.fsm_robot_control = 25
+                    else:
+                        print('Routine Complete succesfully')
+                        self.fsm_robot_control = 21
+
 
                 if self.fsm_robot_control == 23:
-                    print('Wait for robot status == 1 and send actual target, set start to 1')
-                    time.sleep(1)     
+                    print('sending target', actual_target)
+                    print('sending start to robot')
+                    time.sleep(1)
                     self.fsm_robot_control = 24
 
                 if self.fsm_robot_control == 24:
-                    print('Wait for robot status == 3 and add target_id, set start to 0')
+                    print('waiting for robot finish')
+                    actual_target = actual_target + 1
                     time.sleep(1)     
                     self.fsm_robot_control = 22
 
