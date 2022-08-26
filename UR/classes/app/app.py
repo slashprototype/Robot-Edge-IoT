@@ -219,7 +219,7 @@ class App ():
                         print('Special move detected')
                         time.sleep(1)     
                     
-                else:
+                elif setup:
                     self.fsm_robot_control = 30
 
                 # ALARM
