@@ -229,8 +229,9 @@ class App ():
                     print('Special move detected')
                     time.sleep(1)
                 
-                if status==1 and self.mqtt_ok and self.robot_ok:
-                    self.fsm_robot_control = 30
+                if status==1:
+                    if self.mqtt_ok and self.robot_ok != True:
+                        self.fsm_robot_control = 30
                     
                 # ALARM
                 if self.fsm_robot_control == 30:
