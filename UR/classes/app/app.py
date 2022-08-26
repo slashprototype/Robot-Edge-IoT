@@ -69,7 +69,7 @@ class App ():
                 # , 'robot_ok', self.robot_ok)
                 if self.mqtt_ok and self.robot_ok:
                     # print('Communications are ok')
-                    get_fsm_status_type(self.fsm_robot_control)
+                    print(get_fsm_status_type(self.fsm_robot_control))
                     # pass
                 else:
                     print('ROBOT alarms: ',self.robot.alarm, self.robot.alarm_id)
