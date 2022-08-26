@@ -21,25 +21,29 @@ class Application():
                     "/PCB/CELL-A/UR3-A/CONTROLLER/EXECUTE/VALUE",
                     "/PCB/CELL-A/UR3-A/CONTROLLER/EMERGENCYSTOP/VALUE",
                     "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE",
-                    "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE",
+                    "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
 
                     "/PCB/CELL-B/UR3-B/CONTROLLER/COMMAND/VALUE",
                     "/PCB/CELL-B/UR3-B/CONTROLLER/EXECUTE/VALUE",
                     "/PCB/CELL-B/UR3-B/CONTROLLER/EMERGENCYSTOP/VALUE",
-                    "/PCB/CELL-B/UR3-B/CONTROLLER/SPEED/VALUE"
+                    "/PCB/CELL-B/UR3-B/CONTROLLER/SPEED/VALUE",
+
+                    "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
+                    "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE"
+                    
                     ]
 
         subscribe_topics = ["/PCB/CELL-A/UR3-A/MONITORING/STATUS/TYPE",
-                            "/PCB/CELL-A/UR3-A/MONITORING/STATUS/VALUE",
+                            # "/PCB/CELL-A/UR3-A/MONITORING/STATUS/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/JOBNUMBER/VALUE",
-                            "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE"
+                            "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE",
                             "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE",
-                            "/PCB/CELL-A/UR3-A/MONITORING/POSITION/VALUE",
-                            "/PCB/CELL-A/UR3-A/MONITORING/CURRENT/VALUE",
-                            "/PCB/CELL-A/UR3-A/MONITORING/TEMPERATURE/VALUE",
-                            "/PCB/CELL-A/UR3-A/CONTROLLER/TOOL/VALUE",
-                            # "/PCB/CELL-A/UR3-A/CONTROLLER/EXECUTE/VALUE",
+                            # "/PCB/CELL-A/UR3-A/MONITORING/POSITION/VALUE",
+                            # "/PCB/CELL-A/UR3-A/MONITORING/CURRENT/VALUE",
+                            # "/PCB/CELL-A/UR3-A/MONITORING/TEMPERATURE/VALUE",
+                            # "/PCB/CELL-A/UR3-A/CONTROLLER/TOOL/VALUE",
+                            "/PCB/CELL-A/UR3-A/CONTROLLER/EXECUTE/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/RESULTWORK/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/STATUS/VALUE"
                             ]
@@ -70,17 +74,19 @@ class Application():
             while(running):
                 time.sleep(0.1)
 
-                mqtt_con.client.publish(publish_topics[0],self.rutina_A.get() ,1,True)
-                mqtt_con.client.publish(publish_topics[1],self.execute_A.get() ,1,True)
-                mqtt_con.client.publish(publish_topics[2],self.emergency_A.get(),1,True)
-                mqtt_con.client.publish(publish_topics[3],"{:.2f}".format(self.speed_A.get()) ,1,True)
+                # mqtt_con.client.publish(publish_topics[0],self.rutina_A.get() ,1,True)
+                # mqtt_con.client.publish(publish_topics[1],self.execute_A.get() ,1,True)
+                # mqtt_con.client.publish(publish_topics[2],self.emergency_A.get(),1,True)
+                # mqtt_con.client.publish(publish_topics[3],"{:.2f}".format(self.speed_A.get()) ,1,True)
                 # mqtt_con.client.publish(publish_topics[4],self.visor_trigger.get(),1,True)
                 
-                mqtt_con.client.publish(publish_topics[5],self.rutina_B.get() ,1,True)
-                mqtt_con.client.publish(publish_topics[6],self.execute_B.get() ,1,True)
-                mqtt_con.client.publish(publish_topics[7],self.emergency_B.get() ,1,True)
-                mqtt_con.client.publish(publish_topics[8],"{:.2f}".format(self.speed_B.get()),1,True)
+                # mqtt_con.client.publish(publish_topics[5],self.rutina_B.get() ,1,True)
+                # mqtt_con.client.publish(publish_topics[6],self.execute_B.get() ,1,True)
+                # mqtt_con.client.publish(publish_topics[7],self.emergency_B.get() ,1,True)
+                # mqtt_con.client.publish(publish_topics[8],"{:.2f}".format(self.speed_B.get()),1,True)
                 
+                # mqtt_con.client.publish(publish_topics[9],0 ,1,True)
+                # mqtt_con.client.publish(publish_topics[10],0 ,1,True)
                 # if len(mqtt_con.received_msg) > 0:
                 #     print(mqtt_con.received_msg)
                 # time.sleep(1)
@@ -90,6 +96,7 @@ class Application():
         # RUTINA A ENTRY BOX
         def set_command_A():
             self.rutina_A.set(self.entry_A.get())
+            mqtt_con.client.publish(publish_topics[0],self.rutina_A.get() ,1,True)
             # print(self.rutina.get())
         
         # RUTINA B ENTRY BOX
@@ -100,11 +107,13 @@ class Application():
         # SPEED A
         def set_speed_plus_A():
             self.speed_A.set(self.speed_A.get()+0.01)
+            mqtt_con.client.publish(publish_topics[3],"{:.2f}".format(self.speed_A.get()) ,1,True)
             # print(self.speed.get())
 
         def set_speed_minus_A():
             if self.speed_A.get() > 0:
                 self.speed_A.set(self.speed_A.get()-0.01)
+                mqtt_con.client.publish(publish_topics[3],"{:.2f}".format(self.speed_A.get()) ,1,True)
                 # print(self.speed.get())
         
         # SPEED B
@@ -125,7 +134,8 @@ class Application():
         
         
         def set_job():
-            mqtt_con.client.publish(publish_topics[4],self.entry_A.get(),1,True)
+            # mqtt_con.client.publish(publish_topics[4],self.entry_A.get(),1,True)
+            mqtt_con.client.publish(publish_topics[1],1 ,1,True)
             
         mqtt_thread = Thread(target=mqtt_loop)
 
@@ -228,7 +238,7 @@ class Application():
         
         self.check_visor_trigger = ttk.Checkbutton(self.marcoLeft_1A, text='visor trigger',
                                             variable=self.visor_trigger,
-                                            onvalue=1, offvalue=0)                                            
+                                            onvalue=170, offvalue=255)                                            
         self.entry_A = ttk.Entry(self.marcoLeft_1A)
 
         
@@ -245,7 +255,7 @@ class Application():
         self.entry_B = ttk.Entry(self.marcoLeft_1B)
         
         # MARCO4
-        self.btn_test_job = ttk.Button(self.marcoLeft_2A, text='send job: 1',
+        self.btn_test_job = ttk.Button(self.marcoLeft_2A, text='send execute',
                                       style='My.TButton', width=7, command=set_job)
 
         self.btn_exit = ttk.Button(self.marcoLeft_2A, text='Salir',
@@ -276,7 +286,8 @@ class Application():
         self.remote_speed_A.grid(column=0, row=2)
         self.check_execute_A.grid(column=0, row=3)
         self.check_execute_A.grid(column=0, row=4)
-        self.entry_A.grid(column=0,row=5)
+        self.check_visor_trigger.grid(column=0, row= 5)
+        self.entry_A.grid(column=0,row=6)
 
         self.box_emergency_stop_B.grid(column=0, row=0)
         self.remote_speed_B.grid(column=0, row=2)
