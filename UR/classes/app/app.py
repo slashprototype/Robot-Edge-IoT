@@ -177,15 +177,17 @@ class App ():
 
 
     def robot_control(self):
+        setup = False
         while (self.running):
             try:
 
                 if self.fsm_robot_control == 0:
                         print('Initial status in robot control')
                         if self.mqtt_ok and self.robot_ok:
+                            setup = True
                             self.fsm_robot_control = 30
 
-                if self.mqtt_ok and self.robot_ok:
+                if setup and self.mqtt_ok and self.robot_ok:
 
                     if self.fsm_robot_control == 10:
                         print('initializing/reset robot...')
