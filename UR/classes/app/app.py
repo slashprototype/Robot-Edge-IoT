@@ -74,7 +74,6 @@ class App ():
                         print('MQTT connection error')
                     elif self.mqtt.subscribe_status == False:
                         print('MQTT subscribe error')
-                    print('\n')
 
             except KeyboardInterrupt:
                 print('interruptions')            
@@ -199,12 +198,12 @@ class App ():
 
                 if self.fsm_robot_control == 10:
                     # print('initializing/reset robot...')
-                    time.sleep(2)
+                    time.sleep(0.5)
                     self.fsm_robot_control = 20
 
                 if self.fsm_robot_control == 20:
                     
-                    time.sleep(2)
+                    time.sleep(0.5)
                     self.fsm_robot_control = 21
 
                 if self.fsm_robot_control == 21:
@@ -215,12 +214,10 @@ class App ():
                         targets_len = 5
                         actual_target = 0
                         move_type = 0
-                    time.sleep(1)     
+                    time.sleep(0.1)     
 
 
                 if self.fsm_robot_control == 22:
-                    time.sleep(1)
-
                     if actual_target < targets_len:
                         if move_type == 0:
                             self.fsm_robot_control = 23
@@ -229,20 +226,21 @@ class App ():
                     else:
                         print('Routine Complete succesfully')
                         self.fsm_robot_control = 21
+                    time.sleep(0.1)
 
 
                 if self.fsm_robot_control == 23:
                     print('sending target', actual_target)
-                    time.sleep(1)
                     self.fsm_robot_control = 24
+                    time.sleep(0.2)
 
                 if self.fsm_robot_control == 24:
                     actual_target = actual_target + 1
-                    time.sleep(1)     
                     self.fsm_robot_control = 22
+                    time.sleep(0.1)
 
                 if self.fsm_robot_control == 40:
-                    time.sleep(1)
+                    time.sleep(0.1)
                 
                 if setup:
                     if self.mqtt_ok and self.robot_ok != True:
@@ -252,8 +250,8 @@ class App ():
                 if self.fsm_robot_control == 30:
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
                         self.publish_mqtt(execute = 0)
-                        time.sleep(1)
                         self.fsm_robot_control = 10                
+                        time.sleep(0.1)
             except:
                 # END WHILE LOOP
                 print('ending robot control loop')          
