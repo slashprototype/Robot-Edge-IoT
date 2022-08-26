@@ -62,18 +62,32 @@ class App ():
 
     def main_loop(self):
         self.start_app()
+        counter_1 = 0
+        old = -2
+        new = -1
         while True:  
             try:
-                time.sleep(0.5)
+                time.sleep(0.01)
                 if self.mqtt_ok and self.robot_ok:       
-                    print(get_fsm_status_type(self.fsm_robot_control))
-                else:
+                    counter_1 = 0
+                    new = get_fsm_status_type(self.fsm_robot_control)
+                    if new != old:
+                        print(new)
+                        old = new
                     
-                    print('ROBOT alarms: ',self.robot.alarm, self.robot.alarm_id)
-                    if self.mqtt.connection_status == False:
-                        print('MQTT connection error')
-                    elif self.mqtt.subscribe_status == False:
-                        print('MQTT subscribe error')
+                
+                else:    
+                    if counter_1 >= 100:
+                        print('ROBOT alarms: ',self.robot.alarm, self.robot.alarm_id)
+                        if self.mqtt.connection_status == False:
+                            print('MQTT connection error')
+                        elif self.mqtt.subscribe_status == False:
+                            print('MQTT subscribe error')
+                        counter_1 = 0
+                    else:
+                        counter_1 = counter_1 + 1
+
+                
 
             except KeyboardInterrupt:
                 print('interruptions')            
