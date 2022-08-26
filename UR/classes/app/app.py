@@ -29,6 +29,17 @@ class App ():
         self.robot_control_thread.setDaemon(True)
         
         self.main_loop()
+    
+    def publish_mqtt(self, **args):
+        for key,value in args.items():
+            if key == 'robot_status':
+                self.mqtt.publish(self.publish_topics[2],value)
+            if key == 'tool':
+                self.mqtt.publish(self.publish_topics[10],value)
+            if key == 'execute':
+                self.mqtt.publish(self.publish_topics[12],value)
+            if key == 'robot_resultwork':
+                self.mqtt.publish(self.publish_topics[14],value)
 
     def start_app(self):
         self.running = True
@@ -224,6 +235,7 @@ class App ():
                 # ALARM
                 if self.fsm_robot_control == 30:
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
+                        self.publish_mqtt(execute = 0)
                         time.sleep(1)
                         print('sending reset to robot...')
                         self.fsm_robot_control = 10                
