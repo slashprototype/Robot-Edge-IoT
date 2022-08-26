@@ -55,7 +55,7 @@ def get_fsm_status_type(fsm_id):
         23:'Send actual target and start = 1 to robot',
         24:'increase index and start = 0 to robot',
         40:'Special Move type detected, alternative routine',
-        30:'changos2'
+        30:'Alarm status, check for reset or another anomaly'
     }
     return types[fsm_id]
 
