@@ -1,7 +1,7 @@
 from threading import Thread
 import sys
 import time
-from classes.app.test import MyException
+from UR.classes.app.test import MyException
 from classes.app.utils.functions import search_script,send_robot_action,get_robot_targets, get_fsm_status_type
 
 class App ():
@@ -28,6 +28,9 @@ class App ():
         self.robot_monitoring_thread.setDaemon(True)
         self.robot_control_thread = Thread(target=self.robot_control)
         self.robot_control_thread.setDaemon(True)
+
+        self.exceptions_thread = Thread(target=self.exceptions_loop)
+        self.exceptions_thread.setDaemon(True)
         
         self.main_loop()
     
@@ -49,6 +52,7 @@ class App ():
         self.mqtt_thread.start()
         self.robot_monitoring_thread.start()    
         self.robot_control_thread.start()    
+        self.exceptions_thread.start()
         
 
 
@@ -80,12 +84,17 @@ class App ():
                     elif self.mqtt.subscribe_status == False:
                         print('MQTT subscribe error')
                     print('\n')
-                    raise MyException
 
             except KeyboardInterrupt:
                 print('interruptions')            
                 self.close_app() 
                 
+    def exceptions_loop(self):
+        while (self.running):
+            if self.mqtt_ok and self.robot_ok != True:
+                raise MyException
+
+
 
     def mqtt_sync(self):
         counter_1 = 0
