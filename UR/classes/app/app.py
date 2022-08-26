@@ -1,6 +1,7 @@
 from threading import Thread
 import sys
 import time
+from UR.classes.app.test import MyException
 from classes.app.utils.functions import search_script,send_robot_action,get_robot_targets, get_fsm_status_type
 
 class App ():
@@ -72,12 +73,14 @@ class App ():
                     print(get_fsm_status_type(self.fsm_robot_control))
                     # pass
                 else:
+                    
                     print('ROBOT alarms: ',self.robot.alarm, self.robot.alarm_id)
                     if self.mqtt.connection_status == False:
                         print('MQTT connection error')
                     elif self.mqtt.subscribe_status == False:
                         print('MQTT subscribe error')
                     print('\n')
+                    raise MyException
 
             except KeyboardInterrupt:
                 print('interruptions')            
@@ -189,13 +192,21 @@ class App ():
 
 
     def robot_control(self):
-        status = 0
+        setup = False
         while (self.running):
             try:
+                while(True):
+                    try:
+                        print('waiting')
+                    except MyException:
+                        print('changos')
+
                 if self.fsm_robot_control == 0:
                     # Initial status in robot control
                     if self.mqtt_ok and self.robot_ok:
                         self.fsm_robot_control = 30
+                        setup = True
+
 
                 if self.fsm_robot_control == 10:
                     # print('initializing/reset robot...')
@@ -203,7 +214,7 @@ class App ():
                     self.fsm_robot_control = 20
 
                 if self.fsm_robot_control == 20:
-                    status = 1
+                    
                     time.sleep(2)
                     self.fsm_robot_control = 21
 
@@ -219,7 +230,7 @@ class App ():
 
 
                 if self.fsm_robot_control == 22:
-                    time.sleep(1)
+                    time.sleep(3)
 
                     if actual_target < targets_len:
                         if move_type == 0:
@@ -244,7 +255,7 @@ class App ():
                 if self.fsm_robot_control == 40:
                     time.sleep(3)
                 
-                if status==1:
+                if setup:
                     if self.mqtt_ok and self.robot_ok != True:
                         self.fsm_robot_control = 30
                     
