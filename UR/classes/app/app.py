@@ -1,7 +1,7 @@
 from threading import Thread
 import sys
 import time
-from classes.app.utils.functions import search_script,send_robot_action,get_robot_targets
+from classes.app.utils.functions import search_script,send_robot_action,get_robot_targets, get_fsm_status_type
 
 class App ():
     def __init__(self, mqtt,robot,subscribe_topics,publish_topics,routines_path):
@@ -69,7 +69,7 @@ class App ():
                 # , 'robot_ok', self.robot_ok)
                 if self.mqtt_ok and self.robot_ok:
                     # print('Communications are ok')
-                    print(self.fsm_robot_control)
+                    get_fsm_status_type(self.fsm_robot_control)
                     # pass
                 else:
                     print('ROBOT alarms: ',self.robot.alarm, self.robot.alarm_id)
@@ -192,7 +192,6 @@ class App ():
         status = 0
         while (self.running):
             try:
-
                 if self.fsm_robot_control == 0:
                     # Initial status in robot control
                     if self.mqtt_ok and self.robot_ok:
@@ -204,13 +203,11 @@ class App ():
                     self.fsm_robot_control = 20
 
                 if self.fsm_robot_control == 20:
-                    print('Robot is in normal operation')
                     status = 1
                     time.sleep(2)
                     self.fsm_robot_control = 21
 
                 if self.fsm_robot_control == 21:
-                    print('Waiting for execute')
                     if self.ctrl_execute == 1:
                         self.publish_mqtt(execute = 0)
                         print('command selected is',self.ctrl_command)
@@ -222,14 +219,13 @@ class App ():
 
 
                 if self.fsm_robot_control == 22:
-                    print('Checking index and move type')
                     time.sleep(1)
 
                     if actual_target < targets_len:
                         if move_type == 0:
                             self.fsm_robot_control = 23
                         if move_type == 1:
-                            self.fsm_robot_control = 25
+                            self.fsm_robot_control = 40
                     else:
                         print('Routine Complete succesfully')
                         self.fsm_robot_control = 21
@@ -237,22 +233,19 @@ class App ():
 
                 if self.fsm_robot_control == 23:
                     print('sending target', actual_target)
-                    print('sending start to robot')
-                    time.sleep(1)
+                    time.sleep(3)
                     self.fsm_robot_control = 24
 
                 if self.fsm_robot_control == 24:
-                    print('waiting for robot finish')
                     actual_target = actual_target + 1
-                    time.sleep(1)     
+                    time.sleep(3)     
                     self.fsm_robot_control = 22
 
-                if self.fsm_robot_control == 25:
-                    print('Special move detected')
-                    time.sleep(1)
+                if self.fsm_robot_control == 40:
+                    time.sleep(3)
                 
                 if status==1:
-                    if self.mqtt_ok and self.robot_ok != True:
+                    if self.mqtt_ok or self.robot_ok != True:
                         self.fsm_robot_control = 30
                     
                 # ALARM
@@ -260,7 +253,6 @@ class App ():
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
                         self.publish_mqtt(execute = 0)
                         time.sleep(1)
-                        print('sending reset to robot...')
                         self.fsm_robot_control = 10                
             except:
                 # END WHILE LOOP

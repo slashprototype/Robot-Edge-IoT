@@ -44,3 +44,19 @@ def get_robot_targets(file):
 
 def update_once(mqtt,publish_topic,value):
     mqtt.publish(publish_topic,value)
+
+def get_fsm_status_type(fsm_id):
+    types = {
+        0:'Control algorithm not initialized',
+        10:'reset routine',
+        20:'Starting normal control loop',
+        21:'Waiting for execute',
+        22:'Checking index and move type',
+        23:'Send actual target and start = 1 to robot',
+        24:'increase index and start = 0 to robot',
+        40:'Special Move type detected, alternative routine',
+        30:'changos2'
+    }
+    return types[fsm_id]
+
+
