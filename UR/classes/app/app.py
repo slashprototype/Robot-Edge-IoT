@@ -95,7 +95,7 @@ class App ():
                 if self.mqtt_ok and self.robot_ok != True:
                     raise MyException
             except:
-                'EXCEPTION RAISED'
+                print('EXCEPTION RAISED')
 
 
 
