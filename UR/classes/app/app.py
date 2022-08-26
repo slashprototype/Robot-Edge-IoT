@@ -177,57 +177,55 @@ class App ():
 
 
     def robot_control(self):
-        setup = False
         while (self.running):
             try:
-
                 if self.fsm_robot_control == 0:
-                        print('Initial status in robot control')
-                        if self.mqtt_ok and self.robot_ok:
-                            setup = True
-                            self.fsm_robot_control = 30
+                    print('Initial status in robot control')
+                    if self.mqtt_ok and self.robot_ok:
+                        self.fsm_robot_control = 30
 
-                if setup and self.mqtt_ok and self.robot_ok:
+                if self.fsm_robot_control > 0:
+                    if self.mqtt_ok and self.robot_ok:
 
-                    if self.fsm_robot_control == 10:
-                        print('initializing/reset robot...')
-                        time.sleep(5)
-                        self.fsm_robot_control = 20
+                        if self.fsm_robot_control == 10:
+                            print('initializing/reset robot...')
+                            time.sleep(5)
+                            self.fsm_robot_control = 20
 
-                    if self.fsm_robot_control == 20:
-                        print('Robot is in normal operation')
-                        time.sleep(5)
-                        self.fsm_robot_control = 21
+                        if self.fsm_robot_control == 20:
+                            print('Robot is in normal operation')
+                            time.sleep(5)
+                            self.fsm_robot_control = 21
 
-                    if self.fsm_robot_control == 21:
-                        print('Waiting for execute')
-                        time.sleep(1)     
+                        if self.fsm_robot_control == 21:
+                            print('Waiting for execute')
+                            time.sleep(1)     
 
-                    if self.fsm_robot_control == 22:
-                        print('Checking index and move type')
-                        time.sleep(1)     
+                        if self.fsm_robot_control == 22:
+                            print('Checking index and move type')
+                            time.sleep(1)     
 
-                    if self.fsm_robot_control == 23:
-                        print('Wait for robot status == 1 and send actual target, set start to 1')
-                        time.sleep(1)     
+                        if self.fsm_robot_control == 23:
+                            print('Wait for robot status == 1 and send actual target, set start to 1')
+                            time.sleep(1)     
 
-                    if self.fsm_robot_control == 24:
-                        print('Wait for robot status == 3 and add target_id, set start to 0')
-                        time.sleep(1)     
+                        if self.fsm_robot_control == 24:
+                            print('Wait for robot status == 3 and add target_id, set start to 0')
+                            time.sleep(1)     
 
-                    if self.fsm_robot_control == 25:
-                        print('Special move detected')
-                        time.sleep(1)     
-                    
-                elif setup:
-                    self.fsm_robot_control = 30
+                        if self.fsm_robot_control == 25:
+                            print('Special move detected')
+                            time.sleep(1)     
+                        
+                    else:
+                        self.fsm_robot_control = 30
 
-                # ALARM
-                if self.fsm_robot_control == 30:
-                    if self.ctrl_command == 10 and self.ctrl_execute == 1:
-                        time.sleep(1)
-                        print('sending reset to robot...')
-                        self.fsm_robot_control = 10                
+                    # ALARM
+                    if self.fsm_robot_control == 30:
+                        if self.ctrl_command == 10 and self.ctrl_execute == 1:
+                            time.sleep(1)
+                            print('sending reset to robot...')
+                            self.fsm_robot_control = 10                
             except:
                 # END WHILE LOOP
                 print('ending robot control loop')          
