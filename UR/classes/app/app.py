@@ -1,7 +1,6 @@
 from threading import Thread
 import sys
 import time
-from classes.app.test import MyException
 from classes.app.utils.functions import search_script,send_robot_action,get_robot_targets, get_fsm_status_type
 
 class App ():
@@ -17,6 +16,7 @@ class App ():
         self.mqtt_ok = False
         self.robot_ok = False
         self.setup_robot = False
+        self.exception = False
 
         self.fsm_robot_control = 0
         self.fsm_robot_sync = 0
@@ -28,9 +28,6 @@ class App ():
         self.robot_monitoring_thread.setDaemon(True)
         self.robot_control_thread = Thread(target=self.robot_control)
         self.robot_control_thread.setDaemon(True)
-
-        self.exceptions_thread = Thread(target=self.exceptions_loop)
-        self.exceptions_thread.setDaemon(True)
         
         self.main_loop()
     
@@ -52,7 +49,6 @@ class App ():
         self.mqtt_thread.start()
         self.robot_monitoring_thread.start()    
         self.robot_control_thread.start()    
-        self.exceptions_thread.start()
         
 
 
@@ -68,14 +64,9 @@ class App ():
         self.start_app()
         while True:  
             try:
-                # pass
-                time.sleep(1)
-                # print('mqtt_ok', self.mqtt_ok, self.mqtt.subscribe_status,self.mqtt.connection_status
-                # , 'robot_ok', self.robot_ok)
-                if self.mqtt_ok and self.robot_ok:
-                    # print('Communications are ok')
+                time.sleep(0.5)
+                if self.mqtt_ok and self.robot_ok:       
                     print(get_fsm_status_type(self.fsm_robot_control))
-                    # pass
                 else:
                     
                     print('ROBOT alarms: ',self.robot.alarm, self.robot.alarm_id)
@@ -88,15 +79,6 @@ class App ():
             except KeyboardInterrupt:
                 print('interruptions')            
                 self.close_app() 
-                
-    def exceptions_loop(self):
-        while (self.running):
-            try:
-                if self.mqtt_ok and self.robot_ok != True:
-                    raise MyException
-            except:
-                print('EXCEPTION RAISED')
-
 
 
     def mqtt_sync(self):
@@ -208,17 +190,6 @@ class App ():
         s = 0
         while (self.running):
             try:
-                while(True):
-                    try:
-                        if s == 0:
-                            time.sleep(1)
-                            print('waiting')
-                        else:
-                            print('already catched')
-                    except MyException:
-                        s = 1
-                        print('changos')
-
                 if self.fsm_robot_control == 0:
                     # Initial status in robot control
                     if self.mqtt_ok and self.robot_ok:
@@ -244,11 +215,11 @@ class App ():
                         targets_len = 5
                         actual_target = 0
                         move_type = 0
-                    time.sleep(2)     
+                    time.sleep(1)     
 
 
                 if self.fsm_robot_control == 22:
-                    time.sleep(3)
+                    time.sleep(1)
 
                     if actual_target < targets_len:
                         if move_type == 0:
@@ -262,16 +233,16 @@ class App ():
 
                 if self.fsm_robot_control == 23:
                     print('sending target', actual_target)
-                    time.sleep(3)
+                    time.sleep(1)
                     self.fsm_robot_control = 24
 
                 if self.fsm_robot_control == 24:
                     actual_target = actual_target + 1
-                    time.sleep(3)     
+                    time.sleep(1)     
                     self.fsm_robot_control = 22
 
                 if self.fsm_robot_control == 40:
-                    time.sleep(3)
+                    time.sleep(1)
                 
                 if setup:
                     if self.mqtt_ok and self.robot_ok != True:
