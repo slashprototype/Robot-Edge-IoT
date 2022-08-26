@@ -57,7 +57,7 @@ class App ():
                 # print('mqtt_ok', self.mqtt_ok, self.mqtt.subscribe_status,self.mqtt.connection_status
                 # , 'robot_ok', self.robot_ok)
                 if self.mqtt_ok and self.robot_ok:
-                    print('Communications are ok')
+                    # print('Communications are ok')
                     print(self.fsm_robot_control)
                     # pass
                 else:
