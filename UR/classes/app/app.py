@@ -15,7 +15,8 @@ class App ():
 
         self.mqtt_ok = False
         self.robot_ok = False
-        self.setup_robot = False
+        self.robot_sync_setup = False
+        self.robot_control_setup = False
         self.exception = False
 
         self.fsm_robot_control = 0
@@ -75,8 +76,9 @@ class App ():
                         print(new)
                         old = new
                     
-                
-                else:    
+                else:
+                    if self.robot_control_setup: 
+                        self.fsm_robot_control = 30
                     if counter_1 >= 100:
                         print('ROBOT alarms: ',self.robot.alarm, self.robot.alarm_id)
                         if self.mqtt.connection_status == False:
@@ -124,10 +126,11 @@ class App ():
                         self.ctrl_qr_result = received_msg['qr_result']
                         self.ctrl_tool_status = received_msg['tool_status']
                         
-                        if self.setup_robot == True and counter_1 >= 100:
+                        if self.robot_sync_setup == True and counter_1 >= 100:
                             self.mqtt.publish(self.publish_topics[4],self.robot_position)
                             self.mqtt.publish(self.publish_topics[6],self.robot_current)
                             self.mqtt.publish(self.publish_topics[8],self.robot_temperature)
+                            self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                             counter_1 = 0
                         
                         self.mqtt_ok = True
@@ -173,13 +176,17 @@ class App ():
                 if self.fsm_robot_sync == 20:
                     try:
                         robot_data,robot_status = self.robot.get_data()
+                        self.robot_status = robot_status
                         self.robot.sync_config(slider = 1, watchdog = 0)
-                        status = robot_data.get('output_int_register_0') 
-                        runtime_state = robot_data.get('runtime_state') 
+                        self.robot.sync_config(slider_fraction = self.ctrl_speed)
+                        
+                        self.robot_working_status = int(robot_data.get('output_int_register_0'))
                         self.robot_position = str(robot_data.get('actual_q'))
                         self.robot_current = str(robot_data.get('actual_current')) 
                         self.robot_temperature = str(robot_data.get('joint_temperatures'))
-                        self.setup_robot = True
+                        self.robot_tool = str(robot_data.get('output_int_register_1'))
+                        
+                        self.robot_sync_setup = True
                         self.robot_ok = True
                     except:
                         self.fsm_robot_sync = 30
@@ -199,40 +206,46 @@ class App ():
 
 
     def robot_control(self):
-        setup = False
-        s = 0
+        target_type = [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 0]
+
         while (self.running):
             try:
                 if self.fsm_robot_control == 0:
                     # Initial status in robot control
                     if self.mqtt_ok and self.robot_ok:
+                        self.robot_control_setup = True
                         self.fsm_robot_control = 30
-                        setup = True
-
+                        
 
                 if self.fsm_robot_control == 10:
-                    # print('initializing/reset robot...')
-                    time.sleep(0.5)
-                    self.fsm_robot_control = 20
+                    send_robot_action(self.robot,'stop')
+                    if self.robot_status >= 6:
+                        self.fsm_robot_control = 20
+                    else:
+                        send_robot_action(self.robot,'auto_init')
+                        print('Robot status: ',self.robot_status)
+                    time.sleep(0.1)
+                    
 
                 if self.fsm_robot_control == 20:
-                    
-                    time.sleep(0.5)
+                    time.sleep(0.1)
                     self.fsm_robot_control = 21
 
                 if self.fsm_robot_control == 21:
                     if self.ctrl_execute == 1:
                         self.publish_mqtt(execute = 0)
-                        print('command selected is',self.ctrl_command)
+                        file = self.routines_path+search_script(self.robot.name,self.ctrl_commad)
+                        print('routine script selected: ', file)
+                        target_id = 0
+                        targets, targets_len = get_robot_targets(file)
                         self.fsm_robot_control = 22
-                        targets_len = 5
-                        actual_target = 0
+                        send_robot_action(self.robot,'start')
                         move_type = 0
                     time.sleep(0.1)     
 
 
                 if self.fsm_robot_control == 22:
-                    if actual_target < targets_len:
+                    if target_id < targets_len:
                         if move_type == 0:
                             self.fsm_robot_control = 23
                         if move_type == 1:
@@ -244,24 +257,28 @@ class App ():
 
 
                 if self.fsm_robot_control == 23:
-                    print('sending target', actual_target)
-                    self.fsm_robot_control = 24
-                    time.sleep(0.2)
+                    if self.robot_working_status == 1:
+                        print('sending target', target_id)
+                        self.robot.sync_program(start = 1)
+                        self.sync_setpoint(targets,target_id)
+                        print(targets[target_id])
+                        self.fsm_robot_control = 24
+                    time.sleep(0.1)
 
                 if self.fsm_robot_control == 24:
-                    actual_target = actual_target + 1
-                    self.fsm_robot_control = 22
+                    if self.robot_working_status == 3:
+                        self.robot.sync_program(start = 0)
+                        actual_target = actual_target + 1
+                        self.fsm_robot_control = 22
                     time.sleep(0.1)
 
                 if self.fsm_robot_control == 40:
                     time.sleep(0.1)
-                
-                if setup:
-                    if self.mqtt_ok and self.robot_ok != True:
-                        self.fsm_robot_control = 30
                     
                 # ALARM
                 if self.fsm_robot_control == 30:
+                    self.robot.sync_config(slider_mask = 1, slider_fraction = 0)
+                    send_robot_action(self.robot,'stop')
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
                         self.publish_mqtt(execute = 0)
                         self.fsm_robot_control = 10                
