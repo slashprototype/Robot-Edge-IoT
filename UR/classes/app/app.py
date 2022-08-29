@@ -234,7 +234,7 @@ class App ():
                 if self.fsm_robot_control == 21:
                     if self.ctrl_execute == 1:
                         self.publish_mqtt(execute = 0)
-                        file = self.routines_path+search_script(self.robot.name,self.ctrl_commad)
+                        file = self.routines_path+search_script(self.robot.name,self.ctrl_command)
                         print('routine script selected: ', file)
                         target_id = 0
                         targets, targets_len = get_robot_targets(file)
