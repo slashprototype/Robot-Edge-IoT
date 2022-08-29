@@ -219,10 +219,13 @@ class App ():
 
                 if self.fsm_robot_control == 10:
                     send_robot_action(self.robot,'stop')
+                    send_robot_action(self.robot,'auto_init')
+                    send_robot_action(self.robot,'auto_play')
                     if self.robot_status >= 6:
                         self.fsm_robot_control = 20
                     else:
                         send_robot_action(self.robot,'auto_init')
+                        send_robot_action(self.robot,'auto_play')
                         print('Robot status: ',self.robot_status)
                     time.sleep(0.1)
                     
