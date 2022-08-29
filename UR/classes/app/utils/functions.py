@@ -15,9 +15,9 @@ def send_robot_action(robot, action):
             time.sleep(0.1)
             if i == 0:
                 robot.sync_control(action,1)
-            if i == 5:
-                robot.sync_control(action,0)
             if i == 10:
+                robot.sync_control(action,0)
+            if i == 20:
                 running = False
             else:
                 i = i + 1
