@@ -263,7 +263,7 @@ class App ():
                     if self.robot_working_status == 1:
                         print('sending target', target_id)
                         self.robot.sync_program(start = 1)
-                        self.sync_setpoint(targets,target_id)
+                        self.robot.sync_setpoint(targets,target_id)
                         print(targets[target_id])
                         self.fsm_robot_control = 24
                     time.sleep(0.1)
