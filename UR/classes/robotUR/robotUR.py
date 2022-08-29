@@ -132,6 +132,14 @@ class Robot():
         self.setpoint_vars.input_double_register_22 = 0
         self.setpoint_vars.input_int_register_20 = 0
 
+        self.con.send(self.control_input)
+        self.con.send(self.slider)
+        self.con.send(self.watchdog)
+        self.con.send(self.program_input)
+        self.con.send(self.setpoint)
+        self.con.send(self.setpoint_vars)
+
+
 
     def sync_control(self, action, value):
         # control input
