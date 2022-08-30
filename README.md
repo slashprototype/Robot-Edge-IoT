@@ -24,3 +24,7 @@ Functionall, still with no sendind the required data to mqtt
 - Working in add publish topics correctly
 - Generic topics for both robots defined and publish, execution logic isn't defined yet
 - main.py was fixed and improved
+
+### Version 1.2
+
+- Functional, but still without functionalities, visor detect function logics are iplemented
