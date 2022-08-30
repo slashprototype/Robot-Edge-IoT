@@ -252,6 +252,7 @@ class App ():
 
 
                 if self.fsm_robot_control == 22:
+                    flag = 0
                     send_robot_action(self.robot,'start')
                     if target_id < targets_len:
                     
@@ -304,16 +305,32 @@ class App ():
                             fsm_40 = 0
 
                     if target_type == 10:
-                        print('Visor detect routine')
-                        self.mqtt.publish(self.publish_topics[10],self.robot_tool)
-                        
+                        if flag == 0:
+                            print('Visor detect routine')
+                            self.mqtt.publish(self.publish_topics[17],2)
+                            flag = 1
+                        if self.ctrl_visor_result == 170:
+                            self.fsm_robot_control = 22
+                            flag = 0
+                        time.sleep(0.5)
+                        print('visor result = ',self.ctrl_visor_result) 
+
                     if target_type == 11:
-                        print('Visor code routine')
+                        if flag == 0:
+                            print('Visor code routine')
+                            self.mqtt.publish(self.publish_topics[17],2)
+                            flag = 1
+                        if self.ctrl_visor_result == 170 and self.ctrl_qr_result == 170:
+                            self.fsm_robot_control = 22
+                            flag = 0
+                        time.sleep(0.5)
+                        print('visor result = ',self.ctrl_visor_result, 'qr result=',self.ctrl_qr_result)
 
                     time.sleep(0.5)
                     
                 # ALARM
                 if self.fsm_robot_control == 30:
+                    flag = 0
                     self.robot.sync_config(slider_mask = 1, slider_fraction = 0)
                     send_robot_action(self.robot,'stop')
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
