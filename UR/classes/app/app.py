@@ -305,6 +305,8 @@ class App ():
 
                     if target_type == 10:
                         print('Visor detect routine')
+                        self.mqtt.publish(self.publish_topics[10],self.robot_tool)
+                        
                     if target_type == 11:
                         print('Visor code routine')
 
