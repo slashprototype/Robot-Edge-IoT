@@ -130,7 +130,7 @@ class App ():
                             self.mqtt.publish(self.publish_topics[4],self.robot_position)
                             self.mqtt.publish(self.publish_topics[6],self.robot_current)
                             self.mqtt.publish(self.publish_topics[8],self.robot_temperature)
-                            self.mqtt.publish(self.publish_topics[10],self.robot_tool)
+                            # self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                             counter_1 = 0
                         
                         self.mqtt_ok = True
@@ -184,7 +184,7 @@ class App ():
                         self.robot_position = str(robot_data.get('actual_q'))
                         self.robot_current = str(robot_data.get('actual_current')) 
                         self.robot_temperature = str(robot_data.get('joint_temperatures'))
-                        self.robot_tool = str(robot_data.get('output_int_register_1'))
+                        # self.robot_tool = str(robot_data.get('output_int_register_1'))
                         
                         self.robot_sync_setup = True
                         self.robot_ok = True
@@ -206,7 +206,6 @@ class App ():
 
 
     def robot_control(self):
-        target_type = [[0, 0, 0, 0, 0, 0], 0, 0, 0, 0, 0]
 
         while (self.running):
             try:
@@ -214,6 +213,8 @@ class App ():
                     # Initial status in robot control
                     if self.mqtt_ok and self.robot_ok:
                         self.robot_control_setup = True
+                        self.robot_tool = 0
+                        self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                         self.fsm_robot_control = 30
                         
 
@@ -249,10 +250,14 @@ class App ():
 
                 if self.fsm_robot_control == 22:
                     if target_id < targets_len:
-                        if move_type == 0:
+                    
+                        target_type = targets[target_id][5]
+
+                        if target_type > 2 and target_type < 10:
                             self.fsm_robot_control = 23
-                        if move_type == 1:
+                        else:
                             self.fsm_robot_control = 40
+                            
                     else:
                         print('Routine Complete succesfully')
                         self.fsm_robot_control = 21
@@ -276,7 +281,29 @@ class App ():
                     time.sleep(0.1)
 
                 if self.fsm_robot_control == 40:
-                    time.sleep(0.1)
+
+                    if target_type == 1:
+                        self.robot_tool = 170
+                        self.mqtt.publish(self.publish_topics[10],self.robot_tool)
+                        print('waiting for',self.ctrl_tool_status,'==', self.robot_tool)
+                        if self.ctrl_tool_status == self.robot_tool:
+                            self.fsm_robot_control = 22
+                            fsm_40 = 0
+
+                    if target_type == 2:
+                        self.robot_tool = 187
+                        self.mqtt.publish(self.publish_topics[10],self.robot_tool)
+                        print('waiting for',self.ctrl_tool_status,'==', self.robot_tool)
+                        if self.ctrl_tool_status == self.robot_tool:
+                            self.fsm_robot_control = 22
+                            fsm_40 = 0
+
+                    if target_type == 10:
+                        print('Visor detect routine')
+                    if target_type == 11:
+                        print('Visor code routine')
+
+                    time.sleep(0.5)
                     
                 # ALARM
                 if self.fsm_robot_control == 30:
