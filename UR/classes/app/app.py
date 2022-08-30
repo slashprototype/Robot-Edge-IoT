@@ -321,6 +321,7 @@ class App ():
                             self.mqtt.publish(self.publish_topics[17],2)
                             flag = 1
                         if self.ctrl_visor_result == 170:
+                            self.mqtt.publish(self.publish_topics[17],0)
                             target_id = target_id + 1
                             self.fsm_robot_control = 22
                             flag = 0
@@ -334,6 +335,7 @@ class App ():
                             flag = 1
                         if self.ctrl_visor_result == 170 and self.ctrl_qr_result == 170:
                             target_id = target_id + 1
+                            self.mqtt.publish(self.publish_topics[17],0)
                             self.fsm_robot_control = 22
                             flag = 0
                         time.sleep(0.5)
