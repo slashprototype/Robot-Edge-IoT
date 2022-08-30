@@ -43,6 +43,7 @@ class App ():
             if key == 'robot_resultwork':
                 self.mqtt.publish(self.publish_topics[14],value)
 
+
     def start_app(self):
         self.running = True
         print('Initializing App...')
@@ -216,6 +217,7 @@ class App ():
                         self.robot_tool = 0
                         self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                         self.robot.sync_program(start = 0)
+                        
                         self.fsm_robot_control = 30
 
                         
@@ -225,7 +227,9 @@ class App ():
                     send_robot_action(self.robot,'auto_init')
                     send_robot_action(self.robot,'auto_play')
                     if self.robot_status >= 6:
+                        self.publish_mqtt(robot_resultwork = 170)
                         self.fsm_robot_control = 20
+                        
                     else:
                         send_robot_action(self.robot,'auto_init')
                         send_robot_action(self.robot,'auto_play')
@@ -238,9 +242,10 @@ class App ():
                     self.fsm_robot_control = 21
 
                 if self.fsm_robot_control == 21:
-
                     if self.ctrl_execute == 1:
+                        self.publish_mqtt(robot_resultwork = 221)
                         self.publish_mqtt(execute = 0)
+                        
                         file = self.routines_path+search_script(self.robot.name,self.ctrl_command)
                         print('routine script selected: ', file)
                         target_id = 0
@@ -264,6 +269,7 @@ class App ():
                             self.fsm_robot_control = 40
                             
                     else:
+                        self.publish_mqtt(robot_resultwork = 170)
                         print('Routine Complete succesfully')
                         self.fsm_robot_control = 21
                     time.sleep(0.1)
