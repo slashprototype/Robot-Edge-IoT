@@ -37,35 +37,35 @@ def process(file):
             if re.search(r'(global)\s(speed_ms)\s*=\d*',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(10)
+                data.append(30)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
             if re.search(r'(global)\s(speed_rads)\s*=\d*',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(12)
+                data.append(31)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
             if re.search(r'(global)\s(accel_mss)\s*=\d*',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(11)
+                data.append(32)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
             if re.search(r'(global)\s(accel_radss)\s*=\d*',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(13)
+                data.append(33)
                 data.append(float(speed[0]))
                 all_pos.append(data)
             
             if re.search(r'(global)\s(blend_radius_m)\s*=\d*',line):
                 data = []
                 speed = re.findall(r'\s*(\d.*)', line)
-                data.append(14)
+                data.append(34)
                 data.append(float(speed[0]))
                 all_pos.append(data)
 
