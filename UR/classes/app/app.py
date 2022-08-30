@@ -215,7 +215,9 @@ class App ():
                         self.robot_control_setup = True
                         self.robot_tool = 0
                         self.mqtt.publish(self.publish_topics[10],self.robot_tool)
+                        self.robot.sync_program(start = 0)
                         self.fsm_robot_control = 30
+
                         
 
                 if self.fsm_robot_control == 10:
@@ -236,6 +238,7 @@ class App ():
                     self.fsm_robot_control = 21
 
                 if self.fsm_robot_control == 21:
+
                     if self.ctrl_execute == 1:
                         self.publish_mqtt(execute = 0)
                         file = self.routines_path+search_script(self.robot.name,self.ctrl_command)
@@ -243,12 +246,13 @@ class App ():
                         target_id = 0
                         targets, targets_len = get_robot_targets(file)
                         self.fsm_robot_control = 22
-                        send_robot_action(self.robot,'start')
+                        
                         move_type = 0
                     time.sleep(0.1)     
 
 
                 if self.fsm_robot_control == 22:
+                    send_robot_action(self.robot,'start')
                     if target_id < targets_len:
                     
                         target_type = targets[target_id][5]
@@ -265,6 +269,7 @@ class App ():
 
 
                 if self.fsm_robot_control == 23:
+                    print(self.robot_working_status)
                     if self.robot_working_status == 1:
                         print('sending target', target_id)
                         self.robot.sync_setpoint(targets,target_id)
