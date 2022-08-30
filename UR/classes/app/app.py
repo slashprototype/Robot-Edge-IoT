@@ -178,9 +178,11 @@ class App ():
                     try:
                         robot_data,robot_status = self.robot.get_data()
                         self.robot_status = robot_status
+                        
                         self.robot.sync_config(slider = 1, watchdog = 0)
                         self.robot.sync_config(slider_fraction = self.ctrl_speed)
                         
+                        self.runtime_state = int(robot_data.get('runtime_state'))
                         self.robot_working_status = int(robot_data.get('output_int_register_0'))
                         self.robot_position = str(robot_data.get('actual_q'))
                         self.robot_current = str(robot_data.get('actual_current')) 
@@ -261,7 +263,10 @@ class App ():
                 if self.fsm_robot_control == 22:
                     flag = 0
                     self.mqtt.publish(self.publish_topics[17],0)
-                    send_robot_action(self.robot,'start')
+                    
+                    if self.runtime_state != 2:
+                        send_robot_action(self.robot,'start')
+
                     if target_id < targets_len:
                     
                         target_type = targets[target_id][5]
