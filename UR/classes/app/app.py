@@ -299,6 +299,7 @@ class App ():
                         self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                         print('waiting for',self.ctrl_tool_status,'==', self.robot_tool)
                         if self.ctrl_tool_status == self.robot_tool:
+                            target_id = target_id + 1
                             self.fsm_robot_control = 22
                             fsm_40 = 0
 
@@ -307,6 +308,7 @@ class App ():
                         self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                         print('waiting for',self.ctrl_tool_status,'==', self.robot_tool)
                         if self.ctrl_tool_status == self.robot_tool:
+                            target_id = target_id + 1
                             self.fsm_robot_control = 22
                             fsm_40 = 0
 
@@ -316,6 +318,7 @@ class App ():
                             self.mqtt.publish(self.publish_topics[17],2)
                             flag = 1
                         if self.ctrl_visor_result == 170:
+                            target_id = target_id + 1
                             self.fsm_robot_control = 22
                             flag = 0
                         time.sleep(0.5)
@@ -327,6 +330,7 @@ class App ():
                             self.mqtt.publish(self.publish_topics[17],2)
                             flag = 1
                         if self.ctrl_visor_result == 170 and self.ctrl_qr_result == 170:
+                            target_id = target_id + 1
                             self.fsm_robot_control = 22
                             flag = 0
                         time.sleep(0.5)
