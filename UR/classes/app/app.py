@@ -216,6 +216,7 @@ class App ():
                         self.robot_control_setup = True
                         self.robot_tool = 0
                         self.mqtt.publish(self.publish_topics[10],self.robot_tool)
+                        self.mqtt.publish(self.publish_topics[17],0)
                         self.robot.sync_program(start = 0)
                         
                         self.fsm_robot_control = 30
@@ -242,6 +243,7 @@ class App ():
                     self.fsm_robot_control = 21
 
                 if self.fsm_robot_control == 21:
+                    self.mqtt.publish(self.publish_topics[17],0)
                     if self.ctrl_execute == 1:
                         self.publish_mqtt(robot_resultwork = 221)
                         self.publish_mqtt(execute = 0)
@@ -258,6 +260,7 @@ class App ():
 
                 if self.fsm_robot_control == 22:
                     flag = 0
+                    self.mqtt.publish(self.publish_topics[17],0)
                     send_robot_action(self.robot,'start')
                     if target_id < targets_len:
                     
@@ -341,6 +344,7 @@ class App ():
                 # ALARM
                 if self.fsm_robot_control == 30:
                     flag = 0
+                    
                     self.robot.sync_config(slider_mask = 1, slider_fraction = 0)
                     send_robot_action(self.robot,'stop')
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
