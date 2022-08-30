@@ -49,7 +49,7 @@ class Mqtt():
                 self.received_msg['execute'] = int(msg.payload.decode('UTF-8'))
             # EMERGENCY STOP
             if msg.topic == subscribe_topics[5]:
-                self.received_msg['emergency_stop'] = int(msg.payload.decode('UTF-8'))
+                self.received_msg['emergency_stop'] = msg.payload.decode('UTF-8')
             # SPEED
             if msg.topic == subscribe_topics[6]:
                 self.received_msg['speed'] = float(msg.payload.decode('UTF-8'))
