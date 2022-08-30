@@ -271,7 +271,7 @@ class App ():
                 if self.fsm_robot_control == 24:
                     if self.robot_working_status == 3:
                         self.robot.sync_program(start = 0)
-                        actual_target = actual_target + 1
+                        target_id = target_id + 1
                         self.fsm_robot_control = 22
                     time.sleep(0.1)
 
