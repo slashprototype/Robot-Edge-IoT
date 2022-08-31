@@ -67,9 +67,11 @@ class App ():
         counter_1 = 0
         old = -2
         new = -1
+
         while True:  
             try:
                 time.sleep(0.01)
+                
                 if self.mqtt_ok and self.robot_ok:       
                     counter_1 = 0
                     new = get_fsm_status_type(self.fsm_robot_control)
@@ -89,6 +91,10 @@ class App ():
                         counter_1 = 0
                     else:
                         counter_1 = counter_1 + 1
+                
+                if self.robot_control_setup:
+                    if self.robot_status <= 6:
+                        self.fsm_robot_control = 30
 
                 
 
