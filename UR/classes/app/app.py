@@ -93,7 +93,7 @@ class App ():
                         counter_1 = counter_1 + 1
                 
                 if self.robot_control_setup:
-                    if self.robot_status <= 6 and self.fsm_robot_control >= 20:
+                    if self.robot_status <= 6 and self.fsm_robot_control > 20:
                         self.fsm_robot_control = 30
 
                 
