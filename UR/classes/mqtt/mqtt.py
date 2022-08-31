@@ -16,6 +16,7 @@ class Mqtt():
         self.received_msg_len = 7
         self.connection_status = False
         self.subscribe_status = True
+        self.receive_status = False
         self.publish_status = True
         self.setup = False
         self.alarm = 'Not connected'
@@ -64,8 +65,10 @@ class Mqtt():
                 
                 if msg.topic == subscribe_topics[7]:
                     self.received_msg['tool_status'] = int(msg.payload.decode('UTF-8'))      
+                
+                self.receive_status = True
             except:
-                self.subscribe_status = False
+                self.receive_status = False
         
         if self.setup == False:
             self.client.on_connect = on_connect
@@ -98,7 +101,7 @@ class Mqtt():
 
     def get_data(self):
 
-        if len(self.received_msg) == self.received_msg_len and self.connection_status == True and self.subscribe_status == True:
+        if len(self.received_msg) == self.received_msg_len and self.connection_status == True and self.receive_status == True:
             self.subscribe_status = True
             return (self.received_msg)
 
