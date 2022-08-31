@@ -299,27 +299,29 @@ class App ():
                         target_id = target_id + 1
                         self.fsm_robot_control = 22
                     time.sleep(0.1)
-
+                
                 if self.fsm_robot_control == 40:
-
+                    if target_type <10:
+                        self.fsm_robot_control = 41
+                    
+                    elif target_type >= 10:
+                        self.fsm_robot_control = 42
+                
+                if self.fsm_robot_control == 41:
+                    
                     if target_type == 1:
                         self.robot_tool = 170
-                        self.mqtt.publish(self.publish_topics[10],self.robot_tool)
-                        print('waiting for',self.ctrl_tool_status,'==', self.robot_tool)
-                        if self.ctrl_tool_status == self.robot_tool:
-                            target_id = target_id + 1
-                            self.fsm_robot_control = 22
-                            fsm_40 = 0
-
                     if target_type == 2:
-                        self.robot_tool = 187
-                        self.mqtt.publish(self.publish_topics[10],self.robot_tool)
-                        print('waiting for',self.ctrl_tool_status,'==', self.robot_tool)
-                        if self.ctrl_tool_status == self.robot_tool:
-                            target_id = target_id + 1
-                            self.fsm_robot_control = 22
-                            fsm_40 = 0
-
+                        self.robot_tool = 170
+                    
+                    self.mqtt.publish(self.publish_topics[10],self.robot_tool)
+                    print('waiting for',self.ctrl_tool_status,'==', self.robot_tool)
+                    if self.ctrl_tool_status == self.robot_tool:
+                        target_id = target_id + 1
+                        self.fsm_robot_control = 22
+                        fsm_40 = 0
+                
+                if self.fsm_robot_control == 42:
                     if target_type == 10:
                         if flag == 0:
                             print('Visor detect routine')
@@ -330,7 +332,7 @@ class App ():
                             target_id = target_id + 1
                             self.fsm_robot_control = 22
                             flag = 0
-                        time.sleep(0.5)
+                        time.sleep(0.1)
                         print('visor result = ',self.ctrl_visor_result) 
 
                     if target_type == 11:
@@ -343,8 +345,13 @@ class App ():
                             self.mqtt.publish(self.publish_topics[17],0)
                             self.fsm_robot_control = 22
                             flag = 0
-                        time.sleep(0.5)
+                        time.sleep(0.1)
                         print('visor result = ',self.ctrl_visor_result, 'qr result=',self.ctrl_qr_result)
+
+
+
+
+                   
 
                     time.sleep(0.5)
                     
