@@ -42,27 +42,30 @@ class Mqtt():
         
         def on_message(client, userdata, msg):
             # COMMAND
-            if msg.topic == subscribe_topics[1]:    
-                self.received_msg['command'] = int(msg.payload.decode('UTF-8'))
-            # EXECUTE
-            if msg.topic == subscribe_topics[3]:
-                self.received_msg['execute'] = int(msg.payload.decode('UTF-8'))
-            # EMERGENCY STOP
-            if msg.topic == subscribe_topics[5]:
-                self.received_msg['emergency_stop'] = msg.payload.decode('UTF-8')
-            # SPEED
-            if msg.topic == subscribe_topics[6]:
-                self.received_msg['speed'] = float(msg.payload.decode('UTF-8'))
-            
-            #VISOR VALUE
-            if msg.topic == subscribe_topics[8]:
-                self.received_msg['visor_result'] = int(msg.payload.decode('UTF-8'))
+            try:
+                if msg.topic == subscribe_topics[1]:    
+                    self.received_msg['command'] = int(msg.payload.decode('UTF-8'))
+                # EXECUTE
+                if msg.topic == subscribe_topics[3]:
+                    self.received_msg['execute'] = int(msg.payload.decode('UTF-8'))
+                # EMERGENCY STOP
+                if msg.topic == subscribe_topics[5]:
+                    self.received_msg['emergency_stop'] = msg.payload.decode('UTF-8')
+                # SPEED
+                if msg.topic == subscribe_topics[6]:
+                    self.received_msg['speed'] = float(msg.payload.decode('UTF-8'))
                 
-            if msg.topic == subscribe_topics[9]:
-                self.received_msg['qr_result'] = int(msg.payload.decode('UTF-8'))
-            
-            if msg.topic == subscribe_topics[7]:
-                self.received_msg['tool_status'] = int(msg.payload.decode('UTF-8'))      
+                #VISOR VALUE
+                if msg.topic == subscribe_topics[8]:
+                    self.received_msg['visor_result'] = int(msg.payload.decode('UTF-8'))
+                    
+                if msg.topic == subscribe_topics[9]:
+                    self.received_msg['qr_result'] = int(msg.payload.decode('UTF-8'))
+                
+                if msg.topic == subscribe_topics[7]:
+                    self.received_msg['tool_status'] = int(msg.payload.decode('UTF-8'))      
+            except:
+                self.subscribe_status = False
         
         if self.setup == False:
             self.client.on_connect = on_connect
@@ -95,7 +98,7 @@ class Mqtt():
 
     def get_data(self):
 
-        if len(self.received_msg) == self.received_msg_len and self.connection_status == True:
+        if len(self.received_msg) == self.received_msg_len and self.connection_status == True and self.subscribe_status == True:
             self.subscribe_status = True
             return (self.received_msg)
 
