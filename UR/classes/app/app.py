@@ -221,10 +221,12 @@ class App ():
                 if self.fsm_robot_control == 0:
                     # Initial status in robot control
                     if self.mqtt_ok and self.robot_ok:
+
                         self.robot_control_setup = True
                         self.robot_tool = 0
                         self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                         self.mqtt.publish(self.publish_topics[17],0)
+                        self.publish_mqtt(execute = 0)
                         self.robot.sync_program(start = 0)
                         
                         self.fsm_robot_control = 30
