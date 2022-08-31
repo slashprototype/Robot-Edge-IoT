@@ -364,9 +364,11 @@ class App ():
                 # ALARM
                 if self.fsm_robot_control == 30:
                     flag = 0
-                    
-                    self.robot.sync_config(slider_mask = 1, slider_fraction = 0)
-                    send_robot_action(self.robot,'stop')
+                    if self.robot_ok == True:
+                        self.robot.sync_config(slider_mask = 1, slider_fraction = 0)
+                        if self.runtime_state != 1:
+                            send_robot_action(self.robot,'stop')
+                        
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
                         self.publish_mqtt(execute = 0)
                         self.fsm_robot_control = 10                
