@@ -37,6 +37,7 @@ class Application():
                             # "/PCB/CELL-A/UR3-A/MONITORING/STATUS/VALUE",
                             # "/PCB/CELL-A/UR3-A/CONTROLLER/JOBNUMBER/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE",
+                            "/PCB/CELL-A/UR3-A/CONTROLLER/EMERGENCYSTOP/VALUE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
                             # "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/COMMAND/VALUE",
