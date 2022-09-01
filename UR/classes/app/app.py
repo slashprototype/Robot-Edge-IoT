@@ -73,6 +73,8 @@ class App ():
                 time.sleep(0.01)
                 
                 if self.mqtt_ok and self.robot_ok:       
+                    if self.ctrl_emergency_stop != 0:
+                        self.fsm_robot_control = 30
                     counter_1 = 0
                     new = get_fsm_status_type(self.fsm_robot_control)
                     if new != old:
@@ -330,6 +332,7 @@ class App ():
                         fsm_40 = 0
                 
                 if self.fsm_robot_control == 42:
+                    
                     if target_type == 10:
                         if flag == 0:
                             print('Visor detect routine')
@@ -355,13 +358,6 @@ class App ():
                             flag = 0
                         time.sleep(0.1)
                         print('visor result = ',self.ctrl_visor_result, 'qr result=',self.ctrl_qr_result)
-
-
-
-
-                   
-
-                    time.sleep(0.5)
                     
                 # ALARM
                 if self.fsm_robot_control == 30:
