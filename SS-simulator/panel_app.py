@@ -297,7 +297,7 @@ class Application():
 
         # Marco 04
         self.btn_exit.grid(column=2, row=0, padx=5, pady=5)
-        self.btn_send_execute.grid(column=1, row=0, padx=5, pady=send_execute_A)
+        self.btn_send_execute.grid(column=1, row=0, padx=5)
 
         # initThread()
         initThread()
