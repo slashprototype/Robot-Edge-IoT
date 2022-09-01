@@ -158,8 +158,9 @@ class App ():
                         self.fsm_mqtt_sync = 20
 
                     else:
-                        print('unknow error raised')
-                        self.fsm_mqtt_sync = 30
+                        # print('unknow error raised')
+                        pass
+                        
                 counter_1 = counter_1 + 1
             except:
                 # END WHILE LOOP    
@@ -373,6 +374,7 @@ class App ():
                         self.publish_mqtt(execute = 0)
                         self.fsm_robot_control = 10                
                         time.sleep(0.1)
+                    
             except:
                 # END WHILE LOOP
                 print('ending robot control loop')          
