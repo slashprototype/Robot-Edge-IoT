@@ -246,8 +246,6 @@ class App ():
                         
 
                 if self.fsm_robot_control == 10:
-                    print('Robot status: ',self.robot_status)
-                
                     if self.robot_status <= 3:
                         self.publish_mqtt(robot_status = 204)
                         send_robot_action(self.robot,'stop')
