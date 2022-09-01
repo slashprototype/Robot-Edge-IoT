@@ -42,6 +42,8 @@ class App ():
                 self.mqtt.publish(self.publish_topics[12],value)
             if key == 'robot_resultwork':
                 self.mqtt.publish(self.publish_topics[14],value)
+            if key == 'robot_status':
+                self.mqtt.publish(self.publish_topics[16],value)
 
 
     def start_app(self):
@@ -224,7 +226,8 @@ class App ():
 
 
     def robot_control(self):
-
+        fsm_reset = 0
+        timeout = 0
         while (self.running):
             try:
                 if self.fsm_robot_control == 0:
@@ -243,17 +246,31 @@ class App ():
                         
 
                 if self.fsm_robot_control == 10:
-                    send_robot_action(self.robot,'stop')
-                    send_robot_action(self.robot,'auto_init')
-                    send_robot_action(self.robot,'auto_play')
-                    if self.robot_status >= 6:
-                        self.publish_mqtt(robot_resultwork = 170)
-                        self.fsm_robot_control = 20
-                        
-                    else:
+                    print('Robot status: ',self.robot_status)
+                
+                    if self.robot_status <= 3:
+                        self.publish_mqtt(robot_status = 204)
+                        send_robot_action(self.robot,'stop')
                         send_robot_action(self.robot,'auto_init')
-                        send_robot_action(self.robot,'auto_play')
-                        print('Robot status: ',self.robot_status)
+                        send_robot_action(self.robot,'auto_play')                
+                        timeout = 0
+                
+                    if self.robot_status >3 and self.robot_status <6 and timeout == 0:
+                        self.publish_mqtt(robot_status = 204)
+
+                    if self.robot_status >= 6:
+                        timeout = 0
+                        self.publish_mqtt(robot_status = 170)
+                        self.fsm_robot_control = 20
+                    
+                    if timeout >= 150:
+                        print('Timeout exceed restart routine...')
+                        self.publish_mqtt(robot_status = 255)
+                        self.fsm_robot_control = 30
+
+
+                    timeout = timeout + 1
+                        
                     time.sleep(0.1)
                     
 
