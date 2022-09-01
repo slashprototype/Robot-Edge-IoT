@@ -1,7 +1,7 @@
 from threading import Thread
 import sys
 import time
-from classes.app.utils.functions import search_script,send_robot_action,get_robot_targets, get_fsm_status_type
+from classes.app.utils.functions import search_script,send_robot_action,get_robot_targets, get_fsm_status_type,Once
 
 class App ():
     def __init__(self, mqtt,robot,subscribe_topics,publish_topics,routines_path):
@@ -74,6 +74,7 @@ class App ():
                 
                 if self.mqtt_ok and self.robot_ok:       
                     if self.ctrl_emergency_stop != 0:
+                        print('Emergency stop')
                         self.fsm_robot_control = 30
                     counter_1 = 0
                     new = get_fsm_status_type(self.fsm_robot_control)
@@ -134,6 +135,7 @@ class App ():
                         self.ctrl_visor_result = received_msg['visor_result']
                         self.ctrl_qr_result = received_msg['qr_result']
                         self.ctrl_tool_status = received_msg['tool_status']
+                        self.ctrl_operation_mode= received_msg['operation_mode']
                         
                         if self.robot_sync_setup == True and counter_1 >= 100:
                             self.mqtt.publish(self.publish_topics[4],self.robot_position)

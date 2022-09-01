@@ -35,10 +35,11 @@ class Application():
 
         subscribe_topics = ["/PCB/CELL-A/UR3-A/MONITORING/STATUS/TYPE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/STATUS/VALUE",
-                            "/PCB/CELL-A/UR3-A/CONTROLLER/JOBNUMBER/VALUE",
+                            # "/PCB/CELL-A/UR3-A/CONTROLLER/JOBNUMBER/VALUE",
                             "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE",
-                            "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
-                            "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE",
+                            # "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
+                            # "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE",
+                            "/PCB/CELL-A/UR3-A/CONTROLLER/COMMAND/VALUE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/POSITION/VALUE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/CURRENT/VALUE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/TEMPERATURE/VALUE",
@@ -76,7 +77,7 @@ class Application():
 
                 # mqtt_con.client.publish(publish_topics[0],self.rutina_A.get() ,1,True)
                 # mqtt_con.client.publish(publish_topics[1],self.execute_A.get() ,1,True)
-                # mqtt_con.client.publish(publish_topics[2],self.emergency_A.get(),1,True)
+                mqtt_con.client.publish(publish_topics[2],self.emergency_A.get(),1,True)
                 # mqtt_con.client.publish(publish_topics[3],"{:.2f}".format(self.speed_A.get()) ,1,True)
                 # mqtt_con.client.publish(publish_topics[4],self.visor_trigger.get(),1,True)
                 
@@ -255,8 +256,8 @@ class Application():
         self.entry_B = ttk.Entry(self.marcoLeft_1B)
         
         # MARCO4
-        self.btn_test_job = ttk.Button(self.marcoLeft_2A, text='send execute',
-                                      style='My.TButton', width=7, command=set_job)
+        self.btn_send_execute = ttk.Button(self.marcoLeft_2A, text='send execute',
+                                      style='My.TButton', width=7, command=send_execute_A)
 
         self.btn_exit = ttk.Button(self.marcoLeft_2A, text='Salir',
                                    style='My.TButton', width=7, command=close_app)
@@ -296,7 +297,7 @@ class Application():
 
         # Marco 04
         self.btn_exit.grid(column=2, row=0, padx=5, pady=5)
-        self.btn_test_job.grid(column=1, row=0, padx=5, pady=5)
+        self.btn_send_execute.grid(column=1, row=0, padx=5, pady=send_execute_A)
 
         # initThread()
         initThread()

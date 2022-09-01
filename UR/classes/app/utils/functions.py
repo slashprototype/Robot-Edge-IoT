@@ -59,4 +59,8 @@ def get_fsm_status_type(fsm_id):
     }
     return types[fsm_id]
 
+class Once():
+    def __init__(value):
+        value = False
+
 

@@ -55,16 +55,18 @@ class Mqtt():
                 # SPEED
                 if msg.topic == subscribe_topics[6]:
                     self.received_msg['speed'] = float(msg.payload.decode('UTF-8'))
-                
+
+                if msg.topic == subscribe_topics[7]:
+                    self.received_msg['tool_status'] = int(msg.payload.decode('UTF-8'))      
                 #VISOR VALUE
                 if msg.topic == subscribe_topics[8]:
                     self.received_msg['visor_result'] = int(msg.payload.decode('UTF-8'))
                     
                 if msg.topic == subscribe_topics[9]:
                     self.received_msg['qr_result'] = int(msg.payload.decode('UTF-8'))
-                
-                if msg.topic == subscribe_topics[7]:
-                    self.received_msg['tool_status'] = int(msg.payload.decode('UTF-8'))      
+
+                if msg.topic == subscribe_topics[10]:
+                    self.received_msg['operation_mode'] = str(msg.payload.decode('UTF-8'))
                 
                 self.receive_status = True
             except:
@@ -98,6 +100,7 @@ class Mqtt():
         except:
             print('publish problem')
             self.publish_status = False
+
 
     def get_data(self):
 
