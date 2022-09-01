@@ -283,25 +283,25 @@ class App ():
                     
                     if self.runtime_state != 2:
                         send_robot_action(self.robot,'start')
-
-                    if target_id < targets_len:
-                    
-                        target_type = targets[target_id][5]
-
-                        if target_type > 2 and target_type < 10:
-                            self.fsm_robot_control = 23
-                        else:
-                            self.fsm_robot_control = 40
-                            
                     else:
-                        self.publish_mqtt(robot_resultwork = 170)
-                        print('Routine Complete succesfully')
-                        self.fsm_robot_control = 21
+                        if target_id < targets_len:
+                        
+                            target_type = targets[target_id][5]
+
+                            if target_type > 2 and target_type < 10:
+                                self.fsm_robot_control = 23
+                            else:
+                                self.fsm_robot_control = 40
+                                
+                        else:
+                            self.publish_mqtt(robot_resultwork = 170)
+                            print('Routine Complete succesfully')
+                            self.fsm_robot_control = 21
                     time.sleep(0.1)
 
 
                 if self.fsm_robot_control == 23:
-                    print(self.robot_working_status)
+                    # print(self.robot_working_status)
                     if self.robot_working_status == 1:
                         print('sending target', target_id)
                         self.robot.sync_setpoint(targets,target_id)
