@@ -29,11 +29,12 @@ def search_script(robot_name,command):
         type_receipt = {'1':'MOVE','2':'PICK','3':'PLACE','4':'SNAP'}
         str_command = str(command)
         file = ''
-        if len(str_command) == 3:
-            station =   str_command[0] 
-            type = str_command[1]
-            zone_ID = str_command[2]
-            robot_name_ID = robot_name[len(robot_name)-1]
+        
+        station =   str_command[0] 
+        type = str_command[1]
+        zone_ID = str_command[2]
+        robot_name_ID = robot_name[len(robot_name)-1]
+
         file = 'R'+robot_name_ID+'_E'+station+'_'+type_receipt[type]+'_'+str_command+'.script'
         return (file)
 
