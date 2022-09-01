@@ -18,7 +18,7 @@ class App ():
         self.robot_sync_setup = False
         self.robot_control_setup = False
         self.exception = False
-        self.robot_status = 187
+        self.control_status = 187
 
         self.fsm_robot_control = 0
         self.fsm_robot_sync = 0
@@ -148,7 +148,7 @@ class App ():
                             self.mqtt.publish(self.publish_topics[4],self.robot_position)
                             self.mqtt.publish(self.publish_topics[6],self.robot_current)
                             self.mqtt.publish(self.publish_topics[8],self.robot_temperature)
-                            self.mqtt.publish(self.publish_topics[16],self.robot_status)
+                            self.mqtt.publish(self.publish_topics[16],self.control_status)
                             # self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                             counter_1 = 0
                         
@@ -249,23 +249,23 @@ class App ():
 
                 if self.fsm_robot_control == 10:
                     if self.robot_status <= 3:
-                        self.robot_status = 204
+                        self.control_status = 204
                         send_robot_action(self.robot,'stop')
                         send_robot_action(self.robot,'auto_init')
                         send_robot_action(self.robot,'auto_play')                
                         timeout = 0
                 
                     if self.robot_status >3 and self.robot_status <6 and timeout == 0:
-                        self.robot_status = 204
+                        self.control_status = 204
 
                     if self.robot_status >= 6:
                         timeout = 0
-                        self.robot_status = 170
+                        self.control_status = 170
                         self.fsm_robot_control = 20
                     
                     if timeout >= 150:
                         print('Timeout exceed restart routine...')
-                        self.robot_status = 255
+                        self.control_status = 255
                         self.fsm_robot_control = 30
 
 
@@ -392,7 +392,7 @@ class App ():
                     
                     flag = 0
                     if self.mqtt_ok:
-                        self.robot_status = 255
+                        self.control_status = 255
                     
                     if self.robot_ok == True:
                         self.robot.sync_program(start = 0)
