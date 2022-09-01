@@ -389,7 +389,11 @@ class App ():
                     
                 # ALARM
                 if self.fsm_robot_control == 30:
+                    
                     flag = 0
+                    if self.mqtt_ok:
+                        self.publish_mqtt(robot_status = 255)
+                    
                     if self.robot_ok == True:
                         self.robot.sync_program(start = 0)
                         # self.robot.sync_config(slider_mask = 1, slider_fraction = 0)
