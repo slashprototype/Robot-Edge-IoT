@@ -264,16 +264,20 @@ class App ():
                 if self.fsm_robot_control == 21:
                     self.mqtt.publish(self.publish_topics[17],0)
                     if self.ctrl_execute == 1:
-                        self.publish_mqtt(robot_resultwork = 221)
-                        self.publish_mqtt(execute = 0)
+                        try:
+                            self.publish_mqtt(robot_resultwork = 221)
+                            self.publish_mqtt(execute = 0)
+                            
+                            file = self.routines_path+search_script(self.robot.name,self.ctrl_command)
+                            print('routine script selected: ', file)
+                            target_id = 0
+                            targets, targets_len = get_robot_targets(file)
+                            self.fsm_robot_control = 22
+                        except:
+                            print('Error when searching file: ',file)
+                            self.fsm_robot_control = 30
                         
-                        file = self.routines_path+search_script(self.robot.name,self.ctrl_command)
-                        print('routine script selected: ', file)
-                        target_id = 0
-                        targets, targets_len = get_robot_targets(file)
-                        self.fsm_robot_control = 22
                         
-                        move_type = 0
                     time.sleep(0.1)     
 
 
