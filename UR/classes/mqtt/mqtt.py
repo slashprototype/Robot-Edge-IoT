@@ -13,7 +13,7 @@ class Mqtt():
         self.client_name = client_name
         self.keyPaths = "classes/mqtt/authFiles/"
         self.received_msg = {}
-        self.received_msg_len = 7
+        self.received_msg_len = 8
         self.connection_status = False
         self.subscribe_status = True
         self.receive_status = False

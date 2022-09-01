@@ -87,6 +87,7 @@ class App ():
                         self.fsm_robot_control = 30
                     if counter_1 >= 100:
                         print('ROBOT alarms: ',self.robot.alarm, self.robot.alarm_id)
+                        print('MQTT alarm:',self.mqtt.alarm)
                         if self.mqtt.connection_status == False:
                             print('MQTT connection error')
                         elif self.mqtt.subscribe_status == False:
