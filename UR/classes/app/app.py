@@ -73,7 +73,7 @@ class App ():
                 time.sleep(0.01)
                 
                 if self.mqtt_ok and self.robot_ok:  
-                    if self.ctrl_operation_mode == 'D1' or 'D2' or 'D3':
+                    if self.ctrl_operation_mode != 'D1' or 'D2' or 'D3':
                         print('Stop by',self.ctrl_operation_mode)
                         self.fsm_robot_control = 30    
                     if self.ctrl_emergency_stop != 0:
