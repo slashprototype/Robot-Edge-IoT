@@ -67,7 +67,7 @@ class App ():
         counter_1 = 0
         old = -2
         new = -1
-
+        time.sleep(3)
         while True:  
             try:
                 time.sleep(0.01)
