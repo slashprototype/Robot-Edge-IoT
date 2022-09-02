@@ -272,7 +272,6 @@ class App ():
                         
                     time.sleep(0.1)
                     
-
                 if self.fsm_robot_control == 20:
                     self.control_status = 170
                     time.sleep(0.1)
@@ -306,18 +305,24 @@ class App ():
                         send_robot_action(self.robot,'start')
                     else:
                         if target_id < targets_len:
-                        
                             target_type = targets[target_id][5]
-
-                            if target_type > 2 and target_type < 10:
-                                self.fsm_robot_control = 23
-                            else:
-                                self.fsm_robot_control = 40
-                                
+                            
+                            if self.robot.name == 'UR3-A':
+                                if target_type > 2 and target_type < 10:
+                                    self.fsm_robot_control = 23
+                                else:
+                                    self.fsm_robot_control = 40
+                            
+                            elif self.robot.name == 'UR3-C':
+                                if target_type < 10:
+                                    self.fsm_robot_control = 23
+                                else:
+                                    self.fsm_robot_control = 40
                         else:
                             print('Routine Complete succesfully')
                             self.publish_mqtt(robot_resultwork = 170)
                             self.fsm_robot_control = 21
+
                     time.sleep(0.1)
 
 
