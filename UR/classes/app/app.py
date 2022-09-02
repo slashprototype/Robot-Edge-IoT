@@ -234,8 +234,9 @@ class App ():
             try:
                 if self.fsm_robot_control == 0:
                     # Initial status in robot control
-                    if self.mqtt_ok and self.robot_ok:
+                    self.publish_mqtt(robot_resultwork = 0)
 
+                    if self.mqtt_ok and self.robot_ok:    
                         self.robot_control_setup = True
                         self.robot_tool = 0
                         self.mqtt.publish(self.publish_topics[10],self.robot_tool)
@@ -244,8 +245,6 @@ class App ():
                         self.robot.sync_program(start = 0)
                         
                         self.fsm_robot_control = 30
-
-                        
 
                 if self.fsm_robot_control == 10:
                     if self.robot_status <= 3:
@@ -275,6 +274,7 @@ class App ():
                     
 
                 if self.fsm_robot_control == 20:
+                    self.control_status = 170
                     time.sleep(0.1)
                     self.fsm_robot_control = 21
 
@@ -315,8 +315,8 @@ class App ():
                                 self.fsm_robot_control = 40
                                 
                         else:
-                            self.publish_mqtt(robot_resultwork = 170)
                             print('Routine Complete succesfully')
+                            self.publish_mqtt(robot_resultwork = 170)
                             self.fsm_robot_control = 21
                     time.sleep(0.1)
 
@@ -393,6 +393,7 @@ class App ():
                     flag = 0
                     if self.mqtt_ok:
                         self.control_status = 255
+                        self.publish_mqtt(robot_resultwork = 255)
                     
                     if self.robot_ok == True:
                         self.robot.sync_program(start = 0)
@@ -404,7 +405,8 @@ class App ():
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
                         self.publish_mqtt(execute = 0)
                         self.fsm_robot_control = 10                
-                        time.sleep(0.1)
+                    
+                    time.sleep(1)
                     
             except:
                 # END WHILE LOOP
