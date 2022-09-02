@@ -149,7 +149,8 @@ class App ():
                             self.mqtt.publish(self.publish_topics[6],self.robot_current)
                             self.mqtt.publish(self.publish_topics[8],self.robot_temperature)
                             self.mqtt.publish(self.publish_topics[16],self.control_status)
-                            # self.mqtt.publish(self.publish_topics[10],self.robot_tool)
+                            if self.robot.name == 'UR3-C':
+                                self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                             counter_1 = 0
                         
                         self.mqtt_ok = True
@@ -206,7 +207,8 @@ class App ():
                         self.robot_position = str(robot_data.get('actual_q'))
                         self.robot_current = str(robot_data.get('actual_current')) 
                         self.robot_temperature = str(robot_data.get('joint_temperatures'))
-                        # self.robot_tool = str(robot_data.get('output_int_register_1'))
+                        if self.robot.name == 'UR3-C':
+                            self.robot_tool = str(robot_data.get('output_int_register_1'))
                         
                         self.robot_sync_setup = True
                         self.robot_ok = True
