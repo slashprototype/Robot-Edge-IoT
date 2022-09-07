@@ -104,6 +104,7 @@ class Mqtt():
 
     def get_data(self):
 
+        print(self.received_msg)
         if len(self.received_msg) == self.received_msg_len and self.connection_status == True and self.receive_status == True:
             self.subscribe_status = True
             return (self.received_msg)
