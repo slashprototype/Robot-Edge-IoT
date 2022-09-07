@@ -149,8 +149,8 @@ class App ():
                             self.mqtt.publish(self.publish_topics[6],self.robot_current)
                             self.mqtt.publish(self.publish_topics[8],self.robot_temperature)
                             self.mqtt.publish(self.publish_topics[16],self.control_status)
-                            if self.robot.name == 'UR3-C':
-                                self.mqtt.publish(self.publish_topics[10],self.robot_tool)
+                            # if self.robot.name == 'UR3-C':
+                            #     self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                             counter_1 = 0
                         
                         self.mqtt_ok = True
