@@ -39,7 +39,7 @@ class Mqtt():
 
         def on_disconnect(client, userdata, rc):
             self.connection_status = False
-            print('CLIENTE DESCONECTADO!!!!')
+            print('CLIENT DISCONNECTED!!!!')
         
         def on_message(client, userdata, msg):
             # COMMAND
