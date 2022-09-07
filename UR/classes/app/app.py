@@ -236,7 +236,7 @@ class App ():
             try:
                 if self.fsm_robot_control == 0:
                     # Initial status in robot control
-                    self.publish_mqtt(robot_resultwork = 0)
+                    # self.publish_mqtt(robot_resultwork = 0)
 
                     if self.mqtt_ok and self.robot_ok:    
                         self.robot_control_setup = True
