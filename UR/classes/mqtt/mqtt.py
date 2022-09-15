@@ -12,8 +12,8 @@ class Mqtt():
         self.keep_alive = keep_alive
         self.client_name = client_name
         self.keyPaths = "classes/mqtt/authFiles/"
-        self.received_msg = {}
-        self.received_msg_len = 8
+        self.topic_value = {}
+        self.topic_value_len = 8
         self.connection_status = False
         self.subscribe_status = True
         self.receive_status = False
@@ -22,6 +22,8 @@ class Mqtt():
         self.alarm = 'Not connected'
         self.client = mqtt.Client(client_id=self.client_name,
                         clean_session=True, userdata=None, protocol=mqtt.MQTTv311, transport="tcp")
+        
+
 
     def connect(self,subscribe_topics):
             # Subscribe to MQTT broker topics
@@ -34,8 +36,8 @@ class Mqtt():
                 self.connection_status = False
                 
             # Subscribe to REGOUT
-            for i in subscribe_topics:
-                client.subscribe(i)
+            for key,value in subscribe_topics.items():
+                client.subscribe(value)
 
         def on_disconnect(client, userdata, rc):
             self.connection_status = False
@@ -44,35 +46,39 @@ class Mqtt():
         def on_message(client, userdata, msg):
             # COMMAND
             try:
-                if msg.topic == subscribe_topics[1]:    
-                    self.received_msg['command'] = int(msg.payload.decode('UTF-8'))
+
+                if msg.topic == subscribe_topics['command']:
+                    self.topic_value['command'] = int(msg.payload.decode('UTF-8'))
                 # EXECUTE
-                if msg.topic == subscribe_topics[3]:
-                    self.received_msg['execute'] = int(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['execute']:
+                    self.topic_value['execute'] = int(msg.payload.decode('UTF-8'))
                 # EMERGENCY STOP
-                if msg.topic == subscribe_topics[5]:
-                    self.received_msg['emergency_stop'] = int(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['emergency_stop']:
+                    self.topic_value['emergency_stop'] = int(msg.payload.decode('UTF-8'))
                 # SPEED
-                if msg.topic == subscribe_topics[6]:
-                    self.received_msg['speed'] = float(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['speed']:
+                    self.topic_value['speed'] = float(msg.payload.decode('UTF-8'))
 
-                if msg.topic == subscribe_topics[7]:
-                    self.received_msg['tool_status'] = int(msg.payload.decode('UTF-8'))      
+                if msg.topic == subscribe_topics['tool']:
+                    self.topic_value['tool'] = int(msg.payload.decode('UTF-8'))      
                 #VISOR VALUE
-                if msg.topic == subscribe_topics[8]:
-                    self.received_msg['visor_result'] = int(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['visor']:
+                    self.topic_value['visor'] = int(msg.payload.decode('UTF-8'))
                     
-                if msg.topic == subscribe_topics[9]:
-                    self.received_msg['qr_result'] = int(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['qr']:
+                    self.topic_value['qr'] = int(msg.payload.decode('UTF-8'))
 
-                if msg.topic == subscribe_topics[10]:
-                    self.received_msg['operation_mode'] = str(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['operation_mode']:
+                    self.topic_value['operation_mode'] = str(msg.payload.decode('UTF-8'))
                 
                 self.receive_status = True
             except:
                 self.receive_status = False
         
         if self.setup == False:
+            for key,value in subscribe_topics.items():
+                self.topic_value[key]=0
+
             self.client.on_connect = on_connect
             self.client.on_disconnect = on_disconnect
             self.client.on_message = on_message
@@ -83,6 +89,7 @@ class Mqtt():
             self.client.tls_insecure_set(True)
             self.setup = True
         print('trying connection to broker...')
+
         try:
             self.client.connect(self.ip,self.port,self.keep_alive)
             print('connected succesfully to broker at', self.ip)
@@ -104,10 +111,10 @@ class Mqtt():
 
     def get_data(self):
 
-        
-        if len(self.received_msg) == self.received_msg_len and self.connection_status == True and self.receive_status == True:
+        # Check connection before send data
+        if self.connection_status == True and self.receive_status == True:    
             self.subscribe_status = True
-            return (self.received_msg)
+            return (self.topic_value)
 
         else:            
             self.subscribe_status = False
@@ -115,8 +122,8 @@ class Mqtt():
                 self.alarm = 'Connection error ocurred when getting data'
                 raise Exception('Connection error ocurred when getting data')
             else:
-                self.alarm = 'A topic data is missing, just received: ',len(self.received_msg),' topics info'
-                raise Exception('A topic data is missing, just received: ',len(self.received_msg),' topics info')
+                self.alarm = 'A topic data is missing, just received: ',len(self.topic_value),' topics info'
+                raise Exception('A topic data is missing, just received: ',len(self.topic_value),' topics info')
             
 
 
