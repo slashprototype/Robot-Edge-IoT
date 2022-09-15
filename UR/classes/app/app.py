@@ -241,14 +241,12 @@ class App ():
                 # FIRST START
                 if self.fsm_robot_control == 0:
                     # Initial status in robot control
-                    # self.publish_mqtt(robot_resultwork = 0)
 
                     if self.mqtt_ok and self.robot_ok:    
                         self.robot_control_setup = True
                         self.robot_tool = 0
                         self.mqtt.publish(self.publish_topics['tool_value'],self.robot_tool)
                         self.mqtt.publish(self.publish_topics['visor_value'],0)
-                        self.publish_mqtt(execute = 0)
                         self.robot.sync_program(start = 0)
                         
                         self.fsm_robot_control = 30
@@ -288,8 +286,10 @@ class App ():
                     self.mqtt.publish(self.publish_topics['visor_value'],0)
                     if self.ctrl_execute == 1:
                         try:
-                            self.publish_mqtt(robot_resultwork = 221)
-                            self.publish_mqtt(execute = 0)
+                            self.mqtt.publish(self.publish_topics['status_value'],187)
+                            
+                            # self.publish_mqtt(robot_resultwork = 221)
+                            # self.publish_mqtt(execute = 0)
                             
                             file = self.routines_path+search_script(self.robot.name,self.ctrl_command)
                             print('routine script selected: ', file)
@@ -327,9 +327,10 @@ class App ():
                                     self.fsm_robot_control = 40
                         else:
                             print('Routine Complete succesfully')
-                            self.publish_mqtt(robot_resultwork = 170)
-                            self.fsm_robot_control = 21
-
+                            self.mqtt.publish(self.publish_topics['status_value'],204)
+                            time.sleep(1)
+                            if self.ctrl_execute == 0:
+                                self.fsm_robot_control = 21
                     time.sleep(0.1)
 
 
@@ -405,7 +406,9 @@ class App ():
                     flag = 0
                     if self.mqtt_ok:
                         self.control_status = 255
-                        self.publish_mqtt(robot_resultwork = 255)
+                        self.mqtt.publish(self.publish_topics['visor_value'],255)
+                        self.mqtt.publish(self.publish_topics['status_value'],255)
+                        # self.publish_mqtt(robot_resultwork = 255)
                     
                     if self.robot_ok == True:
                         self.robot.sync_program(start = 0)
@@ -415,7 +418,8 @@ class App ():
                             send_robot_action(self.robot,'stop')
                         
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
-                        self.publish_mqtt(execute = 0)
+                        self.mqtt.publish(self.publish_topics['visor_value'],187)
+                        # self.publish_mqtt(execute = 0)
                         self.fsm_robot_control = 10                
                     
                     time.sleep(1)
