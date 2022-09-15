@@ -131,6 +131,9 @@ class Application():
         def send_execute_A():
             mqtt_con.client.publish(publish_topics[1],1,1,True)
         
+        def send_execute_off_A():
+            mqtt_con.client.publish(publish_topics[1],0,1,True)
+        
         def send_execute_B():
             mqtt_con.client.publish(publish_topics[5],1,1,True)
         
@@ -259,6 +262,8 @@ class Application():
         # MARCO4
         self.btn_send_execute = ttk.Button(self.marcoLeft_2A, text='send execute',
                                       style='My.TButton', width=7, command=send_execute_A)
+        self.btn_send_execute_off = ttk.Button(self.marcoLeft_2A, text='off execute',
+                                      style='My.TButton', width=7, command=send_execute_off_A)
 
         self.btn_exit = ttk.Button(self.marcoLeft_2A, text='Salir',
                                    style='My.TButton', width=7, command=close_app)
@@ -299,6 +304,7 @@ class Application():
         # Marco 04
         self.btn_exit.grid(column=2, row=0, padx=5, pady=5)
         self.btn_send_execute.grid(column=1, row=0, padx=5)
+        self.btn_send_execute_off.grid(column=3, row=0, padx=5)
 
         # initThread()
         initThread()
