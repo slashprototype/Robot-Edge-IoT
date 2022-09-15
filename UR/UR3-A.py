@@ -12,7 +12,7 @@ from robotUR import Robot
 import json
 
 NAME = 'UR3-A'
-ROBOT_IP = '10.7.7.11'
+ROBOT_IP = '10.7.7.13'
 config_file = 'configuration/configuration.xml'
 
 topics_file = open('configuration/'+NAME+'.json',)
