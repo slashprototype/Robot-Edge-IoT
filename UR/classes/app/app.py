@@ -289,6 +289,7 @@ class App ():
                     if self.ctrl_execute == 1:
                         try:
                             self.mqtt.publish(self.publish_topics['status_value'],187)
+                            self.mqtt.publish(self.publish_topics['resultwork_value'],221)
                             
                             # self.publish_mqtt(robot_resultwork = 221)
                             # self.publish_mqtt(execute = 0)
@@ -330,6 +331,7 @@ class App ():
                         else:
                             print('Routine Complete succesfully')
                             self.mqtt.publish(self.publish_topics['status_value'],221)
+                            self.mqtt.publish(self.publish_topics['resultwork_value'],170)
                             time.sleep(1)
                             if self.ctrl_execute == 0:
                                 self.fsm_robot_control = 20
@@ -410,6 +412,7 @@ class App ():
                         self.control_status = 255
                         self.mqtt.publish(self.publish_topics['visor_value'],255)
                         self.mqtt.publish(self.publish_topics['status_value'],255)
+                        self.mqtt.publish(self.publish_topics['resultwork_value'],255)
                         # self.publish_mqtt(robot_resultwork = 255)
                     
                     if self.robot_ok == True:
