@@ -17,37 +17,37 @@ class Application():
 
         global running
         publish_topics = [
-                    "/PCB/CELL-A/UR3-A/CONTROLLER/COMMAND/VALUE",
-                    "/PCB/CELL-A/UR3-A/CONTROLLER/EXECUTE/VALUE",
-                    "/PCB/CELL-A/UR3-A/CONTROLLER/EMERGENCYSTOP/VALUE",
-                    "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE",
-                    "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
+                    "/PCB/CELL-A/UR3-C/CONTROLLER/COMMAND/VALUE",
+                    "/PCB/CELL-A/UR3-C/CONTROLLER/EXECUTE/VALUE",
+                    "/PCB/CELL-A/UR3-C/CONTROLLER/EMERGENCYSTOP/VALUE",
+                    "/PCB/CELL-A/UR3-C/CONTROLLER/SPEED/VALUE",
+                    "/PCB/CELL-A/UR3-C/MONITORING/VISOR/VALUE",
 
                     "/PCB/CELL-B/UR3-B/CONTROLLER/COMMAND/VALUE",
                     "/PCB/CELL-B/UR3-B/CONTROLLER/EXECUTE/VALUE",
                     "/PCB/CELL-B/UR3-B/CONTROLLER/EMERGENCYSTOP/VALUE",
                     "/PCB/CELL-B/UR3-B/CONTROLLER/SPEED/VALUE",
 
-                    "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
-                    "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE"
+                    "/PCB/CELL-A/UR3-C/MONITORING/VISOR/VALUE",
+                    "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/VALUE"
                     
                     ]
 
-        subscribe_topics = ["/PCB/CELL-A/UR3-A/MONITORING/STATUS/TYPE",
+        subscribe_topics = ["/PCB/CELL-A/UR3-C/MONITORING/STATUS/TYPE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/STATUS/VALUE",
                             # "/PCB/CELL-A/UR3-A/CONTROLLER/JOBNUMBER/VALUE",
-                            "/PCB/CELL-A/UR3-A/CONTROLLER/SPEED/VALUE",
-                            "/PCB/CELL-A/UR3-A/CONTROLLER/EMERGENCYSTOP/VALUE",
+                            "/PCB/CELL-A/UR3-C/CONTROLLER/SPEED/VALUE",
+                            "/PCB/CELL-A/UR3-C/CONTROLLER/EMERGENCYSTOP/VALUE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/VISOR/VALUE",
                             # "/PCB/CELL-A/UR3-A/CONTROLLER/VISOR/VALUE",
-                            "/PCB/CELL-A/UR3-A/CONTROLLER/COMMAND/VALUE",
+                            "/PCB/CELL-A/UR3-C/CONTROLLER/COMMAND/VALUE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/POSITION/VALUE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/CURRENT/VALUE",
                             # "/PCB/CELL-A/UR3-A/MONITORING/TEMPERATURE/VALUE",
                             # "/PCB/CELL-A/UR3-A/CONTROLLER/TOOL/VALUE",
-                            "/PCB/CELL-A/UR3-A/CONTROLLER/EXECUTE/VALUE",
-                            "/PCB/CELL-A/UR3-A/CONTROLLER/RESULTWORK/VALUE",
-                            "/PCB/CELL-A/UR3-A/CONTROLLER/STATUS/VALUE"
+                            "/PCB/CELL-A/UR3-C/CONTROLLER/EXECUTE/VALUE",
+                            "/PCB/CELL-A/UR3-C/CONTROLLER/RESULTWORK/VALUE",
+                            "/PCB/CELL-A/UR3-C/CONTROLLER/STATUS/VALUE"
                             ]
 
         def initThread():

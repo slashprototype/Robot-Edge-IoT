@@ -16,16 +16,20 @@ ROBOT_IP = '10.7.7.13'
 config_file = 'configuration/configuration.xml'
 
 topics_file = open('configuration/'+NAME+'.json',)
-topics = json.load(topics_file)
+topics_json = json.load(topics_file)
 
-SUBSCRIBE_TOPICS = []
-PUBLISH_TOPICS = []
+SUBSCRIBE_TOPICS_DICTIONARY = topics_json.get('SUBSCRIBE_TOPICS')
+PUBLISH_TOPICS_DICTIONARY = topics_json.get('PUBLISH_TOPICS')
 
-for i in topics['SUBSCRIBE_TOPICS']:
-    SUBSCRIBE_TOPICS.append(i)
+subscribe_topics = {}
+publish_topics = {}
 
-for i in topics['PUBLISH_TOPICS']:
-    PUBLISH_TOPICS.append(i)
+
+for key,value in SUBSCRIBE_TOPICS_DICTIONARY.items():
+    subscribe_topics[key] = value
+
+for key,value in PUBLISH_TOPICS_DICTIONARY.items():
+    publish_topics[key] = value
 
 ROUTINES_PATH = 'routines/'+NAME+'_routines/'
 
@@ -33,4 +37,4 @@ robot = Robot(ROBOT_IP, NAME, 30004, config_file)
 
 mqtt = Mqtt('10.40.30.50', 31285, 2,NAME)
 
-app = App(mqtt,robot,SUBSCRIBE_TOPICS,PUBLISH_TOPICS,ROUTINES_PATH)
+app = App(mqtt,robot,subscribe_topics,publish_topics,ROUTINES_PATH)
