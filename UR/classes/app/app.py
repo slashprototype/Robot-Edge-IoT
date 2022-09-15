@@ -329,7 +329,7 @@ class App ():
                                     self.fsm_robot_control = 40
                         else:
                             print('Routine Complete succesfully')
-                            self.mqtt.publish(self.publish_topics['status_value'],204)
+                            self.mqtt.publish(self.publish_topics['status_value'],221)
                             time.sleep(1)
                             if self.ctrl_execute == 0:
                                 self.fsm_robot_control = 20
