@@ -279,12 +279,12 @@ class App ():
                     time.sleep(0.1)
                     
                 if self.fsm_robot_control == 20:
-                    self.control_status = 170
+                    self.mqtt.publish(self.publish_topics['visor_value'],0)
+                    self.mqtt.publish(self.publish_topics['status_value'],170)
                     time.sleep(0.1)
                     self.fsm_robot_control = 21
 
                 if self.fsm_robot_control == 21:
-                    self.mqtt.publish(self.publish_topics['visor_value'],0)
                     if self.ctrl_execute == 1:
                         try:
                             self.mqtt.publish(self.publish_topics['status_value'],187)
@@ -331,7 +331,7 @@ class App ():
                             self.mqtt.publish(self.publish_topics['status_value'],204)
                             time.sleep(1)
                             if self.ctrl_execute == 0:
-                                self.fsm_robot_control = 21
+                                self.fsm_robot_control = 20
                     time.sleep(0.1)
 
 
