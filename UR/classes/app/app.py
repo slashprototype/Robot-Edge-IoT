@@ -149,7 +149,7 @@ class App ():
                             self.mqtt.publish(self.publish_topics['position_value'],self.robot_position)
                             self.mqtt.publish(self.publish_topics['current_value'],self.robot_current)
                             self.mqtt.publish(self.publish_topics['temperature_value'],self.robot_temperature)
-                            self.mqtt.publish(self.publish_topics['status_value'],self.control_status)
+                            # self.mqtt.publish(self.publish_topics['status_value'],self.control_status)
                             # if self.robot.name == 'UR3-C':
                             #     self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                             counter_1 = 0
@@ -265,7 +265,8 @@ class App ():
                     if self.robot_status >= 6:
                         timeout = 0
                         self.control_status = 170
-                        self.fsm_robot_control = 20
+                        if self.ctrl_execute == 0:
+                            self.fsm_robot_control = 20
                     
                     if timeout >= 150:
                         print('Timeout exceed restart routine...')
