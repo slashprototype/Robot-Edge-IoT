@@ -247,6 +247,7 @@ class App ():
                         self.robot_tool = 0
                         self.mqtt.publish(self.publish_topics['tool_value'],self.robot_tool)
                         self.mqtt.publish(self.publish_topics['visor_value'],0)
+                        self.mqtt.publish(self.publish_topics['status_value'],255)
                         self.robot.sync_program(start = 0)
                         
                         self.fsm_robot_control = 30
