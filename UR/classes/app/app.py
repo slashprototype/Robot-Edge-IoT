@@ -246,7 +246,7 @@ class App ():
                     if self.mqtt_ok and self.robot_ok:    
                         self.robot_control_setup = True
                         self.robot_tool = 0
-                        self.mqtt.publish(self.publish_topics['tool'],self.robot_tool)
+                        self.mqtt.publish(self.publish_topics['tool_value'],self.robot_tool)
                         self.mqtt.publish(self.publish_topics['visor_value'],0)
                         self.publish_mqtt(execute = 0)
                         self.robot.sync_program(start = 0)
@@ -364,7 +364,7 @@ class App ():
                     if target_type == 2:
                         self.robot_tool = 170
                     
-                    self.mqtt.publish(self.publish_topics['tool'],self.robot_tool)
+                    self.mqtt.publish(self.publish_topics['tool_value'],self.robot_tool)
                     print('waiting for',self.ctrl_tool_status,'==', self.robot_tool)
                     if self.ctrl_tool_status == self.robot_tool:
                         target_id = target_id + 1
