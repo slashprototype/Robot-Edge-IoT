@@ -21,8 +21,13 @@ class App ():
         self.control_status = 187
 
         self.fsm_robot_control = 0
+        self.fsm_robot_control_type = ''
+
         self.fsm_robot_sync = 0
+        self.fsm_robot_sync_type = ''
+        
         self.fsm_mqtt_sync = 0
+        self.fsm_mqtt_sync_type = ''
         
         self.mqtt_thread = Thread(target=self.mqtt_sync)
         self.mqtt_thread.setDaemon(True)
@@ -32,20 +37,6 @@ class App ():
         self.robot_control_thread.setDaemon(True)
         
         self.main_loop()
-    
-    # def publish_mqtt(self, **args):
-    #     for key,value in args.items():
-    #         if key == 'robot_status':
-    #             self.mqtt.publish(self.publish_topics[2],value)
-    #         if key == 'tool':
-    #             self.mqtt.publish(self.publish_topics[10],value)
-    #         if key == 'execute':
-    #             self.mqtt.publish(self.publish_topics[12],value)
-    #         if key == 'robot_resultwork':
-    #             self.mqtt.publish(self.publish_topics[14],value)
-    #         if key == 'robot_status':
-    #             self.mqtt.publish(self.publish_topics[16],value)
-
 
     def start_app(self):
         self.running = True
@@ -55,13 +46,9 @@ class App ():
         self.robot_monitoring_thread.start()    
         self.robot_control_thread.start()    
         
-
-
     def close_app(self):
         self.running = False
         raise Exception('App interruption')
-        
-
 
 # ---------------------THREADS AND CONTROL LOOP---------------------------
 
@@ -84,7 +71,9 @@ class App ():
                         time.sleep(1)
                         self.fsm_robot_control = 30
                     counter_1 = 0
-                    new = get_fsm_status_type(self.fsm_robot_control)
+                    
+                    #Print control finite state machine type
+                    new = self.fsm_robot_control_type
                     if new != old:
                         print(new)
                         old = new
@@ -187,6 +176,7 @@ class App ():
             try:
                 # FIRST START
                 if self.fsm_robot_sync == 0:
+                    self.fsm_robot_sync_type = 'Initial Conditions'
                     self.fsm_robot_sync = 10
 
                 if self.fsm_robot_sync == 10:
@@ -240,6 +230,7 @@ class App ():
 
                 # FIRST START
                 if self.fsm_robot_control == 0:
+                    self.fsm_robot_control_type = 'Initial Conditions'
                     # Initial status in robot control
 
                     if self.mqtt_ok and self.robot_ok:    
@@ -253,6 +244,7 @@ class App ():
                         self.fsm_robot_control = 30
 
                 if self.fsm_robot_control == 10:
+                    self.fsm_robot_control_type = 'Initial Conditions'
                     if self.robot_status <= 3:
                         self.control_status = 204
                         send_robot_action(self.robot,'stop')
@@ -280,12 +272,14 @@ class App ():
                     time.sleep(0.1)
                     
                 if self.fsm_robot_control == 20:
+                    self.fsm_robot_control_type = 'set initial control status'
                     self.mqtt.publish(self.publish_topics['visor_value'],0)
                     self.mqtt.publish(self.publish_topics['status_value'],170)
                     time.sleep(0.1)
                     self.fsm_robot_control = 21
 
                 if self.fsm_robot_control == 21:
+                    self.fsm_robot_control_type = 'Waiting for execute'
                     if self.ctrl_execute == 1:
                         try:
                             self.mqtt.publish(self.publish_topics['status_value'],187)
@@ -303,11 +297,11 @@ class App ():
                             print('Error when searching file: ',file)
                             self.fsm_robot_control = 30
                         
-                        
                     time.sleep(0.1)     
 
 
                 if self.fsm_robot_control == 22:
+                    self.fsm_robot_control_type = 'Analizing script target selected'
                     flag = 0
                     self.mqtt.publish(self.publish_topics['visor_value'],0)
                     
@@ -339,6 +333,7 @@ class App ():
 
 
                 if self.fsm_robot_control == 23:
+                    self.fsm_robot_control_type = 'Send actual "target" and "start" to robot'
                     # print(self.robot_working_status)
                     if self.robot_working_status == 1:
                         print('sending target', target_id)
@@ -349,6 +344,7 @@ class App ():
                     time.sleep(0.1)
 
                 if self.fsm_robot_control == 24:
+                    self.fsm_robot_control_type = 'Waiting for finish movement'
                     if self.robot_working_status == 3:
                         self.robot.sync_program(start = 0)
                         target_id = target_id + 1
@@ -356,6 +352,7 @@ class App ():
                     time.sleep(0.1)
                 
                 if self.fsm_robot_control == 40:
+                    self.fsm_robot_control_type = 'Alternative action selected'
                     if target_type <10:
                         self.fsm_robot_control = 41
                     
@@ -363,6 +360,7 @@ class App ():
                         self.fsm_robot_control = 42
                 
                 if self.fsm_robot_control == 41:
+                    self.fsm_robot_control_type = 'Tool logic'
                     
                     if target_type == 1:
                         self.robot_tool = 170
@@ -377,6 +375,7 @@ class App ():
                         fsm_40 = 0
                 
                 if self.fsm_robot_control == 42:
+                    self.fsm_robot_control_type = 'Visor logic'
                     
                     if target_type == 10:
                         if flag == 0:
@@ -406,6 +405,7 @@ class App ():
                     
                 # ALARM
                 if self.fsm_robot_control == 30:
+                    self.fsm_robot_control_type = 'Alarm status'
                     
                     flag = 0
                     if self.mqtt_ok:
