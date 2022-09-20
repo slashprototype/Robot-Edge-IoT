@@ -92,9 +92,12 @@ class App ():
                     else:
                         counter_1 = counter_1 + 1
                 
-                # if self.robot_control_setup:
-                #     if self.robot_status <= 6 and self.fsm_robot_control != 10 and self.fsm_robot_control != 30 :
-                #         self.fsm_robot_control = 30
+                if self.robot_control_setup:
+                    if self.robot_status <= 6 and self.fsm_robot_control != 10 and self.fsm_robot_control != 30 :
+                        self.fsm_robot_control = 30
+                        if self.robot_status == 0:
+                            print('UNKNOW ERROR IN ROBOT STATUS ID')
+                            time.sleep(2)
 
                 
 
@@ -411,8 +414,8 @@ class App ():
                     if self.mqtt_ok:
                         self.control_status = 255
                         self.mqtt.publish(self.publish_topics['visor_value'],255)
-                        self.mqtt.publish(self.publish_topics['status_value'],255)
-                        self.mqtt.publish(self.publish_topics['resultwork_value'],255)
+                        self.mqtt.publish(self.publish_topics['status_value'],187)
+                        self.mqtt.publish(self.publish_topics['resultwork_value'],187)
                         # self.publish_mqtt(robot_resultwork = 255)
                     
                     if self.robot_ok == True:
