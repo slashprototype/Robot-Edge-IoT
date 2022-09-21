@@ -111,6 +111,11 @@ def process(file):
                 data.append(11)
                 all_pos.append(data)
             
+            if re.search(r'(camera_inspection\(\))',line):
+                data = []
+                data.append(12)
+                all_pos.append(data)                
+            
             if re.search(r'(move_axis_0\(\))',line):
                 data = []
                 data.append(20)
@@ -240,6 +245,9 @@ def process(file):
             targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
         # 11 = visor code
         if i[0] == 11:
+            targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
+        # 12 = camera inspection
+        if i[0] == 12:
             targets.append([[0,0,0,0,0,0],0,0,0,0,i[0]])
 
         # 20 = move axis 0

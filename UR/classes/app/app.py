@@ -287,8 +287,8 @@ class App ():
                     self.fsm_robot_control_type = 'Waiting for execute'
                     if self.ctrl_execute == 1:
                         try:
-                            self.mqtt.publish(self.publish_topics['status_value'],187)
-                            self.mqtt.publish(self.publish_topics['resultwork_value'],187)
+                            self.mqtt.publish(self.publish_topics['status_value'],)
+                            self.mqtt.publish(self.publish_topics['resultwork_value'],221)
                             
                             # self.publish_mqtt(robot_resultwork = 221)
                             # self.publish_mqtt(execute = 0)
@@ -406,7 +406,7 @@ class App ():
                             flag = 0
                         time.sleep(0.1)
                         print('visor result = ',self.ctrl_visor_result, 'qr result=',self.ctrl_qr_result)
-                    
+
                 # ALARM
                 if self.fsm_robot_control == 30:
                     self.fsm_robot_control_type = 'Alarm status'
@@ -426,7 +426,7 @@ class App ():
                             send_robot_action(self.robot,'stop')
                         
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
-                        self.mqtt.publish(self.publish_topics['visor_value'],187)
+                        # self.mqtt.publish(self.publish_topics['visor_value'],187)
                         self.fsm_robot_control = 10                
                     
                     time.sleep(1)
