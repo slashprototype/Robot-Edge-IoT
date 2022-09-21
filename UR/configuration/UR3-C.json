@@ -1,20 +1,21 @@
 {
   "SUBSCRIBE_TOPICS": {
-    "command": "/PCB/CELL-A/UR3-C/CONTROLLER/COMMAND/VALUE",
+    "ss_command": "/PCB/CELL-A/UR3-C/CONTROLLER/COMMAND/VALUE",
 
-    "execute": "/PCB/CELL-A/UR3-C/CONTROLLER/EXECUTE/VALUE",
+    "ss_execute": "/PCB/CELL-A/UR3-C/CONTROLLER/EXECUTE/VALUE",
 
-    "emergency_stop": "/PCB/CELL-A/UR3-C/CONTROLLER/EMERGENCYSTOP/VALUE",
+    "ss_emergency_stop": "/PCB/CELL-A/UR3-C/CONTROLLER/EMERGENCYSTOP/VALUE",
 
-    "speed": "/PCB/CELL-A/UR3-C/CONTROLLER/SPEED/VALUE",
+    "ss_speed": "/PCB/CELL-A/UR3-C/CONTROLLER/SPEED/VALUE",
 
-    "tool": "/PCB/CELL-A/UR3-C/MONITORING/TOOL/VALUE",
+    "robot_visor": "/PCB/CELL-A/UR3-C/MONITORING/VISOR/VALUE",
 
-    "visor": "/PCB/CELL-A/UR3-C/MONITORING/VISOR/VALUE",
+    "ss_qr": "/PCB/CELL-A/UR3-C/CONTROLLER/QR/VALUE",
 
-    "qr": "/PCB/CELL-A/UR3-C/CONTROLLER/QR/VALUE",
+    "operation_mode": "/PCB/CELL-A/OPERATIONMODE/VALUE",
 
-    "operation_mode": "/PCB/CELL-A/OPERATIONMODE/VALUE"
+    "inspection_2_resultwork": "/PCB/CELL-A/INSPECTION-C/CONTROLLER/RESULTWORK/VALUE",
+    "inspection_2_status": "/PCB/CELL-A/INSPECTION-C/CONTROLLER/STATUS/VALUE"
   },
   "PUBLISH_TOPICS": {
     "status_type": "/PCB/CELL-A/UR3-C/MONITORING/STATUS/TYPE",
@@ -31,15 +32,19 @@
     "temperature_timestamp": "/PCB/CELL-A/UR3-C/MONITORING/TEMPERATURE/TIMESTAMP",
     "temperature_value": "/PCB/CELL-A/UR3-C/MONITORING/TEMPERATURE/VALUE",
 
-    "tool_timestamp": "/PCB/CELL-A/UR3-C/CONTROLLER/TOOL/TIMESTAMP",
-    "tool_value": "/PCB/CELL-A/UR3-C/CONTROLLER/TOOL/VALUE",
-
-    "execute_timestamp": "/PCB/CELL-A/UR3-C/CONTROLLER/EXECUTE/TIMESTAMP",
-    "execute_value": "/PCB/CELL-A/UR3-C/CONTROLLER/EXECUTE/VALUE",
+    "tool_timestamp": "/PCB/CELL-A/UR3-C/MONITORING/TOOL/TIMESTAMP",
+    "tool_value": "/PCB/CELL-A/UR3-C/MONITORING/TOOL/VALUE",
 
     "resultwork_timestamp": "/PCB/CELL-A/UR3-C/CONTROLLER/RESULTWORK/TIMESTAMP",
     "resultwork_value": "/PCB/CELL-A/UR3-C/CONTROLLER/RESULTWORK/VALUE",
 
-    "visor_value": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/VALUE"
+    "visor_value": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/VALUE",
+    "visor_timestamp": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/TIMESTAMP",
+
+    "inspection_2_execute_value": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/VALUE",
+    "inspection_2_execute_timestamp": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/TIMESTAMP",
+
+    "inspection_2_command_value": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/VALUE",
+    "inspection_2_command_timestamp": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/TIMESTAMP"
   }
 }

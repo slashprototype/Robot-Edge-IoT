@@ -128,20 +128,22 @@ class App ():
                 if self.fsm_mqtt_sync == 20:
                     try:
                         topic_value = self.mqtt.get_data()
-                        self.ctrl_command = topic_value['command']
-                        self.ctrl_execute = topic_value['execute']
-                        self.ctrl_emergency_stop = topic_value['emergency_stop']
-                        self.ctrl_speed = topic_value['speed']
-                        self.ctrl_visor_result = topic_value['visor']
-                        self.ctrl_qr_result = topic_value['qr']
-                        self.ctrl_tool_status = topic_value['tool']
-                        self.ctrl_operation_mode= topic_value['operation_mode']
+                        self.ctrl_command = topic_value['ss_command']
+                        self.ctrl_execute = topic_value['ss_execute']
+                        self.ctrl_emergency_stop = topic_value['ss_emergency_stop']
+                        self.ctrl_speed = topic_value['ss_speed']
+                        self.ctrl_visor_result = topic_value['robot_visor']
+                        self.ctrl_qr_result = topic_value['ss_qr']
+                        self.ctrl_tool_status = topic_value['robot_tool']
+                        self.ctrl_operation_mode = topic_value['operation_mode']
+                        self.ctrl_inspection_2_resultwork = topic_value['inspection_2_resultwork']
+                        self.ctrl_inspection_2_status = topic_value['inspection_2_status']
                         
                         if self.robot_sync_setup == True and counter_1 >= 100:
                             self.mqtt.publish(self.publish_topics['position_value'],self.robot_position)
                             self.mqtt.publish(self.publish_topics['current_value'],self.robot_current)
                             self.mqtt.publish(self.publish_topics['temperature_value'],self.robot_temperature)
-                            # self.mqtt.publish(self.publish_topics['status_value'],self.control_status)
+                            self.mqtt.publish(self.publish_topics['tool_value'],self.robot_tool)
                             # if self.robot.name == 'UR3-C':
                             #     self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                             counter_1 = 0
@@ -238,8 +240,7 @@ class App ():
 
                     if self.mqtt_ok and self.robot_ok:    
                         self.robot_control_setup = True
-                        self.robot_tool = 0
-                        self.mqtt.publish(self.publish_topics['tool_value'],self.robot_tool)
+
                         self.mqtt.publish(self.publish_topics['visor_value'],0)
                         self.mqtt.publish(self.publish_topics['status_value'],187)
                         self.mqtt.publish(self.publish_topics['resultwork_value'],170)
@@ -360,8 +361,11 @@ class App ():
                     if target_type <10:
                         self.fsm_robot_control = 41
                     
-                    elif target_type >= 10:
+                    elif target_type == 10 or target_type == 11:
                         self.fsm_robot_control = 42
+                    
+                    elif target_type == 12:
+                        self.fsm_robot_control = 50
                 
                 if self.fsm_robot_control == 41:
                     self.fsm_robot_control_type = 'Tool logic'
@@ -407,6 +411,37 @@ class App ():
                         time.sleep(0.1)
                         print('visor result = ',self.ctrl_visor_result, 'qr result=',self.ctrl_qr_result)
 
+                if self.fsm_robot_control == 50:
+                    self.fsm_robot_control_type = 'Camera inspection routine'
+                    # self.mqtt.publish(self.publish_topics['inspection_2_command_value'],200)
+                    if self.ctrl_inspection_2_status == 170:
+                        self.mqtt.publish(self.publish_topics['inspection_2_command_value'],100)
+                        time.sleep(0.1)
+                        self.mqtt.publish(self.publish_topics['inspection_2_execute_value'],1)
+                        self.fsm_robot_control = 51
+                    else:
+                        print('Camera is not ready..status is: ',self.ctrl_inspection_2_status)
+                        time.sleep(1)
+                
+                if self.fsm_robot_control == 51:
+                    self.fsm_robot_control_type = 'Waiting for camera response...'
+                    if self.ctrl_inspection_2_resultwork == 221:
+                        self.mqtt.publish(self.publish_topics['inspection_2_execute_value'],0)
+                        self.fsm_robot_control = 52
+
+                if self.fsm_robot_control == 52:
+                    self.fsm_robot_control_type = 'Waiting for inspection finished...'
+                    if self.ctrl_inspection_2_resultwork == 187:
+                        self.fsm_robot_control = 20
+
+
+
+                
+
+
+
+
+                    
                 # ALARM
                 if self.fsm_robot_control == 30:
                     self.fsm_robot_control_type = 'Alarm status'

@@ -47,29 +47,36 @@ class Mqtt():
             # COMMAND
             try:
 
-                if msg.topic == subscribe_topics['command']:
-                    self.topic_value['command'] = int(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['ss_command']:
+                    self.topic_value['ss_command'] = int(msg.payload.decode('UTF-8'))
                 # EXECUTE
-                if msg.topic == subscribe_topics['execute']:
-                    self.topic_value['execute'] = int(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['ss_execute']:
+                    self.topic_value['ss_execute'] = int(msg.payload.decode('UTF-8'))
                 # EMERGENCY STOP
-                if msg.topic == subscribe_topics['emergency_stop']:
-                    self.topic_value['emergency_stop'] = int(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['ss_emergency_stop']:
+                    self.topic_value['ss_emergency_stop'] = int(msg.payload.decode('UTF-8'))
                 # SPEED
-                if msg.topic == subscribe_topics['speed']:
-                    self.topic_value['speed'] = float(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['ss_speed']:
+                    self.topic_value['ss_speed'] = float(msg.payload.decode('UTF-8'))
 
-                if msg.topic == subscribe_topics['tool']:
-                    self.topic_value['tool'] = int(msg.payload.decode('UTF-8'))      
+                if msg.topic == subscribe_topics['ss_tool']:
+                    self.topic_value['ss_tool'] = int(msg.payload.decode('UTF-8'))      
                 #VISOR VALUE
-                if msg.topic == subscribe_topics['visor']:
-                    self.topic_value['visor'] = int(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['robot_visor']:
+                    self.topic_value['robot_visor'] = int(msg.payload.decode('UTF-8'))
                     
-                if msg.topic == subscribe_topics['qr']:
-                    self.topic_value['qr'] = int(msg.payload.decode('UTF-8'))
+                if msg.topic == subscribe_topics['ss_qr']:
+                    self.topic_value['ss_qr'] = int(msg.payload.decode('UTF-8'))
 
                 if msg.topic == subscribe_topics['operation_mode']:
                     self.topic_value['operation_mode'] = str(msg.payload.decode('UTF-8'))
+                
+                if msg.topic == subscribe_topics['inspection_2_resultwork']:
+                    self.topic_value['inspection_2_resultwork'] = int(msg.payload.decode('UTF-8'))
+
+                if msg.topic == subscribe_topics['inspection_2_status']:
+                    self.topic_value['inspection_2_status'] = int(msg.payload.decode('UTF-8'))
+                
                 
                 self.receive_status = True
             except:
