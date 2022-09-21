@@ -241,7 +241,8 @@ class App ():
                         self.robot_tool = 0
                         self.mqtt.publish(self.publish_topics['tool_value'],self.robot_tool)
                         self.mqtt.publish(self.publish_topics['visor_value'],0)
-                        self.mqtt.publish(self.publish_topics['status_value'],255)
+                        self.mqtt.publish(self.publish_topics['status_value'],187)
+                        self.mqtt.publish(self.publish_topics['resultwork_value'],170)
                         self.robot.sync_program(start = 0)
                         
                         self.fsm_robot_control = 30
@@ -278,6 +279,7 @@ class App ():
                     self.fsm_robot_control_type = 'set initial control status'
                     self.mqtt.publish(self.publish_topics['visor_value'],0)
                     self.mqtt.publish(self.publish_topics['status_value'],170)
+                    
                     time.sleep(0.1)
                     self.fsm_robot_control = 21
 
@@ -286,7 +288,7 @@ class App ():
                     if self.ctrl_execute == 1:
                         try:
                             self.mqtt.publish(self.publish_topics['status_value'],187)
-                            self.mqtt.publish(self.publish_topics['resultwork_value'],221)
+                            self.mqtt.publish(self.publish_topics['resultwork_value'],187)
                             
                             # self.publish_mqtt(robot_resultwork = 221)
                             # self.publish_mqtt(execute = 0)
@@ -306,33 +308,32 @@ class App ():
                 if self.fsm_robot_control == 22:
                     self.fsm_robot_control_type = 'Analizing script target selected'
                     flag = 0
-                    self.mqtt.publish(self.publish_topics['visor_value'],0)
-                    
-                    if self.runtime_state != 2:
-                        send_robot_action(self.robot,'start')
-                    else:
-                        if target_id < targets_len:
-                            target_type = targets[target_id][5]
-                            
-                            if self.robot.name == 'UR3-A':
-                                if target_type > 2 and target_type < 10:
-                                    self.fsm_robot_control = 23
-                                else:
-                                    self.fsm_robot_control = 40
-                            
-                            elif self.robot.name == 'UR3-C':
-                                if target_type < 10:
-                                    self.fsm_robot_control = 23
-                                else:
-                                    self.fsm_robot_control = 40
+                    # self.mqtt.publish(self.publish_topics['visor_value'],0)
+                    if self.ctrl_execute == 0:
+                        if self.runtime_state != 2:
+                            send_robot_action(self.robot,'start')
                         else:
-                            print('Routine Complete succesfully')
-                            self.mqtt.publish(self.publish_topics['status_value'],221)
-                            self.mqtt.publish(self.publish_topics['resultwork_value'],170)
-                            time.sleep(1)
-                            if self.ctrl_execute == 0:
+                            if target_id < targets_len:
+                                target_type = targets[target_id][5]
+                                
+                                if self.robot.name == 'UR3-A':
+                                    if target_type > 2 and target_type < 10:
+                                        self.fsm_robot_control = 23
+                                    else:
+                                        self.fsm_robot_control = 40
+                                
+                                elif self.robot.name == 'UR3-C':
+                                    if target_type < 10:
+                                        self.fsm_robot_control = 23
+                                    else:
+                                        self.fsm_robot_control = 40
+                            else:
+                                print('Routine Complete succesfully')
+                                self.mqtt.publish(self.publish_topics['status_value'],170)
+                                self.mqtt.publish(self.publish_topics['resultwork_value'],170)
+                                # time.sleep(1)
                                 self.fsm_robot_control = 20
-                    time.sleep(0.1)
+                        # time.sleep(0.1)
 
 
                 if self.fsm_robot_control == 23:
@@ -411,12 +412,11 @@ class App ():
                     self.fsm_robot_control_type = 'Alarm status'
                     
                     flag = 0
-                    if self.mqtt_ok:
+                    if self.mqtt_ok == True:
                         self.control_status = 255
-                        self.mqtt.publish(self.publish_topics['visor_value'],255)
-                        self.mqtt.publish(self.publish_topics['status_value'],187)
-                        self.mqtt.publish(self.publish_topics['resultwork_value'],187)
-                        # self.publish_mqtt(robot_resultwork = 255)
+                        # self.mqtt.publish(self.publish_topics['visor_value'],255)
+                        self.mqtt.publish(self.publish_topics['status_value'],255)
+                        # self.mqtt.publish(self.publish_topics['resultwork_value'],255)
                     
                     if self.robot_ok == True:
                         self.robot.sync_program(start = 0)
@@ -427,7 +427,6 @@ class App ():
                         
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
                         self.mqtt.publish(self.publish_topics['visor_value'],187)
-                        # self.publish_mqtt(execute = 0)
                         self.fsm_robot_control = 10                
                     
                     time.sleep(1)
