@@ -134,7 +134,7 @@ class App ():
                         self.ctrl_speed = topic_value['ss_speed']
                         self.ctrl_visor_result = topic_value['robot_visor']
                         self.ctrl_qr_result = topic_value['ss_qr']
-                        self.ctrl_tool_status = topic_value['robot_tool']
+                        # self.ctrl_tool_status = topic_value['robot_tool']
                         self.ctrl_operation_mode = topic_value['operation_mode']
                         self.ctrl_inspection_2_resultwork = topic_value['inspection_2_resultwork']
                         self.ctrl_inspection_2_status = topic_value['inspection_2_status']
