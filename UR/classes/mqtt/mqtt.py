@@ -80,7 +80,7 @@ class Mqtt():
                 
                 self.receive_status = True
             except:
-                print('some problem in subscribe topics')
+                print('some problem in subscribe topics:', msg.payload.decode('UTF-8'))
                 self.receive_status = False
         
         if self.setup == False:

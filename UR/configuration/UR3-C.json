@@ -41,10 +41,10 @@
     "visor_value": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/VALUE",
     "visor_timestamp": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/TIMESTAMP",
 
-    "inspection_2_execute_value": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/VALUE",
-    "inspection_2_execute_timestamp": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/TIMESTAMP",
+    "inspection_2_execute_value": "/PCB/CELL-A/INSPECTION-C/CONTROLLER/EXECUTE/VALUE",
+    "inspection_2_execute_timestamp": "/PCB/CELL-A/INSPECTION-C/CONTROLLER/EXECUTE/TIMESTAMP",
 
-    "inspection_2_command_value": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/VALUE",
-    "inspection_2_command_timestamp": "/PCB/CELL-A/UR3-C/CONTROLLER/VISOR/TIMESTAMP"
+    "inspection_2_command_value": "/PCB/CELL-A/INSPECTION-C/CONTROLLER/COMMAND/VALUE",
+    "inspection_2_command_timestamp": "/PCB/CELL-A/INSPECTION-C/CONTROLLER/COMMAND/TIMESTAMP"
   }
 }
