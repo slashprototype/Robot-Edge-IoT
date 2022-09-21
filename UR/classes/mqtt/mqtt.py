@@ -59,8 +59,8 @@ class Mqtt():
                 if msg.topic == subscribe_topics['ss_speed']:
                     self.topic_value['ss_speed'] = float(msg.payload.decode('UTF-8'))
 
-                if msg.topic == subscribe_topics['ss_tool']:
-                    self.topic_value['ss_tool'] = int(msg.payload.decode('UTF-8'))      
+                # if msg.topic == subscribe_topics['ss_tool']:
+                #     self.topic_value['ss_tool'] = int(msg.payload.decode('UTF-8'))      
                 #VISOR VALUE
                 if msg.topic == subscribe_topics['robot_visor']:
                     self.topic_value['robot_visor'] = int(msg.payload.decode('UTF-8'))
