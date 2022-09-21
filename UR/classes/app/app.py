@@ -288,7 +288,7 @@ class App ():
                     self.fsm_robot_control_type = 'Waiting for execute'
                     if self.ctrl_execute == 1:
                         try:
-                            self.mqtt.publish(self.publish_topics['status_value'],)
+                            self.mqtt.publish(self.publish_topics['status_value'],221)
                             self.mqtt.publish(self.publish_topics['resultwork_value'],221)
                             
                             # self.publish_mqtt(robot_resultwork = 221)
