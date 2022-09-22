@@ -432,7 +432,9 @@ class App ():
                 if self.fsm_robot_control == 52:
                     self.fsm_robot_control_type = 'Waiting for inspection finished...'
                     if self.ctrl_inspection_2_resultwork == 187:
-                        self.fsm_robot_control = 20
+                        print('Inspection finished correctly')
+                        target_id = target_id + 1
+                        self.fsm_robot_control = 22
 
 
 
