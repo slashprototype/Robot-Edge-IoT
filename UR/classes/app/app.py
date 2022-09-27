@@ -411,7 +411,7 @@ class App ():
                     
                     if self.robot_ok == True:
                         self.robot.sync_program(start = 0)
-                        # self.robot.sync_config(slider_mask = 1, slider_fraction = 0)
+                        self.robot.sync_config(slider_mask = 1, slider_fraction = 0)
                         if self.runtime_state != 1:
                             print(self.runtime_state)
                             send_robot_action(self.robot,'stop')
