@@ -10,9 +10,8 @@ class App ():
         self.subscribe_topics = subscribe_topics
         self.publish_topics = publish_topics
         self.routines_path = routines_path
-        self.running = False
-        self.bit_reset = True
 
+        # Set initial variables to start running the app
         self.mqtt_ok = False
         self.robot_ok = False
         self.robot_sync_setup = False
@@ -20,19 +19,25 @@ class App ():
         self.exception = False
         self.control_status = 187
 
-        self.fsm_robot_control = 0
+        # Finite state machine for robot control
+        self.fsm_robot_control = 0.0
         self.fsm_robot_control_type = ''
 
+        # Finite state machine for robot rtde syncronization
         self.fsm_robot_sync = 0
         self.fsm_robot_sync_type = ''
-        
+
+        # Finite state machine for mqtt broker syncronization
         self.fsm_mqtt_sync = 0
         self.fsm_mqtt_sync_type = ''
         
+        # New threads for manage while loops
         self.mqtt_thread = Thread(target=self.mqtt_sync)
         self.mqtt_thread.setDaemon(True)
+
         self.robot_monitoring_thread = Thread(target=self.robot_sync)
         self.robot_monitoring_thread.setDaemon(True)
+
         self.robot_control_thread = Thread(target=self.robot_control)
         self.robot_control_thread.setDaemon(True)
         
@@ -63,31 +68,24 @@ class App ():
                 time.sleep(0.01)
                 
                 if self.mqtt_ok and self.robot_ok:  
-                    if self.ctrl_operation_mode == 'D1'  or self.ctrl_operation_mode =='D2' or self.ctrl_operation_mode =='D3':
-                        print('Stop by',self.ctrl_operation_mode)
-                        self.fsm_robot_control = 30    
                     if self.ctrl_emergency_stop != 0:
                         print('Emergency stop')
                         time.sleep(1)
                         self.fsm_robot_control = 30
                     counter_1 = 0
-                    
                     #Print control finite state machine type
                     new = self.fsm_robot_control_type
                     if new != old:
                         print(new)
                         old = new
-                    
                 else:
                     if self.robot_control_setup: 
                         self.fsm_robot_control = 30
                     if counter_1 >= 100:
                         print('ROBOT alarms: ',self.robot.alarm, self.robot.alarm_id)
-                        print('MQTT alarm:',self.mqtt.alarm)
-                        if self.mqtt.connection_status == False:
-                            print('MQTT connection error')
-                        elif self.mqtt.subscribe_status == False:
-                            print('MQTT subscribe error')
+                        print('MQTT alarm:',self.mqtt.alarm,
+                              'Connection status:',self.mqtt.connection_status,
+                              'subscribe status:', self.mqtt.subscribe_status)
                         counter_1 = 0
                     else:
                         counter_1 = counter_1 + 1
@@ -98,8 +96,6 @@ class App ():
                 #         if self.robot_status == 0:
                 #             print('UNKNOW ERROR IN ROBOT STATUS ID')
                 #             time.sleep(2)
-
-                
 
             except KeyboardInterrupt:
                 print('interruptions')            
@@ -134,8 +130,6 @@ class App ():
                         self.ctrl_speed = topic_value['ss_speed']
                         self.ctrl_visor_result = topic_value['robot_visor']
                         self.ctrl_qr_result = topic_value['ss_qr']
-                        # self.ctrl_tool_status = topic_value['robot_tool']
-                        self.ctrl_operation_mode = topic_value['operation_mode']
                         self.ctrl_inspection_2_resultwork = topic_value['inspection_2_resultwork']
                         self.ctrl_inspection_2_status = topic_value['inspection_2_status']
                         
@@ -144,10 +138,7 @@ class App ():
                             self.mqtt.publish(self.publish_topics['current_value'],self.robot_current)
                             self.mqtt.publish(self.publish_topics['temperature_value'],self.robot_temperature)
                             self.mqtt.publish(self.publish_topics['tool_value'],self.robot_tool)
-                            # if self.robot.name == 'UR3-C':
-                            #     self.mqtt.publish(self.publish_topics[10],self.robot_tool)
                             counter_1 = 0
-                        
                         self.mqtt_ok = True
                     except:
                         self.fsm_mqtt_sync = 30
@@ -222,13 +213,10 @@ class App ():
                 # END WHILE LOOP
                 print('ending robot monitoring loop')
                 self.robot_sync.join()
-                break
-
-        
+                break        
 
     #LOOP FOR ROBOT CONTROL
     def robot_control(self):
-        fsm_reset = 0
         timeout = 0
         while (self.running):
             try:
@@ -236,16 +224,15 @@ class App ():
                 # FIRST START
                 if self.fsm_robot_control == 0:
                     self.fsm_robot_control_type = 'Initial Conditions'
-                    # Initial status in robot control
-
+                    
+                    # Initial status in robot control, waiting for all connections are ok
                     if self.mqtt_ok and self.robot_ok:    
                         self.robot_control_setup = True
-
                         self.mqtt.publish(self.publish_topics['visor_value'],0)
                         self.mqtt.publish(self.publish_topics['status_value'],187)
-                        self.mqtt.publish(self.publish_topics['resultwork_value'],170)
+                        self.mqtt.publish(self.publish_topics['resultwork_value'],0)
+                        # set robot register "start" to 0 for control flow
                         self.robot.sync_program(start = 0)
-                        
                         self.fsm_robot_control = 30
 
                 if self.fsm_robot_control == 10:
@@ -271,7 +258,6 @@ class App ():
                         self.control_status = 255
                         self.fsm_robot_control = 30
 
-
                     timeout = timeout + 1
                         
                     time.sleep(0.1)
@@ -282,52 +268,60 @@ class App ():
                     self.mqtt.publish(self.publish_topics['status_value'],170)
                     
                     time.sleep(0.1)
-                    self.fsm_robot_control = 21
+                    self.fsm_robot_control = 20.1
 
-                if self.fsm_robot_control == 21:
+                if self.fsm_robot_control == 20.1:
                     self.fsm_robot_control_type = 'Waiting for execute'
+
                     if self.ctrl_execute == 1:
                         try:
                             self.mqtt.publish(self.publish_topics['status_value'],221)
-                            self.mqtt.publish(self.publish_topics['resultwork_value'],221)
-                            
-                            # self.publish_mqtt(robot_resultwork = 221)
-                            # self.publish_mqtt(execute = 0)
-                            
+                            self.mqtt.publish(self.publish_topics['resultwork_value'],221)  
+
                             file = self.routines_path+search_script(self.robot.name,self.ctrl_command)
                             print('routine script selected: ', file)
                             target_id = 0
                             targets, targets_len = get_robot_targets(file)
-                            self.fsm_robot_control = 22
+                            self.fsm_robot_control = 20.2
                         except:
                             print('Error when searching file: ',file)
-                            self.fsm_robot_control = 30
-                        
-                    time.sleep(0.1)     
+                            self.fsm_robot_control = 30 
 
-
-                if self.fsm_robot_control == 22:
-                    self.fsm_robot_control_type = 'Analizing script target selected'
-                    flag = 0
-                    # self.mqtt.publish(self.publish_topics['visor_value'],0)
+                if self.fsm_robot_control == 20.2:
+                    self.fsm_robot_control_type = 'Analizing script... waiting for execute = 0'
+                    
                     if self.ctrl_execute == 0:
                         if self.runtime_state != 2:
                             send_robot_action(self.robot,'start')
                         else:
                             if target_id < targets_len:
+                                # Get move type, tool, visor, inspection, clamp action
                                 target_type = targets[target_id][5]
                                 
-                                if self.robot.name == 'UR3-A':
-                                    if target_type > 2 and target_type < 10:
-                                        self.fsm_robot_control = 23
-                                    else:
-                                        self.fsm_robot_control = 40
+                                # Robot Normal action (move,tool)
+                                if target_type <= 6:
+                                    self.fsm_robot_control = 20.3
+
+                                # Robot Visor routines
+                                elif target_type == 10 or target_type == 11:
+                                    self.fsm_robot_control = 21
                                 
-                                elif self.robot.name == 'UR3-C':
-                                    if target_type < 10:
-                                        self.fsm_robot_control = 23
-                                    else:
-                                        self.fsm_robot_control = 40
+                                # Robot Inspection routine
+                                elif target_type == 12:
+                                    self.fsm_robot_control = 22
+                                
+                                # Robot Clamp control
+                                elif target_type == 15:
+                                    self.fsm_robot_control = 23
+                                
+                                # Robot return (experimental)
+                                elif target_type == 19:
+                                    self.fsm_robot_control = 24
+
+                                # Robot Axis movement
+                                elif target_type>=20:
+                                    self.fsm_robot_control = 24
+                                
                             else:
                                 print('Routine Complete succesfully')
                                 self.mqtt.publish(self.publish_topics['status_value'],170)
@@ -336,8 +330,7 @@ class App ():
                                 self.fsm_robot_control = 20
                         # time.sleep(0.1)
 
-
-                if self.fsm_robot_control == 23:
+                if self.fsm_robot_control == 20.3:
                     self.fsm_robot_control_type = 'Send actual "target" and "start" to robot'
                     # print(self.robot_working_status)
                     if self.robot_working_status == 1:
@@ -345,109 +338,69 @@ class App ():
                         self.robot.sync_setpoint(targets,target_id)
                         self.robot.sync_program(start = 1)
                         print(targets[target_id])
-                        self.fsm_robot_control = 24
+                        self.fsm_robot_control = 20.4
                     time.sleep(0.1)
 
-                if self.fsm_robot_control == 24:
+                if self.fsm_robot_control == 20.4:
                     self.fsm_robot_control_type = 'Waiting for finish movement'
                     if self.robot_working_status == 3:
                         self.robot.sync_program(start = 0)
                         target_id = target_id + 1
-                        self.fsm_robot_control = 22
+                        self.fsm_robot_control = 20.2
                     time.sleep(0.1)
                 
-                if self.fsm_robot_control == 40:
-                    self.fsm_robot_control_type = 'Alternative action selected'
-                    if target_type <10:
-                        self.fsm_robot_control = 41
-                    
-                    elif target_type == 10 or target_type == 11:
-                        self.fsm_robot_control = 42
-                    
-                    elif target_type == 12:
-                        self.fsm_robot_control = 50
+                if self.fsm_robot_control == 21:
+                    self.fsm_robot_control_type = 'Visor routine selected, sending trigger...'
+                    # Send trigger to vision sensor
+                    self.mqtt.publish(self.publish_topics['visor_value'],2)
+                    self.fsm_robot_control = 21.1
                 
-                if self.fsm_robot_control == 41:
-                    self.fsm_robot_control_type = 'Tool logic'
-                    
-                    if target_type == 1:
-                        self.robot_tool = 170
-                    if target_type == 2:
-                        self.robot_tool = 170
-                    
-                    self.mqtt.publish(self.publish_topics['tool_value'],self.robot_tool)
-                    print('waiting for',self.ctrl_tool_status,'==', self.robot_tool)
-                    if self.ctrl_tool_status == self.robot_tool:
-                        target_id = target_id + 1
-                        self.fsm_robot_control = 22
-                        fsm_40 = 0
-                
-                if self.fsm_robot_control == 42:
-                    self.fsm_robot_control_type = 'Visor logic'
-                    
+                if self.fsm_robot_control == 21.1:
+                    # Waiting for visor detect result value
                     if target_type == 10:
-                        if flag == 0:
-                            print('Visor detect routine')
-                            self.mqtt.publish(self.publish_topics['visor_value'],2)
-                            flag = 1
                         if self.ctrl_visor_result == 170:
-                            self.mqtt.publish(self.publish_topics['visor_value'],0)
-                            target_id = target_id + 1
-                            self.fsm_robot_control = 22
-                            flag = 0
-                        time.sleep(0.1)
+                            self.fsm_robot_control = 21.2
                         print('visor result = ',self.ctrl_visor_result) 
-
+                    
+                    # Waiting for visor code qr result
                     if target_type == 11:
-                        if flag == 0:
-                            print('Visor code routine')
-                            self.mqtt.publish(self.publish_topics['visor_value'],2)
-                            flag = 1
                         if self.ctrl_visor_result == 170 and self.ctrl_qr_result == 170:
-                            target_id = target_id + 1
-                            self.mqtt.publish(self.publish_topics['visor_value'],0)
-                            self.fsm_robot_control = 22
-                            flag = 0
-                        time.sleep(0.1)
+                            self.fsm_robot_control = 21.2
                         print('visor result = ',self.ctrl_visor_result, 'qr result=',self.ctrl_qr_result)
+                    time.sleep(0.5)
+                
+                if self.fsm_robot_control == 21.2:
+                    self.mqtt.publish(self.publish_topics['visor_value'],0)
+                    target_id = target_id + 1
+                    self.fsm_robot_control = 20.2
 
-                if self.fsm_robot_control == 50:
+                if self.fsm_robot_control == 22:
                     self.fsm_robot_control_type = 'Camera inspection routine'
-                    # self.mqtt.publish(self.publish_topics['inspection_2_command_value'],200)
                     if self.ctrl_inspection_2_status == 170:
                         self.mqtt.publish(self.publish_topics['inspection_2_command_value'],100)
                         time.sleep(0.1)
                         self.mqtt.publish(self.publish_topics['inspection_2_execute_value'],1)
-                        self.fsm_robot_control = 51
+                        self.fsm_robot_control = 22.1
                     else:
-                        print('Camera is not ready..status is: ',self.ctrl_inspection_2_status)
-                        time.sleep(1)
+                        print('Camera is not ready..status is: ',self.ctrl_inspection_2_status) 
+                        time.sleep(0.5)
                 
-                if self.fsm_robot_control == 51:
+                if self.fsm_robot_control == 22.1:
                     self.fsm_robot_control_type = 'Waiting for camera response...'
                     if self.ctrl_inspection_2_resultwork == 221:
                         self.mqtt.publish(self.publish_topics['inspection_2_execute_value'],0)
-                        self.fsm_robot_control = 52
+                        self.fsm_robot_control = 22.2
 
-                if self.fsm_robot_control == 52:
+                if self.fsm_robot_control == 22.2:
                     self.fsm_robot_control_type = 'Waiting for inspection finished...'
                     if self.ctrl_inspection_2_resultwork == 187:
                         print('Inspection finished correctly')
                         target_id = target_id + 1
-                        self.fsm_robot_control = 22
-
-
-
-                
-
-
-
-
+                        self.fsm_robot_control = 20.2
                     
                 # ALARM
                 if self.fsm_robot_control == 30:
                     self.fsm_robot_control_type = 'Alarm status'
-                    
                     flag = 0
                     if self.mqtt_ok == True:
                         self.control_status = 255
@@ -465,7 +418,6 @@ class App ():
                     if self.ctrl_command == 10 and self.ctrl_execute == 1:
                         # self.mqtt.publish(self.publish_topics['visor_value'],187)
                         self.fsm_robot_control = 10                
-                    
                     time.sleep(1)
                     
             except:
@@ -473,11 +425,5 @@ class App ():
                 print('ending robot control loop')          
                 self.robot_control.join()
                 break
-
-        
-
-
-if __name__ == '__main__':
-    app = App('broker','UR3-A','subscrib','publish','path')
 
 

@@ -1,3 +1,4 @@
+from pydoc_data.topics import topics
 import paho.mqtt.client as mqtt
 import ssl
 import time
@@ -6,6 +7,7 @@ import time
 
 class Mqtt():
 
+    # Class constructor, defines initial setup configuration
     def __init__(self, ip, port, keep_alive,client_name):    
         self.ip = ip
         self.port = port
@@ -23,10 +25,10 @@ class Mqtt():
         self.client = mqtt.Client(client_id=self.client_name,
                         clean_session=True, userdata=None, protocol=mqtt.MQTTv311, transport="tcp")
         
-
-
+    # Class method for start connection with broker MQTT
     def connect(self,subscribe_topics):
-            # Subscribe to MQTT broker topics
+        
+        # Subscribe to MQTT broker topics
         def on_connect(client, userdata, flags, rc):
             
             print("Connected with result code", rc)
@@ -38,45 +40,35 @@ class Mqtt():
             # Subscribe to REGOUT
             for key,value in subscribe_topics.items():
                 client.subscribe(value)
-
+        
+        # Detect lost client connection
         def on_disconnect(client, userdata, rc):
             self.connection_status = False
-            print('CLIENT DISCONNECTED!!!!')
+            print('ON DISCONNECT EVENT DETECTED!!!!')
         
+        # Detect when subscribed topics receive new data input
         def on_message(client, userdata, msg):
-            # COMMAND
+            # Save expected topic values
             try:
-
+                # Super Software topics
                 if msg.topic == subscribe_topics['ss_command']:
                     self.topic_value['ss_command'] = int(msg.payload.decode('UTF-8'))
-                # EXECUTE
                 if msg.topic == subscribe_topics['ss_execute']:
                     self.topic_value['ss_execute'] = int(msg.payload.decode('UTF-8'))
-                # EMERGENCY STOP
                 if msg.topic == subscribe_topics['ss_emergency_stop']:
                     self.topic_value['ss_emergency_stop'] = int(msg.payload.decode('UTF-8'))
-                # SPEED
                 if msg.topic == subscribe_topics['ss_speed']:
                     self.topic_value['ss_speed'] = float(msg.payload.decode('UTF-8'))
-
-                # if msg.topic == subscribe_topics['ss_tool']:
-                #     self.topic_value['ss_tool'] = int(msg.payload.decode('UTF-8'))      
-                #VISOR VALUE
-                if msg.topic == subscribe_topics['robot_visor']:
-                    self.topic_value['robot_visor'] = int(msg.payload.decode('UTF-8'))
-                    
                 if msg.topic == subscribe_topics['ss_qr']:
                     self.topic_value['ss_qr'] = int(msg.payload.decode('UTF-8'))
-
-                if msg.topic == subscribe_topics['operation_mode']:
-                    self.topic_value['operation_mode'] = str(msg.payload.decode('UTF-8'))
                 
+                # Robot sub-systems interaction
+                if msg.topic == subscribe_topics['robot_visor']:
+                    self.topic_value['robot_visor'] = int(msg.payload.decode('UTF-8'))
                 if msg.topic == subscribe_topics['inspection_2_resultwork']:
                     self.topic_value['inspection_2_resultwork'] = int(msg.payload.decode('UTF-8'))
-
                 if msg.topic == subscribe_topics['inspection_2_status']:
                     self.topic_value['inspection_2_status'] = int(msg.payload.decode('UTF-8'))
-                
                 
                 self.receive_status = True
             except:

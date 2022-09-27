@@ -8,6 +8,7 @@ import jsonpickle
 import json
 import time
 import os
+import socket
 
 class Robot():
 
@@ -89,11 +90,14 @@ class Robot():
 
         except:
             self.connection_status = False
-            if os.system("ping -c 5 -w2 " + self.ip) == 0:
-                # self.disconnect()
-                self.alarm = 'Unable to create a connection, check robot alarm_id: '+ str(self.alarm_id)
+            s =  socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            result = s.connect_ex((self.ip, 102))
+            s.close()
+            if result:
+                print('Error in wire connection')
             else:
                 self.alarm = 'Unable to find a robot at '+self.ip
+            time.sleep(1)
 
 
     def initial_control_values(self):
