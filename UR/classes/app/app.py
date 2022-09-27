@@ -320,7 +320,7 @@ class App ():
 
                                 # Robot Axis movement
                                 elif target_type>=20:
-                                    self.fsm_robot_control = 24
+                                    self.fsm_robot_control = 25
                                 
                             else:
                                 print('Routine Complete succesfully')
@@ -373,6 +373,7 @@ class App ():
                     self.mqtt.publish(self.publish_topics['visor_value'],0)
                     target_id = target_id + 1
                     self.fsm_robot_control = 20.2
+                    
 
                 if self.fsm_robot_control == 22:
                     self.fsm_robot_control_type = 'Camera inspection routine'
