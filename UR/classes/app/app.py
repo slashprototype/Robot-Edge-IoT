@@ -189,7 +189,10 @@ class App ():
                         
                         self.robot.sync_config(slider = 1, watchdog = 0)
                         self.watchdog = 1
-                        self.robot.sync_config(slider_fraction = self.ctrl_speed)
+                        if self.fsm_robot_control != 30:
+                            self.robot.sync_config(slider_fraction = self.ctrl_speed)
+                        else:
+                            self.robot.sync_config(slider_fraction = 0)
                         
                         self.runtime_state = int(robot_data.get('runtime_state'))
                         self.robot_working_status = int(robot_data.get('output_int_register_0'))
