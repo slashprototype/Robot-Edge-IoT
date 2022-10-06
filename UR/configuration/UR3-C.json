@@ -21,7 +21,7 @@
     "status_type": "/PCB/CELL-A/UR3-C/MONITORING/STATUS/TYPE",
 
     "status_timestamp": "/PCB/CELL-A/UR3-C/MONITORING/STATUS/TIMESTAMP",
-    "status_value": "/PCB/CELL-A/UR3-C/MONITORING/STATUS/VALUE",
+    "status_value": "/PCB/CELL-A/UR3-C/CONTROLLER/STATUS/VALUE",
 
     "position_timestamp": "/PCB/CELL-A/UR3-C/MONITORING/POSITION/TIMESTAMP",
     "position_value": "/PCB/CELL-A/UR3-C/MONITORING/POSITION/VALUE",
