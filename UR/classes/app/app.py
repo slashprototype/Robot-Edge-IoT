@@ -281,6 +281,7 @@ class App ():
                     self.fsm_robot_control_type = 'set initial control status'
                     self.mqtt.publish(self.publish_topics['visor_value'],0)
                     self.mqtt.publish(self.publish_topics['status_value'],170)
+                    self.mqtt.publish(self.publish_topics['inspection_2_execute_value'],0)
                     
                     time.sleep(0.1)
                     self.fsm_robot_control = 21
@@ -433,6 +434,7 @@ class App ():
                 if self.fsm_robot_control == 52:
                     self.fsm_robot_control_type = 'Waiting for inspection finished...'
                     if self.ctrl_inspection_2_resultwork == 187:
+                        self.mqtt.publish(self.publish_topics['inspection_2_command_value'],0)
                         print('Inspection finished correctly')
                         target_id = target_id + 1
                         self.fsm_robot_control = 22
