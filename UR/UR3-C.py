@@ -35,6 +35,6 @@ ROUTINES_PATH = 'routines/'+NAME+'_routines/'
 
 robot = Robot(ROBOT_IP, NAME, 30004, config_file)
 
-mqtt = Mqtt('10.40.30.50', 31285, 2,NAME)
+mqtt = Mqtt('inginx.icidesi.mx', 8883, 10,NAME)
 
 app = App(mqtt,robot,subscribe_topics,publish_topics,ROUTINES_PATH)

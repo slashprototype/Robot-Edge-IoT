@@ -70,7 +70,7 @@ class Application():
 
             time.sleep(0.1)
             # Create broker client
-            mqtt_con.mqtt_start('10.40.30.50', 31285, 30,
+            mqtt_con.mqtt_start('inginx.icidesi.mx', 8883, 30,
                                 publish_topics, subscribe_topics)
 
             while(running):

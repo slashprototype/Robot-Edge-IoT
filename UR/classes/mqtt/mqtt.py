@@ -90,7 +90,7 @@ class Mqtt():
             self.client.on_connect = on_connect
             self.client.on_disconnect = on_disconnect
             self.client.on_message = on_message
-            self.client.username_pw_set(username="user01", password="user01")
+            self.client.username_pw_set(username="user02", password="C1d3siMQTTUser20220322")
             self.client.tls_set(ca_certs=self.keyPaths+"ca.crt", certfile=self.keyPaths+"client01.crt",
                                 keyfile=self.keyPaths+"client01.key", cert_reqs=ssl.CERT_NONE,
                                 tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)

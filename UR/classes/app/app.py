@@ -244,6 +244,7 @@ class App ():
                         self.mqtt.publish(self.publish_topics['visor_value'],0)
                         self.mqtt.publish(self.publish_topics['status_value'],187)
                         self.mqtt.publish(self.publish_topics['resultwork_value'],170)
+                        self.mqtt.publish(self.publish_topics['inspection_2_execute_value'],0)
                         self.robot.sync_program(start = 0)
                         
                         self.fsm_robot_control = 30

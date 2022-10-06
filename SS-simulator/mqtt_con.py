@@ -25,7 +25,7 @@ def mqtt_start(ip,port,keep_alive,publish_topics, subscribe_topics):
     
     client.on_connect = on_connect
     client.on_message = on_message
-    client.username_pw_set(username="user01", password="user01")
+    client.username_pw_set(username="user02", password="C1d3siMQTTUser20220322")
     client.tls_set(ca_certs=keyPaths+"ca.crt", certfile=keyPaths+"client01.crt",
                         keyfile=keyPaths+"client01.key", cert_reqs=ssl.CERT_NONE,
                         tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
