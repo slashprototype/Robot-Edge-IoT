@@ -438,14 +438,6 @@ class App ():
                         print('Inspection finished correctly')
                         target_id = target_id + 1
                         self.fsm_robot_control = 22
-
-
-
-                
-
-
-
-
                     
                 # ALARM
                 if self.fsm_robot_control == 30:
